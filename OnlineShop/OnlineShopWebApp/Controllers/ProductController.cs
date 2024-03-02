@@ -10,7 +10,7 @@ namespace OnlineShopWebApp.Controllers
                 return "Укажите id!";
             foreach (var product in HomeController.Products)
                 if (product.Id == id)
-                    return product.ToString();
+                    return product.ToString() + $"\nDescription: {product.Description}";
             return "Товар с таким id не найден:(";
         }
     }
