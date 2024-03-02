@@ -7,7 +7,7 @@ namespace OnlineShopWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        public Repository<Product> Products = new Repository<Product>(
+        public static Repository<Product> Products = new Repository<Product>(
             new List<Product>()
             {
                 new Product("Name1", 100),
