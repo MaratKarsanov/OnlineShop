@@ -7,15 +7,23 @@ namespace OnlineShopWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        public Repository<Product> Products = new Repository<Product>(
+            new List<Product>()
+            {
+                new Product("Name1", 100),
+                new Product("Name2", 200),
+                new Product("Name3", 300)
+            }
+        );
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public string Index()
         {
-            return View();
+            return Products.ToString();
         }
 
         public IActionResult Privacy()
