@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace OnlineShopWebApp
 {
     public class Repository<T> : IEnumerable<T>
-        where T : IRepositoryItem
+        where T : RepositoryItem
     {
         private List<T> Elements;
         public int Count { get { return Elements.Count; } }

@@ -2,9 +2,8 @@
 
 namespace OnlineShopWebApp.Models
 {
-    public class Product : IRepositoryItem
+    public class Product : RepositoryItem
     {
-        public Guid Id { get; }
         public string Name { get; set; }
         public decimal Cost { get; set; }
         public string Description { get; set; }
@@ -19,11 +18,7 @@ namespace OnlineShopWebApp.Models
         }
         public override string ToString()
         {
-            var result = new StringBuilder();
-            foreach (var property in typeof(Product).GetProperties().Where(p => p.Name != "Description"))
-                result.AppendLine($"{property.Name}: {property.GetValue(this)}");
-            result.Remove(result.Length - 1, 1);
-            return result.ToString();
+            return $"{Id}\n{Name}\n{Cost}";
         }
     }
 }
