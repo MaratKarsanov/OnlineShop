@@ -15,7 +15,7 @@ namespace OnlineShopWebApp.Controllers
 
         public string Index()
         {
-            return Repositories.Products.ToString();
+            return Repositories.ProductRepository.ToString();
         }
 
         public IActionResult Privacy()

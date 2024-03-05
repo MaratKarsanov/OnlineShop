@@ -8,9 +8,9 @@ namespace OnlineShopWebApp.Controllers
         {
             if (id == default)
                 return "Укажите id!";
-            foreach (var product in Repositories.Products)
-                if (product.Id == id)
-                    return product.ToString() + $"\nDescription: {product.Description}";
+            var product = Repositories.ProductRepository.TryGetElementById(id);
+            if (product is not null)
+                return product.ToString() + $"\nDescription: {product.Description}";
             return "Товар с таким id не найден:(";
         }
     }
