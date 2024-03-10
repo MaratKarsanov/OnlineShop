@@ -1,0 +1,15 @@
+﻿@model Product
+
+<div class="row">
+    <div class="col-6">
+        <img class="" src="@Model.ImageLink" style="width: 600px; height: 400px;" />
+    </div>
+    <div class="col-6">
+        <div>Id: @Model.Id</div>
+        <div>Name: @Model.Name</div>
+        <div>Cost: @Model.Cost</div>
+    </div>
+    <div style="margin:10px">Description: @Model.Description</div>
+</div>
+<a class="btn btn-light" style="margin:10px" href="/home/index" role="button">Продолжить покупки</a>
+<a class="btn btn-light" style="margin:10px" href="#" role="button">Добавить в корзину</a>
