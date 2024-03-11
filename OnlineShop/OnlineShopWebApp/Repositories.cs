@@ -10,10 +10,22 @@ namespace OnlineShopWebApp
                 new Product("Name1", 100),
                 new Product("Name2", 200),
                 new Product("Name3", 300),
-                new Product("Name1", 400),
-                new Product("Name2", 500),
-                new Product("Name3", 600)
+                new Product("Name4", 400),
+                new Product("Name5", 500),
+                new Product("Name6", 600)
             }
         );
+
+        public static Repository<Cart> CartRepository = new Repository<Cart> (
+            new List<Cart>()
+            {
+                new Cart(Guid.NewGuid())
+            }
+        );
+
+        public static Dictionary<Guid, Guid> CartIdByUserId = new Dictionary<Guid, Guid>()
+        {
+            { CartRepository.First().UserId, CartRepository.First().Id }
+        };
     }
 }

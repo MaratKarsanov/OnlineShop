@@ -1,0 +1,25 @@
+﻿@model Cart
+
+@if (Model is null)
+{
+    <div>Корзина пуста!</div>
+    return;
+}
+@foreach (var cartItem in Model)
+{
+    <div class="row">
+        <div class="col-3 card shadow">
+            <img class="card-img-top" src="@cartItem.Product.ImageLink" />
+            <div class="card-body">
+                <a style="color: black" href="/product/index/@cartItem.Product.Id">
+                    <h5>@cartItem.Product.Name</h5>
+                </a>
+                <h5>@cartItem.Product.Cost</h5>
+                <p>Количество: @cartItem.Amount</p>
+                <p>Итоговая цена: @(cartItem.TotalCost)</p>
+            </div>
+        </div>
+    </div>
+}
+<div class="">Итого: @Model.TotalCost</div>
+<a class="btn btn-light" style="margin:10px" href="#" role="button">Оформить заказ</a>
