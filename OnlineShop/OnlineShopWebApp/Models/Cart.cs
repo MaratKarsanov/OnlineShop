@@ -9,16 +9,10 @@ namespace OnlineShopWebApp.Models
         public Guid UserId { get; }
         public decimal TotalCost => Items.Sum(i => i.TotalCost);
 
-        public Cart(Guid userId)
+        public Cart(Guid userId) : base()
         {
             UserId = userId;
             Items = new List<CartItem>();
-        }
-
-        public Cart(Guid userId, IEnumerable<Product> products) : this(userId)
-        {
-            foreach (var product in products)
-                Add(product);
         }
 
         public void Add(Product product)
@@ -30,9 +24,6 @@ namespace OnlineShopWebApp.Models
                     return;
                 }
             Items.Add(new CartItem(1, product));
-            Items = Items
-                .OrderBy(i => i.TotalCost)
-                .ToList();
         }
 
         public void Remove(Product product)
@@ -48,9 +39,6 @@ namespace OnlineShopWebApp.Models
                     item.Amount--;
                     return;
                 }
-            Items = Items
-                .OrderBy(i => i.TotalCost)
-                .ToList();
         }
 
         public static bool operator ==(Cart c1, Cart c2)

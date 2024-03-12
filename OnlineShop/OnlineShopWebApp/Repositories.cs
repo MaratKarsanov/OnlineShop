@@ -16,16 +16,8 @@ namespace OnlineShopWebApp
             }
         );
 
-        public static Repository<Cart> CartRepository = new Repository<Cart> (
-            new List<Cart>()
-            {
-                new Cart(Guid.NewGuid())
-            }
-        );
+        public static Repository<Cart> CartRepository = new Repository<Cart> ();
 
-        public static Dictionary<Guid, Guid> CartIdByUserId = new Dictionary<Guid, Guid>()
-        {
-            { CartRepository.First().UserId, CartRepository.First().Id }
-        };
+        public static Dictionary<Guid, Guid> CartIdByUserId = new Dictionary<Guid, Guid>();
     }
 }
