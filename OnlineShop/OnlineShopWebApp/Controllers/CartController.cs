@@ -7,28 +7,20 @@ namespace OnlineShopWebApp.Controllers
     {
         public IActionResult Index(Guid userId)
         {
-            if (!Repositories.CartIdByUserId.ContainsKey(userId))
-                AddCart(userId);
-            var cart = Repositories.CartRepository.TryGetElementById(Repositories.CartIdByUserId[userId]);
+            if (Repositories.CartRepository.TryGetElementById(userId) is null)
+                Repositories.CartRepository.Add(new Cart(userId));
+            var cart = Repositories.CartRepository.TryGetElementById(userId);
             return View(cart);
         }
 
         public IActionResult Add(Guid productId)
         {
             var product = Repositories.ProductRepository.TryGetElementById(productId);
-            if (!Repositories.CartIdByUserId.ContainsKey(Constants.UserId))
-                AddCart(Constants.UserId);
-            var cart = Repositories.CartRepository.TryGetElementById(Repositories.CartIdByUserId[Constants.UserId]);
+            if (Repositories.CartRepository.TryGetElementById(Constants.UserId) is null)
+                Repositories.CartRepository.Add(new Cart(Constants.UserId));
+            var cart = Repositories.CartRepository.TryGetElementById(Constants.UserId);
             cart.Add(product);
             return RedirectToAction("Index");
-        }
-
-        private static void AddCart(Guid userId)
-        {
-            var newCart = new Cart(userId);
-            if (!Repositories.CartRepository.Contains(newCart))
-                Repositories.CartRepository.Add(newCart);
-            Repositories.CartIdByUserId.Add(userId, newCart.Id);
         }
     }
 }

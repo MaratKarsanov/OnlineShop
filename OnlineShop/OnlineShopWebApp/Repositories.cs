@@ -17,7 +17,5 @@ namespace OnlineShopWebApp
         );
 
         public static Repository<Cart> CartRepository = new Repository<Cart> ();
-
-        public static Dictionary<Guid, Guid> CartIdByUserId = new Dictionary<Guid, Guid>();
     }
 }

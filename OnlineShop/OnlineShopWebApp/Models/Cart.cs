@@ -6,12 +6,11 @@ namespace OnlineShopWebApp.Models
     public class Cart : RepositoryItem, IEnumerable<CartItem>
     {
         private List<CartItem> Items;
-        public Guid UserId { get; }
         public decimal TotalCost => Items.Sum(i => i.TotalCost);
 
-        public Cart(Guid userId) : base()
+        public Cart(Guid id)
         {
-            UserId = userId;
+            Id = id;
             Items = new List<CartItem>();
         }
 
