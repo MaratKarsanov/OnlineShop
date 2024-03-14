@@ -23,6 +23,16 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Remove(Guid productId)
+        {
+            var product = Repositories.ProductRepository.TryGetElementById(productId);
+            var cart = Repositories.CartRepository.TryGetElementById(Constants.UserId);
+            if (cart is null)
+                AddCart(ref cart, Constants.UserId);
+            cart.Remove(product);
+            return RedirectToAction("Index");
+        }
+
         private static void AddCart(ref Cart cart, Guid userId)
         {
             cart = new Cart(userId);
