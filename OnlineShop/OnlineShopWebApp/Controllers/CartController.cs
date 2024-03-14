@@ -7,20 +7,26 @@ namespace OnlineShopWebApp.Controllers
     {
         public IActionResult Index(Guid userId)
         {
-            if (Repositories.CartRepository.TryGetElementById(userId) is null)
-                Repositories.CartRepository.Add(new Cart(userId));
             var cart = Repositories.CartRepository.TryGetElementById(userId);
+            if (cart is null)
+                AddCart(ref cart, userId);
             return View(cart);
         }
 
         public IActionResult Add(Guid productId)
         {
             var product = Repositories.ProductRepository.TryGetElementById(productId);
-            if (Repositories.CartRepository.TryGetElementById(Constants.UserId) is null)
-                Repositories.CartRepository.Add(new Cart(Constants.UserId));
             var cart = Repositories.CartRepository.TryGetElementById(Constants.UserId);
+            if (cart is null)
+                AddCart(ref cart, Constants.UserId);
             cart.Add(product);
             return RedirectToAction("Index");
+        }
+
+        private static void AddCart(ref Cart cart, Guid userId)
+        {
+            cart = new Cart(userId);
+            Repositories.CartRepository.Add(cart);
         }
     }
 }
