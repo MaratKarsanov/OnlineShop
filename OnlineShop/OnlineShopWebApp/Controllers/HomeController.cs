@@ -6,9 +6,15 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(int pageNumber = 1)
         {
-            return View(Repositories.ProductRepository);
+            ViewBag.Pager = new Pager(Repositories.ProductRepository.Count(), pageNumber);
+            var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
+            var showingProducts = Repositories.ProductRepository
+                .Skip(skippedProductsCount)
+                .Take(Constants.PageSize)
+                .ToList();
+            return View(showingProducts);
         }
 
         public IActionResult Privacy()
