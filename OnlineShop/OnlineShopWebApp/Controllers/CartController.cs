@@ -9,7 +9,7 @@ namespace OnlineShopWebApp.Controllers
         {
             var cart = Repositories.CartRepository.TryGetElementById(userId);
             if (cart is null)
-                AddCart(ref cart, userId);
+                AddCart(cart, userId);
             return View(cart);
         }
 
