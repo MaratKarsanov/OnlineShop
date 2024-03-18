@@ -25,10 +25,11 @@ namespace OnlineShopWebApp
             return Elements.FirstOrDefault(e => e.Id == id);
         }
 
-        public void Add(T element)
+        public T Add(T element)
         {
             if (TryGetElementById(element.Id) is null)
                 Elements.Add(element);
+            return element;
         }
 
         public void Remove(T element)
