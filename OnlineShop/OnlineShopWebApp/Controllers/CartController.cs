@@ -5,10 +5,10 @@ namespace OnlineShopWebApp.Controllers
 {
     public class CartController : Controller
     {
-        private Repository<Product> productRepository;
-        private Repository<Cart> cartRepository;
+        private IRepository<Product> productRepository;
+        private IRepository<Cart> cartRepository;
 
-        public CartController(Repository<Product> productRepository, Repository<Cart> cartRepository)
+        public CartController(IRepository<Product> productRepository, IRepository<Cart> cartRepository)
         {
             this.productRepository = productRepository;
             this.cartRepository = cartRepository;

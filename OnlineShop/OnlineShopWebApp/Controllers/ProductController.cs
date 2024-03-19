@@ -5,9 +5,9 @@ namespace OnlineShopWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private Repository<Product> productRepository;
+        private IRepository<Product> productRepository;
 
-        public ProductController(Repository<Product> productRepository)
+        public ProductController(IRepository<Product> productRepository)
         {
             this.productRepository = productRepository;
         }

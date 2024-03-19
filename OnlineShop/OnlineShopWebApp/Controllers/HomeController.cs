@@ -6,9 +6,9 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private Repository<Product> productRepository;
+        private IRepository<Product> productRepository;
 
-        public HomeController(Repository<Product> productRepository)
+        public HomeController(IRepository<Product> productRepository)
         {
             for (var i = 0; i < 100; i++)
                 productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
