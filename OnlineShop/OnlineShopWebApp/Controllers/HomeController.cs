@@ -6,16 +6,16 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private static string SearchString = "";
+        public static string searchString = "";
 
         public IActionResult Index(string searchString, int pageNumber = 1)
         {
             if (!(searchString is null))
-                SearchString = searchString;
-            else
-                SearchString = "";
+                HomeController.searchString = searchString;
+            if (searchString == "emptySearchString")
+                HomeController.searchString = "";
             var foundedProducts = Repositories.ProductRepository
-                .Where(p => p.Name.Contains(SearchString))
+                .Where(p => p.Name.Contains(HomeController.searchString))
                 .ToList();
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
