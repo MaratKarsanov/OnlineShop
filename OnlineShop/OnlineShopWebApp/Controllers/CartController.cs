@@ -34,8 +34,8 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Remove(Guid productId)
         {
-            var product = Repositories.ProductRepository.TryGetElementById(productId);
-            var cart = Repositories.CartRepository.TryGetElementById(Constants.UserId);
+            var product = productRepository.TryGetElementById(productId);
+            var cart = cartRepository.TryGetElementById(Constants.UserId);
             if (cart is null)
                 throw new NullReferenceException("Не найдена корзина пользователя!");
             cart.Remove(product);
