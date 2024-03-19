@@ -31,5 +31,15 @@ namespace OnlineShopWebApp.Controllers
             cart.Add(product);
             return RedirectToAction("Index");
         }
+
+        public IActionResult Remove(Guid productId)
+        {
+            var product = Repositories.ProductRepository.TryGetElementById(productId);
+            var cart = Repositories.CartRepository.TryGetElementById(Constants.UserId);
+            if (cart is null)
+                throw new NullReferenceException("Не найдена корзина пользователя!");
+            cart.Remove(product);
+            return RedirectToAction("Index");
+        }
     }
 }
