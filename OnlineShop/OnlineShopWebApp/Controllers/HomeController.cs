@@ -6,9 +6,18 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private Repository<Product> productRepository;
+
+        public HomeController(Repository<Product> productRepository)
+        {
+            for (var i = 0; i < 100; i++)
+                productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
+            this.productRepository = productRepository;
+        }
+
         public IActionResult Index()
         {
-            return View(Repositories.ProductRepository);
+            return View(productRepository);
         }
 
         public IActionResult Privacy()
