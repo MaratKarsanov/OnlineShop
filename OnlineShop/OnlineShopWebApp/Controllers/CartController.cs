@@ -31,11 +31,5 @@ namespace OnlineShopWebApp.Controllers
             cart.Add(product);
             return RedirectToAction("Index");
         }
-
-        private static void AddCart(ref Cart cart, Guid userId)
-        {
-            cart = new Cart(userId);
-            Repositories.CartRepository.Add(cart);
-        }
     }
 }
