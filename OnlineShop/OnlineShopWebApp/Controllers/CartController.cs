@@ -23,10 +23,14 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction("Index");
         }
 
-        private static void AddCart(ref Cart cart, Guid userId)
+        public IActionResult Remove(Guid productId)
         {
-            cart = new Cart(userId);
-            Repositories.CartRepository.Add(cart);
+            var product = Repositories.ProductRepository.TryGetElementById(productId);
+            var cart = Repositories.CartRepository.TryGetElementById(Constants.UserId);
+            if (cart is null)
+                throw new NullReferenceException("Не найдена корзина пользователя!");
+            cart.Remove(product);
+            return RedirectToAction("Index");
         }
     }
 }
