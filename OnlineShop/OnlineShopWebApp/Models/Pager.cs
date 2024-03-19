@@ -9,29 +9,24 @@
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
 
-        public Pager()
-        {
-
-        }
-
         public Pager(int itemsCount, int currentPage)
         {
             var pagesCount = (int)Math.Ceiling((decimal)itemsCount / Constants.PageSize);
 
-            var startPage = currentPage - 5;
-            var endPage = currentPage + 4;
+            var startPage = currentPage - Constants.PaginationButtonsCount / 2;
+            var endPage = currentPage + Constants.PaginationButtonsCount / 2 - 1;
 
             if (startPage <= 0)
             {
                 startPage = 1;
-                endPage = 10;
+                endPage = Constants.PaginationButtonsCount;
             }
 
             if (endPage > pagesCount)
             {
                 endPage = pagesCount;
                 if (endPage > Constants.PageSize)
-                    startPage = currentPage - 9;
+                    startPage = currentPage - Constants.PaginationButtonsCount + 1;
             }
 
             ItemsCount = itemsCount;
