@@ -22,9 +22,16 @@
                 <td>@cartItem.Product.Cost</td>
                 <td>@cartItem.Amount</td>
                 <td>@cartItem.TotalCost</td>
+                <td>
+                    <a href="/cart/add?productId=@cartItem.Product.Id">+</a>
+                </td>
+                <td>
+                    <a href="/cart/remove?productId=@cartItem.Product.Id">-</a>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 <div class="">Итого: @Model.TotalCost</div>
+<a class="btn btn-light" style="margin:10px" asp-controller="Home" asp-action="Index" role="button">Продолжить покупки</a>
 <a class="btn btn-light" style="margin:10px" href="#" role="button">Оформить заказ</a>
