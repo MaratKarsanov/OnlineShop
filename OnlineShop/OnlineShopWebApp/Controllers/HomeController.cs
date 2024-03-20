@@ -15,11 +15,11 @@ namespace OnlineShopWebApp.Controllers
             this.productRepository = productRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int pageNumber = 1)
         {
-            ViewBag.Pager = new Pager(Repositories.ProductRepository.Count(), pageNumber);
+            ViewBag.Pager = new Pager(productRepository.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
-            var showingProducts = Repositories.ProductRepository
+            var showingProducts = productRepository
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
                 .ToList();
