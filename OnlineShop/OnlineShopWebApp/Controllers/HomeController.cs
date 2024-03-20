@@ -6,7 +6,15 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private IRepository<Product> productRepository;
         public static string searchString = "";
+
+        public HomeController(IRepository<Product> productRepository)
+        {
+            for (var i = 0; i < 100; i++)
+                productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
+            this.productRepository = productRepository;
+        }
 
         public IActionResult Index(string searchString, int pageNumber = 1)
         {
@@ -14,7 +22,7 @@ namespace OnlineShopWebApp.Controllers
                 HomeController.searchString = searchString;
             if (searchString == "emptySearchString")
                 HomeController.searchString = "";
-            var foundedProducts = Repositories.ProductRepository
+            var foundedProducts = productRepository
                 .Where(p => p.Name.Contains(HomeController.searchString))
                 .ToList();
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
