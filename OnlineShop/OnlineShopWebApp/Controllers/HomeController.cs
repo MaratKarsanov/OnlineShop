@@ -6,20 +6,20 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private IRepository<Product> productRepository;
+        public static string searchString = "";
 
-        public HomeController(IRepository<Product> productRepository)
+        public IActionResult Index(string searchString, int pageNumber = 1)
         {
-            for (var i = 0; i < 100; i++)
-                productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
-            this.productRepository = productRepository;
-        }
-
-        public IActionResult Index(int pageNumber = 1)
-        {
-            ViewBag.Pager = new Pager(productRepository.Count(), pageNumber);
+            if (!(searchString is null))
+                HomeController.searchString = searchString;
+            if (searchString == "emptySearchString")
+                HomeController.searchString = "";
+            var foundedProducts = Repositories.ProductRepository
+                .Where(p => p.Name.Contains(HomeController.searchString))
+                .ToList();
+            ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
-            var showingProducts = productRepository
+            var showingProducts = foundedProducts
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
                 .ToList();
