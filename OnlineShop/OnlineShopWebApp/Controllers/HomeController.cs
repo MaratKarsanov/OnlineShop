@@ -11,8 +11,11 @@ namespace OnlineShopWebApp.Controllers
 
         public HomeController(IRepository<Product> productRepository)
         {
-            for (var i = 0; i < 100; i++)
-                productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
+            if (productRepository.Count() == 0)
+            {
+                for (var i = 0; i < 100; i++)
+                    productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
+            }
             this.productRepository = productRepository;
         }
 
