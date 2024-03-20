@@ -1,4 +1,4 @@
-﻿@model InMemoryRepository<Product>
+﻿@model List<Product>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -18,3 +18,5 @@
         </div>
     }
 </div>
+
+<partial name="_Pager" model="ViewBag.Pager"/>
