@@ -1,0 +1,50 @@
+﻿@model Order
+
+@if (Model is null)
+{
+    <form method="post" target="_blank" asp-action="AddOrder" asp-controller="Order">
+        <h2>Информация о заказе</h2>
+        <fieldset>
+            <legend>Персональные данные</legend>
+            <ul>
+                <li>
+                    <label for="name">Имя:*</label>
+                    <input type="text" name="name" placeholder="Иван" id="name" required>
+                </li>
+                <li>
+                    <label for="surname">Фамилия:</label>
+                    <input type="text" name="surname" placeholder="Иванов" id="surname" required>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset>
+            <legend>Контакты</legend>
+            <ul>
+                <li>
+                    <label for="address">Адрес:*</label>
+                    <input type="text" name="address" placeholder="г.Москва, ул.Тверская, д.1" id="address" required>
+                </li>
+                <li>
+                    <label for="email">E-mail:*</label>
+                    <input type="email" name="email" placeholder="ivanov@gmail.com" id="email" required>
+                </li>
+                <li>
+                    <label for="number">Телефон:*</label>
+                    <input type="tel" name="phoneNumber" placeholder="+7 000 000-00-00" id="phoneNumber" maxlength="21" required>
+                </li>
+            </ul>
+        </fieldset>
+        <div>
+            <label for="message">Комментарии к заказу: </label>
+            <textarea name="comments" id="comments"></textarea>
+        </div>
+        <div>
+            <button type="submit">Отправить</button>
+            <p>* — Обязательные поля</p>
+        </div>
+    </form>
+}
+else
+{
+    <p>@Model.ToString()</p>
+}
