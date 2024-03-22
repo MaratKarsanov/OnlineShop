@@ -7,9 +7,9 @@ namespace OnlineShopWebApp.Controllers
     {
         private IRepository<Product> productRepository;
 
-        public ProductController(IRepository<Product> productRepository)
+        public ProductController(IEnumerable<IRepository<Product>> productRepositories)
         {
-            this.productRepository = productRepository;
+            productRepository = productRepositories.First();
         }
 
         public IActionResult Index(Guid id)

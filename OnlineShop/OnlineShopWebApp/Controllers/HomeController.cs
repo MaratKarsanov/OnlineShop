@@ -9,14 +9,14 @@ namespace OnlineShopWebApp.Controllers
         private IRepository<Product> productRepository;
         public static string searchString = "";
 
-        public HomeController(IRepository<Product> productRepository)
+        public HomeController(IEnumerable<IRepository<Product>> productRepositories)
         {
+            productRepository = productRepositories.First();
             if (productRepository.Count() == 0)
             {
-                for (var i = 0; i < 100; i++)
+                for (var i = 0; i < 1000; i++)
                     productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
             }
-            this.productRepository = productRepository;
         }
 
         public IActionResult Index(string searchString, int pageNumber = 1)

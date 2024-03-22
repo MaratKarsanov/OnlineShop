@@ -1,0 +1,28 @@
+﻿@model IRepository<Product>
+
+@if (Model is null || Model.Count() == 0)
+{
+    <p>Вы не выбрали товары для сравнения!</p>
+    <a class="btn btn-light" style="margin:10px" href="/home/index" role="button">Перейти к товарам</a>
+    return;
+}
+<h2>Анализ характеристик</h2>
+<table class="table">
+    <thead>
+        <tr>
+            @foreach (var product in Model)
+            {
+                <th>@product.Name</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @foreach (var product in Model)
+            {
+                <td>Name: @product.Name<br>Cost: @product.Cost</td>
+            }
+        </tr>
+    </tbody>
+</table>
+<a class="btn btn-light" style="margin:10px" href="/home/index" role="button">Перейти к списку товаров</a>

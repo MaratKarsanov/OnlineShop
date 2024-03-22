@@ -8,9 +8,9 @@ namespace OnlineShopWebApp.Controllers
         private IRepository<Product> productRepository;
         private IRepository<Cart> cartRepository;
 
-        public CartController(IRepository<Product> productRepository, IRepository<Cart> cartRepository)
+        public CartController(IEnumerable<IRepository<Product>> productRepositories, IRepository<Cart> cartRepository)
         {
-            this.productRepository = productRepository;
+            productRepository = productRepositories.First();
             this.cartRepository = cartRepository;
         }
 
