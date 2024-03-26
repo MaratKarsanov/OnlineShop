@@ -4,12 +4,12 @@
         <legend>Персональные данные</legend>
         <ul>
             <li>
-                <label for="name">Имя:*</label>
-                <input type="text" name="name" placeholder="Иван" required>
+                <label for="PersonalData.Name">Имя:*</label>
+                <input type="text" name="PersonalData.Name" placeholder="Иван" required>
             </li>
             <li>
-                <label for="surname">Фамилия:*</label>
-                <input type="text" name="surname" placeholder="Иванов" required>
+                <label for="PersonalData.Surname">Фамилия:*</label>
+                <input type="text" name="PersonalData.Surname" placeholder="Иванов" required>
             </li>
         </ul>
     </fieldset>
@@ -31,7 +31,7 @@
         </ul>
     </fieldset>
     <div>
-        <button type="submit" asp-action="AddOrder" asp-controller="Order">
+        <button type="submit" asp-action="Add" asp-controller="Order">
             Отправить
         </button>
         <p>* — Обязательные поля</p>

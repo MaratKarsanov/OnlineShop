@@ -14,22 +14,19 @@ namespace OnlineShopWebApp.Controllers
             this.orderRepository = orderRepository;
         }
 
-        public IActionResult Index(Guid orderId)
+        public IActionResult Index()
         {
-            var order = orderRepository.TryGetElementById(orderId);
-            if (order is null)
-                return View("Index");
-            return View("Success", order);
+            return View("Index");
         }
 
         [HttpPost]
-        public IActionResult AddOrder(Order newOrder)
+        public IActionResult Add(Order newOrder)
         {
             var products = cartRepository.TryGetElementById(Constants.UserId).ToList();
             newOrder.Products = products;
             orderRepository.Add(newOrder);
             cartRepository.Remove(Constants.UserId);
-            return RedirectToAction("Index", new {orderId = newOrder.Id});
+            return View("Success", newOrder);
         }
     }
 }
