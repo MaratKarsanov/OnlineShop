@@ -6,7 +6,8 @@ namespace OnlineShopWebApp.Models
     public class Cart : RepositoryItem, IEnumerable<CartItem>
     {
         private List<CartItem> Items;
-        public decimal TotalCost => Items.Sum(i => i.TotalCost);
+        public decimal TotalCost => Items?.Sum(i => i.TotalCost) ?? 0;
+        public int Amount => Items?.Sum(i => i.Amount) ?? 0;
 
         public Cart(Guid id)
         {
