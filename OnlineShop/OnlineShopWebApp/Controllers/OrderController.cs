@@ -18,26 +18,17 @@ namespace OnlineShopWebApp.Controllers
         {
             var order = orderRepository.TryGetElementById(orderId);
             if (order is null)
-                return View("Index", null);
-            return View(order);
+                return View("Index");
+            return View("Success", order);
         }
 
-        public IActionResult AddOrder(string name, 
-            string surname, 
-            string address,
-            string email, 
-            string phoneNumber, 
-            string comments)
+        [HttpPost]
+        public IActionResult AddOrder(Order newOrder)
         {
             var products = cartRepository.TryGetElementById(Constants.UserId).ToList();
-            var newOrder = new Order(products,
-                new User(Constants.UserId, $"{name} {surname}"),
-                address,
-                email,
-                phoneNumber,
-                comments);
+            newOrder.Products = products;
             orderRepository.Add(newOrder);
-            cartRepository.Remove(cartRepository.TryGetElementById(Constants.UserId));
+            cartRepository.Remove(Constants.UserId);
             return RedirectToAction("Index", new {orderId = newOrder.Id});
         }
     }
