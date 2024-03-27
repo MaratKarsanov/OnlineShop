@@ -16,16 +16,18 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index()
         {
-            return View("Index");
+            return View();
         }
 
         [HttpPost]
         public IActionResult Add(Order newOrder)
         {
-            var products = cartRepository.TryGetElementById(Constants.UserId).ToList();
-            newOrder.Products = products;
+            var cart = cartRepository.TryGetElementById(Constants.UserId);
+            if (cart is null || cart.Count == 0)
+                return RedirectToAction("Index");
+            newOrder.Products = cart.ToList();
             orderRepository.Add(newOrder);
-            cartRepository.Remove(Constants.UserId);
+            cart.Clear();
             return View("Success", newOrder);
         }
     }

@@ -32,6 +32,11 @@ namespace OnlineShopWebApp
             return element;
         }
 
+        public void Clear()
+        {
+            Elements.Clear();
+        }
+
         public void Remove(Guid id)
         {
             var element = TryGetElementById(id);
