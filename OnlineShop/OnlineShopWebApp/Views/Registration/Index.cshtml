@@ -1,5 +1,5 @@
 ﻿<form method="post" target="_self">
-    <h2>Авторизация</h2>
+    <h2>Регистрация</h2>
     <fieldset>
         <div>
             <label for="login">Логин:</label>
@@ -10,16 +10,13 @@
             <input type="password" name="password" placeholder="Password" required>
         </div>
         <div>
-            <label for="RememberMe">Запомнить меня</label>
-            <input type="checkbox" name="RememberMe"></input>
-        </div>
-        <div>
-            <a asp-action="Index" asp-controller="Registration">Регистрация</a>
+            <label for="repeatedPassword">Повторите пароль:</label>
+            <input type="password" name="repeatedPassword" placeholder="Repeat password" required>
         </div>
     </fieldset>
     <div>
-        <button type="submit" asp-action="SignIn" asp-controller="Autorization">
-            Войти
+        <button type="submit" asp-action="SignUp" asp-controller="Registration">
+            Зарегистрироваться
         </button>
     </div>
 </form>
