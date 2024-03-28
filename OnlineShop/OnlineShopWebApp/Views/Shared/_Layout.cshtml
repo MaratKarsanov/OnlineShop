@@ -23,18 +23,17 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Comparison" asp-action="Index">Comparison</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
                 </div>
-                @await Component.InvokeAsync("Cart")
+                <a class="nav-link text-dark" asp-area="" asp-controller="Autorization" asp-action="Index">Autorization</a>
+                <a asp-controller="Cart" asp-action="Index" asp-route-userId="@Constants.UserId">
+                    <img style="width:50px; height:50px" src="/Images/Cart.png">
+                </a>
             </div>
         </nav>
     </header>
-
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
