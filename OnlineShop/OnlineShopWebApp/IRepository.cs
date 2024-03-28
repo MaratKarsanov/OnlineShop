@@ -5,7 +5,7 @@
     {
         public T TryGetElementById(Guid id);
         public T Add(T element);
-        public void Remove(T element);
+        public void Remove(Guid id);
         public bool Contains(T element);
     }
 }

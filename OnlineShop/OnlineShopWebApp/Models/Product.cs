@@ -8,6 +8,12 @@ namespace OnlineShopWebApp.Models
         public decimal Cost { get; set; }
         public string Description { get; set; }
         public string ImageLink { get; set; }
+
+        public Product() 
+        {
+
+        }
+
         public Product(string name = "UnknownProduct",
             decimal cost = 0,
             string description = "",
@@ -19,6 +25,7 @@ namespace OnlineShopWebApp.Models
             Description = description;
             ImageLink = imageLink;
         }
+
         public override string ToString()
         {
             return $"{Id}\n{Name}\n{Cost}";

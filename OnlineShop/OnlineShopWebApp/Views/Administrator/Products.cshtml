@@ -1,6 +1,41 @@
-﻿<div class="row">
+﻿@model IRepository<Product>
+@{
+    var productNumber = 0;
+}
+<div class="row">
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-9">
         <h2>Список продуктов</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model)
+                {
+                    <tr>
+                        <td>@(++productNumber)</td>
+                        <td>
+                            <a style="color: black" asp-controller="Administrator" asp-action="ViewProductEdit" asp-route-productId="@product.Id">
+                                @product.Name
+                            </a>
+                        </td>
+                        <td>@product.Cost</td>
+                        <td>
+                            <a asp-controller="Administrator" asp-action="ViewProductEdit" asp-route-productId="@product.Id">Редактировать</a>
+                        </td>
+                        <td>
+                            <a asp-action="RemoveProduct" asp-controller="Administrator" asp-route-productId="@product.Id">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
