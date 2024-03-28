@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-
-namespace OnlineShopWebApp
+﻿namespace OnlineShopWebApp
 {
     public static class Constants
     {

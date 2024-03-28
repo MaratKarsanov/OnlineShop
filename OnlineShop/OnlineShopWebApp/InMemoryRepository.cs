@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.Text;
 
 namespace OnlineShopWebApp
 {
