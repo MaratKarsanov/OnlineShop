@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace OnlineShopWebApp.Models
+﻿namespace OnlineShopWebApp.Models
 {
     public class Order : RepositoryItem
     {

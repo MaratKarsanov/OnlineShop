@@ -23,12 +23,16 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Add(Order newOrder)
         {
             var cart = cartRepository.TryGetElementById(Constants.UserId);
-            if (cart is null || cart.Count == 0)
-                return RedirectToAction("Index");
             newOrder.Products = cart.ToList();
             orderRepository.Add(newOrder);
             cart.Clear();
-            return View("Success", newOrder);
+            return RedirectToAction("Success", new { order = newOrder.ToString() });
+            //return View("Success", newOrder);
+        }
+
+        public IActionResult Success(string order)
+        {
+            return View("Success", order);
         }
     }
 }
