@@ -10,7 +10,7 @@ namespace OnlineShopWebApp.Controllers
             return View();
         }
 
-        public IActionResult SignUp(AutorizationData autorizationData, string repeatedPassword)
+        public IActionResult SignUp(RegistrationData registrationData)
         {
             return RedirectToAction("Index", "Autorization");
         }
