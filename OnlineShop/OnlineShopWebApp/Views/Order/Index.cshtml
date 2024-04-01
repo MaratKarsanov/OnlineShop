@@ -1,0 +1,39 @@
+﻿<form method="post" target="_self">
+    <h2>Информация о заказе</h2>
+    <fieldset>
+        <legend>Персональные данные</legend>
+        <ul>
+            <li>
+                <label for="PersonalData.Name">Имя:*</label>
+                <input type="text" name="PersonalData.Name" placeholder="Иван">
+            </li>
+            <li>
+                <label for="PersonalData.Surname">Фамилия:*</label>
+                <input type="text" name="PersonalData.Surname" placeholder="Иванов" required>
+            </li>
+        </ul>
+    </fieldset>
+    <fieldset>
+        <legend>Контакты</legend>
+        <ul>
+            <li>
+                <label for="address">Адрес:*</label>
+                <input type="text" name="address" placeholder="г.Москва, ул.Тверская, д.1" required>
+            </li>
+            <li>
+                <label for="email">E-mail:*</label>
+                <input type="text" name="email" placeholder="ivanov@gmail.com" required>
+            </li>
+            <li>
+                <label for="phoneNumber">Телефон:*</label>
+                <input type="text" name="phoneNumber" placeholder="+7 000 000-00-00" maxlength="21" required>
+            </li>
+        </ul>
+    </fieldset>
+    <div>
+        <button type="submit" asp-action="Add" asp-controller="Order">
+            Отправить
+        </button>
+        <p>* — Обязательные поля</p>
+    </div>
+</form>

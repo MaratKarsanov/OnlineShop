@@ -30,11 +30,20 @@ namespace OnlineShopWebApp
             return element;
         }
 
-        public void Remove(T element)
+        public void Clear()
         {
-            Elements = Elements
-                .Where(e => e.Id != element.Id)
-                .ToList();
+            Elements.Clear();
+        }
+
+        public void Remove(Guid id)
+        {
+            var element = TryGetElementById(id);
+            if (element is not null)
+            {
+                Elements = Elements
+                    .Where(e => e.Id != element.Id)
+                    .ToList();
+            }
         }
 
         public bool Contains(T element)

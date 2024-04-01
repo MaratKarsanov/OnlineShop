@@ -6,6 +6,7 @@ namespace OnlineShopWebApp.Models
     public class Cart : RepositoryItem, IEnumerable<CartItem>
     {
         private List<CartItem> Items;
+        public int Count => Items.Count;
         public decimal TotalCost => Items?.Sum(i => i.TotalCost) ?? 0;
         public int Amount => Items?.Sum(i => i.Amount) ?? 0;
 
@@ -24,6 +25,11 @@ namespace OnlineShopWebApp.Models
                     return;
                 }
             Items.Add(new CartItem(1, product));
+        }
+
+        public void Clear()
+        {
+            Items.Clear();
         }
 
         public void Remove(Product product)
@@ -56,7 +62,7 @@ namespace OnlineShopWebApp.Models
             if (obj is null || !(obj is Cart))
                 return false;
             var objAsCart = (Cart)obj;
-            return this == objAsCart;
+            return Id == objAsCart.Id;
         }
 
         public IEnumerator<CartItem> GetEnumerator()
