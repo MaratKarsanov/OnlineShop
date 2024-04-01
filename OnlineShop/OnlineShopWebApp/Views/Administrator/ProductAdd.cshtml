@@ -1,0 +1,27 @@
+﻿<form method="post" target="_self">
+    <div class="row">
+        <div class="col-6">
+            <img class="" src="@Constants.ImageLink" style="width: 600px; height: 400px;" />
+        </div>
+        <div class="col-6">
+            <div>
+                <label for="name">Название:</label>
+                <input type="text" name="name" placeholder="New name" required>
+            </div>
+            <div>
+                <label for="cost">Цена:</label>
+                <input type="number" name="cost" placeholder="New cost" required>
+            </div>
+            <div>
+                <label for="description">Описание:</label>
+                <input type="text" name="description" placeholder="New description" required>
+            </div>
+            <div>
+                <button type="submit" asp-action="AddProduct" asp-controller="Administrator">
+                    Внести изменения
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="ViewProducts" role="button">К списку продуктов</a>

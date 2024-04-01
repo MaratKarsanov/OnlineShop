@@ -1,4 +1,4 @@
-﻿@model IRepository<Product>
+﻿@model IEnumerable<Product>
 @{
     var productNumber = 0;
 }
@@ -17,6 +17,7 @@
                 </tr>
             </thead>
             <tbody>
+                <a asp-controller="Administrator" asp-action="ViewProductAdd">Добавить новый продукт</a>
                 @foreach (var product in Model)
                 {
                     <tr>

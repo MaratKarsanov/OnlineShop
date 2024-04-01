@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Models;
+using System.Collections.Immutable;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -29,13 +30,13 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult ViewProducts()
         {
-            return View("Products", productRepository);
+            return View("Products", productRepository.OrderBy(p => p.Name));
         }
 
         public IActionResult RemoveProduct(Guid productId)
         {
             productRepository.Remove(productId);
-            return View("Products", productRepository);
+            return RedirectToAction("ViewProducts");
         }
 
         public IActionResult ViewProductEdit(Guid productId)
@@ -44,13 +45,28 @@ namespace OnlineShopWebApp.Controllers
             return View("ProductEdit", product);
         }
 
+        public IActionResult ViewProductAdd(Guid productId)
+        {
+            var product = productRepository.TryGetElementById(productId);
+            return View("ProductAdd", product);
+        }
+
         public IActionResult EditProduct(Guid productId, Product newProduct)
         {
             var product = productRepository.TryGetElementById(productId);  
             product.Name = newProduct.Name;
             product.Cost = newProduct.Cost;
             product.Description = newProduct.Description;
-            return View("Products", productRepository);
+            product.ImageLink = Constants.ImageLink;
+            return RedirectToAction("ViewProducts");
+        }
+
+        public IActionResult AddProduct(Product newProduct)
+        {
+            newProduct.Id = Guid.NewGuid();
+            newProduct.ImageLink = Constants.ImageLink;
+            productRepository.Add(newProduct);
+            return RedirectToAction("ViewProducts");
         }
     }
 }
