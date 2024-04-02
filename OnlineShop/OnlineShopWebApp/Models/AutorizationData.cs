@@ -4,8 +4,7 @@
     {
         public string Login { get; set; }
         public string Password { get; set; }
-        public string CheckBoxValue { get; set; }
-        public bool RememberMe => CheckBoxValue == "on";
+        public bool RememberMe { get; set; }
 
         public override string ToString()
         {
