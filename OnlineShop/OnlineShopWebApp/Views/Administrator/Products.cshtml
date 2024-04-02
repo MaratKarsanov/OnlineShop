@@ -17,19 +17,19 @@
                 </tr>
             </thead>
             <tbody>
-                <a asp-controller="Administrator" asp-action="ViewProductAdd">Добавить новый продукт</a>
+                <a asp-controller="Administrator" asp-action="AddProduct">Добавить новый продукт</a>
                 @foreach (var product in Model)
                 {
                     <tr>
                         <td>@(++productNumber)</td>
                         <td>
-                            <a style="color: black" asp-controller="Administrator" asp-action="ViewProductEdit" asp-route-productId="@product.Id">
+                            <a style="color: black" asp-controller="Administrator" asp-action="EditProduct" asp-route-productId="@product.Id">
                                 @product.Name
                             </a>
                         </td>
                         <td>@product.Cost</td>
                         <td>
-                            <a asp-controller="Administrator" asp-action="ViewProductEdit" asp-route-productId="@product.Id">Редактировать</a>
+                            <a asp-controller="Administrator" asp-action="EditProduct" asp-route-productId="@product.Id">Редактировать</a>
                         </td>
                         <td>
                             <a asp-action="RemoveProduct" asp-controller="Administrator" asp-route-productId="@product.Id">Удалить</a>

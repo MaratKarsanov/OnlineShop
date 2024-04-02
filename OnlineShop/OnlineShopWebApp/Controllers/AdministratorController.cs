@@ -13,44 +13,47 @@ namespace OnlineShopWebApp.Controllers
             productRepository = productRepositories.First();
         }
 
-        public IActionResult ViewOrders()
+        public IActionResult Orders()
         {
-            return View("Orders");
+            return View();
         }
 
-        public IActionResult ViewUsers()
+        public IActionResult Users()
         {
-            return View("Users");
+            return View();
         }
 
-        public IActionResult ViewRoles()
+        public IActionResult Roles()
         {
-            return View("Roles");
+            return View();
         }
 
-        public IActionResult ViewProducts()
+        public IActionResult Products()
         {
-            return View("Products", productRepository.OrderBy(p => p.Name));
+            return View(productRepository.OrderBy(p => p.Name));
+        }
+
+        [HttpGet]
+        public IActionResult EditProduct(Guid productId)
+        {
+            var product = productRepository.TryGetElementById(productId);
+            return View(product);
+        }
+
+        [HttpGet]
+        public IActionResult AddProduct(Guid productId)
+        {
+            var product = productRepository.TryGetElementById(productId);
+            return View(product);
         }
 
         public IActionResult RemoveProduct(Guid productId)
         {
             productRepository.Remove(productId);
-            return RedirectToAction("ViewProducts");
+            return RedirectToAction("Products");
         }
 
-        public IActionResult ViewProductEdit(Guid productId)
-        {
-            var product = productRepository.TryGetElementById(productId);
-            return View("ProductEdit", product);
-        }
-
-        public IActionResult ViewProductAdd(Guid productId)
-        {
-            var product = productRepository.TryGetElementById(productId);
-            return View("ProductAdd", product);
-        }
-
+        [HttpPost]
         public IActionResult EditProduct(Guid productId, Product newProduct)
         {
             var product = productRepository.TryGetElementById(productId);  
@@ -58,15 +61,16 @@ namespace OnlineShopWebApp.Controllers
             product.Cost = newProduct.Cost;
             product.Description = newProduct.Description;
             product.ImageLink = Constants.ImageLink;
-            return RedirectToAction("ViewProducts");
+            return RedirectToAction("Products");
         }
 
+        [HttpPost]
         public IActionResult AddProduct(Product newProduct)
         {
             newProduct.Id = Guid.NewGuid();
             newProduct.ImageLink = Constants.ImageLink;
             productRepository.Add(newProduct);
-            return RedirectToAction("ViewProducts");
+            return RedirectToAction("Products");
         }
     }
 }

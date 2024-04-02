@@ -6,15 +6,15 @@
         <div class="col-6">
             <div>
                 <label for="name">Название:</label>
-                <input type="text" name="name" placeholder="New name" required>
+                <input type="text" name="name" placeholder="Name" required>
             </div>
             <div>
                 <label for="cost">Цена:</label>
-                <input type="number" name="cost" placeholder="New cost" required>
+                <input type="number" name="cost" placeholder="Cost" required>
             </div>
             <div>
                 <label for="description">Описание:</label>
-                <input type="text" name="description" placeholder="New description" required>
+                <input type="text" name="description" placeholder="Description" value="-" required>
             </div>
             <div>
                 <button type="submit" asp-action="AddProduct" asp-controller="Administrator">
@@ -24,4 +24,4 @@
         </div>
     </div>
 </form>
-<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="ViewProducts" role="button">К списку продуктов</a>
+<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="Products" role="button">К списку продуктов</a>

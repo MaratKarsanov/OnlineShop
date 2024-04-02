@@ -16,7 +16,7 @@ namespace OnlineShopWebApp.Models
 
         public Product(string name = "UnknownProduct",
             decimal cost = 0,
-            string description = "",
+            string description = "-",
             string imageLink = "/images/DefaultImg.jpg")
         {
             Id = Guid.NewGuid();
