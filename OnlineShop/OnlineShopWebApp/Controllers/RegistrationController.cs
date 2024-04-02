@@ -12,7 +12,9 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult SignUp(RegistrationData registrationData)
         {
-            return RedirectToAction("Index", "Autorization");
+            if (ModelState.IsValid)
+                return Content(registrationData.ToString());
+            return RedirectToAction("Index", "Registration");
         }
     }
 }
