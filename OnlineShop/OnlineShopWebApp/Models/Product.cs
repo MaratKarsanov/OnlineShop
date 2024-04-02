@@ -8,6 +8,8 @@ namespace OnlineShopWebApp.Models
         public decimal Cost { get; set; }
         public string Description { get; set; }
         public string ImageLink { get; set; }
+        public bool IsInFavourities { get; set; }
+
         public Product(string name = "UnknownProduct",
             decimal cost = 0,
             string description = "",

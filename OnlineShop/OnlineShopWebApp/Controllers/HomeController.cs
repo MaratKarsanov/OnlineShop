@@ -41,9 +41,7 @@ namespace OnlineShopWebApp.Controllers
             if (favourities is null)
                 favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
             ViewBag.pageNumber = pageNumber;
-            return View(new List<IEnumerable<RepositoryItem>>() {
-                showingProducts,
-                favourities});
+            return View(showingProducts);
         }
 
         public IActionResult Privacy()

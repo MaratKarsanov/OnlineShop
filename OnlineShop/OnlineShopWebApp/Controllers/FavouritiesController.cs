@@ -32,6 +32,7 @@ namespace OnlineShopWebApp.Controllers
             if (favourities is null)
                 favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
             favourities.Add(product);
+            product.IsInFavourities = true;
             return RedirectToAction("Index", controllerName, new { pageNumber, id = productId });
         }
 
@@ -42,7 +43,9 @@ namespace OnlineShopWebApp.Controllers
             var favourities = favouritiesRepository.TryGetElementById(Constants.UserId);
             if (favourities is null)
                 favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
+            var product = productRepository.TryGetElementById(productId);
             favourities.Remove(productId);
+            product.IsInFavourities = false;
             return RedirectToAction("Index", controllerName, new {pageNumber, id = productId});
         }
     }
