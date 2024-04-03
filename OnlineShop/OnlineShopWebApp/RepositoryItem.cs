@@ -2,8 +2,7 @@
 {
     public abstract class RepositoryItem
     {
-        public Guid Id { get; protected set; }
-
+        public Guid Id { get; set; }
         public RepositoryItem()
         {
             Id = Guid.NewGuid();

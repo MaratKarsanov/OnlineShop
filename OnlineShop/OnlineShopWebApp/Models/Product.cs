@@ -10,9 +10,14 @@ namespace OnlineShopWebApp.Models
         public string ImageLink { get; set; }
         public bool IsInFavourities { get; set; }
 
+        public Product() 
+        {
+
+        }
+
         public Product(string name = "UnknownProduct",
             decimal cost = 0,
-            string description = "",
+            string description = "-",
             string imageLink = "/images/DefaultImg.jpg")
         {
             Id = Guid.NewGuid();
@@ -21,6 +26,7 @@ namespace OnlineShopWebApp.Models
             Description = description;
             ImageLink = imageLink;
         }
+
         public override string ToString()
         {
             return $"{Id}\n{Name}\n{Cost}";
