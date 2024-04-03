@@ -1,0 +1,28 @@
+﻿@model RegistrationData
+
+<form method="post" target="_self">
+    <h2>Регистрация</h2>
+    <div class="validation" asp-validation-summary="All"></div>
+    <fieldset>
+        <div>
+            <label asp-for="Login">Логин:</label>
+            <input type="text" asp-for="Login" placeholder="Login">
+            <span asp-validation-for="Login"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Пароль:</label>
+            <input type="password" asp-for="Password" placeholder="Password">
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="RepeatedPassword">Повторите пароль:</label>
+            <input type="password" asp-for="RepeatedPassword" placeholder="Repeat password">
+            <span asp-validation-for="RepeatedPassword"></span>
+        </div>
+    </fieldset>
+    <div>
+        <button type="submit" asp-action="SignUp" asp-controller="Registration">
+            Зарегистрироваться
+        </button>
+    </div>
+</form>

@@ -1,0 +1,30 @@
+﻿@model AutorizationData
+
+<form method="post" target="_self">
+    <h2>Авторизация</h2>
+    <div class="validation" asp-validation-summary="All"></div>
+    <fieldset>
+        <div>
+            <label asp-for="Login">Логин:</label>
+            <input type="text" asp-for="Login" placeholder="Login">
+            <span asp-validation-for="Login"></span>
+        </div>
+        <div>
+            <label asp-for="Password">Пароль:</label>
+            <input type="password" asp-for="Password" placeholder="Password">
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div>
+            <label asp-for="RememberMe">Запомнить меня</label>
+            <input type="checkbox" asp-for="RememberMe" value="true"></input>
+        </div>
+        <div>
+            <a asp-action="Index" asp-controller="Registration">Регистрация</a>
+        </div>
+    </fieldset>
+    <div>
+        <button type="submit" asp-action="SignIn" asp-controller="Autorization">
+            Войти
+        </button>
+    </div>
+</form>
