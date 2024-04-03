@@ -7,11 +7,14 @@ namespace OnlineShopWebApp.Controllers
     public class HomeController : Controller
     {
         private IRepository<Product> productRepository;
+        private IRepository<Favourities> favouritiesRepository;
         public static string searchString = "";
 
-        public HomeController(IEnumerable<IRepository<Product>> productRepositories)
+        public HomeController(IEnumerable<IRepository<Product>> productRepositories, 
+            IRepository<Favourities> favouritiesRepository)
         {
             productRepository = productRepositories.First();
+            this.favouritiesRepository = favouritiesRepository;
             if (productRepository.Count() == 0)
             {
                 for (var i = 0; i < 1000; i++)
@@ -21,7 +24,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index(string searchString, int pageNumber = 1)
         {
-            if (!(searchString is null))
+            if (searchString is not null)
                 HomeController.searchString = searchString;
             if (searchString == "emptySearchString")
                 HomeController.searchString = "";
@@ -34,6 +37,10 @@ namespace OnlineShopWebApp.Controllers
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
                 .ToList();
+            var favourities = favouritiesRepository.TryGetElementById(Constants.UserId);
+            if (favourities is null)
+                favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
+            ViewBag.pageNumber = pageNumber;
             return View(showingProducts);
         }
 

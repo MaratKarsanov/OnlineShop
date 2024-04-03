@@ -16,7 +16,6 @@ namespace OnlineShopWebApp.Views.Shared.Components
         {
             var cart = cartRepository.TryGetElementById(Constants.UserId);
             var productsCount = cart?.Amount ?? 0;
-
             return View("Cart", productsCount);
         }
     }

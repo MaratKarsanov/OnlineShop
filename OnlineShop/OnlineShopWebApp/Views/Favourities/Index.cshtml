@@ -1,0 +1,39 @@
+﻿@model Favourities
+
+@if (Model is null || Model.Count() == 0)
+{
+    <div>В избранном нет товаров!</div>
+    return;
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Название</th>
+            <th>Цена</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    <img style="width: 60px; height: 40px;" src="@product.ImageLink" />
+                </td>
+                <td>
+                    <a style="color: black" href="/product/index/@product.Id">
+                        @product.Name
+                    </a>
+                </td>
+                <td>@product.Cost</td>
+                <td>
+                    <a asp-controller="Favourities" asp-action="Remove" asp-route-productId="@product.Id" asp-route-controllerName="Favourities" >
+                        Удалить
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a class="btn btn-light" style="margin:10px" asp-controller="Home" asp-action="Index" role="button">Продолжить покупки</a>
