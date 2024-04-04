@@ -14,7 +14,7 @@
             </div>
             <div>
                 <label asp-for="Cost">Цена:</label>
-                <input type="number" asp-for="Cost" placeholder="New cost" value="@Model.Cost">
+                <input type="number" asp-for="Cost" placeholder="New cost" value="@Model.Cost.ToString().Replace(",", ".")">
                 <span asp-validation-for="Cost"></span>
             </div>
             <div>

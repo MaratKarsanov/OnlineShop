@@ -8,6 +8,7 @@ namespace OnlineShopWebApp.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Не указана стоимость товара")]
+        [Range(typeof(decimal), "0", "100000000", ErrorMessage = "Цена должна быть положительной!")]
         public decimal Cost { get; set; }
 
         [Required(ErrorMessage = "Нет описания")]
