@@ -6,7 +6,7 @@ namespace OnlineShopWebApp
         where T : RepositoryItem
     {
         private List<T> Elements;
-        public int Count { get { return Elements.Count; } }
+        public int Count => Elements.Count;
 
         public InMemoryRepository()
         {

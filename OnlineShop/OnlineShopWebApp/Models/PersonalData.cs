@@ -9,5 +9,10 @@ namespace OnlineShopWebApp.Models
 
         [Required(ErrorMessage = "Введите фамилию")]
         public string Surname { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Surname} {Name}";
+        }
     }
 }

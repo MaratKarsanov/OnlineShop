@@ -1,0 +1,36 @@
+﻿@model Order
+
+<form method="post" target="_self">
+    <div class="row">
+        @await Html.PartialAsync("AdministratorPanel")
+        <div class="col-6">
+            <div>
+                <p>Дата и время оформления: @Model.CreationTime.ToString()</p>
+            </div>
+            <div>
+                <p>Адрес доставки: @Model.Address</p>
+            </div>
+            <div>
+                <p>Получатель: @Model.PersonalData.ToString()</p>
+            </div>
+            <div>
+                <p>Телефон: @Model.PhoneNumber</p>
+            </div>
+            <div>
+                <p>Email: @Model.EMail</p>
+            </div>
+            <div>
+                <p>Сумма заказа: @Model.TotalCost</p>
+            </div>
+            <div>
+                <select asp-for="Status" asp-items="@Html.GetEnumSelectList<OrderStatus>()" class="form-control"></select>
+            </div>
+            <div>
+                <button type="submit" asp-action="UpdateOrderStatus" asp-controller="Administrator" asp-route-orderId="@Model.Id">
+                    Внести изменения
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="ViewProducts" role="button">К списку продуктов</a>
