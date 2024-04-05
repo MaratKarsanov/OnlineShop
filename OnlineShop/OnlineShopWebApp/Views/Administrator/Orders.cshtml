@@ -26,7 +26,7 @@
                         <tr>
                             <td>@(++orderNumber)</td>
                         <td>@order.TotalCost</td>
-                        <td>@order.Status</td>
+                            <td>@EnumHelper.GetDisplayName(order.Status)</td>
                         <td>@order.PersonalData.ToString()</td>
                         <td>@order.CreationTime.Date.ToString().Split(' ')[0]</td>
                         <td>@($"{order.CreationTime.Hour}:{order.CreationTime.Minute}")</td>
