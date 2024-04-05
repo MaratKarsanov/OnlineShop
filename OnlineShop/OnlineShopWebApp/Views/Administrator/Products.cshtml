@@ -6,6 +6,7 @@
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-9">
         <h2>Список продуктов</h2>
+        <a asp-controller="Administrator" asp-action="AddProduct">Добавить новый продукт</a>
         <table class="table">
             <thead>
                 <tr>
@@ -17,7 +18,6 @@
                 </tr>
             </thead>
             <tbody>
-                <a asp-controller="Administrator" asp-action="AddProduct">Добавить новый продукт</a>
                 @foreach (var product in Model)
                 {
                     <tr>

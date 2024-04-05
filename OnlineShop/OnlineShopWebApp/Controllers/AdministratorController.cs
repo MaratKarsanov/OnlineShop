@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Models;
 using System.Collections.Immutable;
+using System.Data;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class AdministratorController : Controller
     {
         private IRepository<Product> productRepository;
+        private IRepository<Role> roleRepository;
 
-        public AdministratorController(IEnumerable<IRepository<Product>> productRepositories)
+        public AdministratorController(
+            IEnumerable<IRepository<Product>> productRepositories,
+            IRepository<Role> roleRepository)
         {
             productRepository = productRepositories.First();
+            this.roleRepository = roleRepository;
         }
 
         public IActionResult Orders()
@@ -25,7 +30,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Roles()
         {
-            return View();
+            return View(roleRepository);
         }
 
         public IActionResult Products()
@@ -75,6 +80,33 @@ namespace OnlineShopWebApp.Controllers
             newProduct.ImageLink = Constants.ImageLink;
             productRepository.Add(newProduct);
             return RedirectToAction("Products");
+        }
+
+        public IActionResult RemoveRole(Guid roleId)
+        {
+            roleRepository.Remove(roleId);
+            return RedirectToAction("Roles");
+        }
+
+        [HttpGet]
+        public IActionResult AddRole(Guid roleId)
+        {
+            if (!ModelState.IsValid)
+                return View();
+            var role = roleRepository.TryGetElementById(roleId);
+            return View(role);
+        }
+
+        [HttpPost]
+        public IActionResult AddRole(Role newRole)
+        {
+            if (roleRepository.Where(r => r.Name == newRole.Name).Count() > 0)
+                ModelState.AddModelError("", "Такая роль уже существует");
+            if (!ModelState.IsValid)
+                return View();
+            newRole.Id = Guid.NewGuid();
+            roleRepository.Add(newRole);
+            return RedirectToAction("Roles");
         }
     }
 }

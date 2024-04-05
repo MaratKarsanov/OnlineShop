@@ -1,6 +1,31 @@
-﻿<div class="row">
+﻿@model IEnumerable<Role>
+
+<div class="row">
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-9">
         <h2>Список ролей</h2>
+        <a asp-controller="Administrator" asp-action="AddRole">Добавить роль</a>
+        @if (Model is not null && Model.Count() > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model)
+                    {
+                        <tr>
+                            <td>@role.Name</td>
+                            <td>
+                                <a asp-action="RemoveRole" asp-controller="Administrator" asp-route-roleId="@role.Id">Удалить</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 </div>
