@@ -6,17 +6,21 @@
             <img class="" src="@Model.ImageLink" style="width: 600px; height: 400px;" />
         </div>
         <div class="col-6">
+            <div class="validation" asp-validation-summary="All"></div>
             <div>
-                <label for="name">Название:</label>
-                <input type="text" name="name" placeholder="New name" value="@Model.Name" required>
+                <label asp-for="Name">Название:</label>
+                <input type="text" asp-for="Name" placeholder="New name" value="@Model.Name">
+                <span asp-validation-for="Name"></span>
             </div>
             <div>
-                <label for="cost">Цена:</label>
-                <input type="number" name="cost" placeholder="New cost" value="@Model.Cost" required>
+                <label asp-for="Cost">Цена:</label>
+                <input type="number" asp-for="Cost" placeholder="New cost" value="@Model.Cost.ToString().Replace(",", ".")">
+                <span asp-validation-for="Cost"></span>
             </div>
             <div>
-                <label for="description">Описание:</label>
-                <input type="text" name="description" placeholder="New description" value="@Model.Description" required>
+                <label asp-for="Description">Описание:</label>
+                <input type="text" asp-for="Description" placeholder="New description" value="@Model.Description">
+                <span asp-validation-for="Description"></span>
             </div>
             <div>
                 <button type="submit" asp-action="EditProduct" asp-controller="Administrator" asp-route-productId="@Model.Id">

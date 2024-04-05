@@ -36,6 +36,8 @@ namespace OnlineShopWebApp.Controllers
         [HttpGet]
         public IActionResult EditProduct(Guid productId)
         {
+            if (!ModelState.IsValid)
+                return View();
             var product = productRepository.TryGetElementById(productId);
             return View(product);
         }
@@ -43,6 +45,8 @@ namespace OnlineShopWebApp.Controllers
         [HttpGet]
         public IActionResult AddProduct(Guid productId)
         {
+            if (!ModelState.IsValid)
+                return View();
             var product = productRepository.TryGetElementById(productId);
             return View(product);
         }

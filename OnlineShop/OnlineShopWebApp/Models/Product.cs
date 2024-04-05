@@ -1,26 +1,32 @@
-﻿using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Models
 {
     public class Product : RepositoryItem
     {
+        [Required(ErrorMessage = "Не указано имя товара")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Не указана стоимость товара")]
+        [Range(typeof(decimal), "0", "100000000", ErrorMessage = "Цена должна быть положительной!")]
         public decimal Cost { get; set; }
+
+        [Required(ErrorMessage = "Нет описания")]
         public string Description { get; set; }
         public string ImageLink { get; set; }
         public bool IsInFavourities { get; set; }
 
-        public Product() 
+        public Product() // без этого конструктора не передаются данные из представления, не трогать!!!
         {
-
+            ImageLink = Constants.ImageLink;
+            IsInFavourities = false;
         }
 
         public Product(string name = "UnknownProduct",
             decimal cost = 0,
             string description = "-",
-            string imageLink = "/images/DefaultImg.jpg")
+            string imageLink = "/images/DefaultImg.jpg") : base()
         {
-            Id = Guid.NewGuid();
             Name = name;
             Cost = cost;
             Description = description;
