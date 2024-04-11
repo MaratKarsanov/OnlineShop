@@ -89,12 +89,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddRole(Guid roleId)
+        public IActionResult AddRole()
         {
-            if (!ModelState.IsValid)
-                return View();
-            var role = roleRepository.TryGetElementById(roleId);
-            return View(role);
+            return View();
         }
 
         [HttpPost]
