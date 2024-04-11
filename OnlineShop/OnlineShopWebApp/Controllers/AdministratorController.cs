@@ -48,12 +48,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddProduct(Guid productId)
+        public IActionResult AddProduct()
         {
-            if (!ModelState.IsValid)
-                return View();
-            var product = productRepository.TryGetElementById(productId);
-            return View(product);
+            return View();
         }
 
         public IActionResult RemoveProduct(Guid productId)
