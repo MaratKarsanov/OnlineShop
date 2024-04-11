@@ -7,15 +7,19 @@ namespace OnlineShopWebApp.Controllers
     public class AdministratorController : Controller
     {
         private IRepository<Product> productRepository;
+        private IRepository<Order> orderRepository;
 
-        public AdministratorController(IEnumerable<IRepository<Product>> productRepositories)
+        public AdministratorController(
+            IEnumerable<IRepository<Product>> productRepositories,
+            IRepository<Order> orderRepository)
         {
             productRepository = productRepositories.First();
+            this.orderRepository = orderRepository;
         }
 
         public IActionResult Orders()
         {
-            return View();
+            return View(orderRepository.ToList());
         }
 
         public IActionResult Users()
@@ -75,6 +79,21 @@ namespace OnlineShopWebApp.Controllers
             newProduct.ImageLink = Constants.ImageLink;
             productRepository.Add(newProduct);
             return RedirectToAction("Products");
+        }
+
+        [HttpGet]
+        public IActionResult EditOrder(Guid orderId)
+        {
+            var order = orderRepository.TryGetElementById(orderId);
+            return View(order);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateOrderStatus(Guid orderId, OrderStatus status)
+        {
+            var order = orderRepository.TryGetElementById(orderId);
+            order.UpdateStatus(status);
+            return RedirectToAction("Orders");
         }
     }
 }

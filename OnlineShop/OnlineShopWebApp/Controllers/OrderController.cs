@@ -33,7 +33,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Success(string order)
         {
-            return Content(order);
+            return View((object)order);
         }
     }
 }
