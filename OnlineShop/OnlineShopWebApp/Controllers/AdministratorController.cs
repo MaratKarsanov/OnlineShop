@@ -1,19 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShopWebApp.Models;
 using System.Collections.Immutable;
+using System.Data;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class AdministratorController : Controller
     {
         private IRepository<Product> productRepository;
+        private IRepository<Role> roleRepository;
         private IRepository<Order> orderRepository;
 
         public AdministratorController(
             IEnumerable<IRepository<Product>> productRepositories,
-            IRepository<Order> orderRepository)
+            IRepository<Order> orderRepository,
+            IRepository<Role> roleRepository)
         {
             productRepository = productRepositories.First();
+            this.roleRepository = roleRepository;
             this.orderRepository = orderRepository;
         }
 
@@ -29,7 +33,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Roles()
         {
-            return View();
+            return View(roleRepository);
         }
 
         public IActionResult Products()
@@ -47,12 +51,9 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddProduct(Guid productId)
+        public IActionResult AddProduct()
         {
-            if (!ModelState.IsValid)
-                return View();
-            var product = productRepository.TryGetElementById(productId);
-            return View(product);
+            return View();
         }
 
         public IActionResult RemoveProduct(Guid productId)
@@ -79,6 +80,30 @@ namespace OnlineShopWebApp.Controllers
             newProduct.ImageLink = Constants.ImageLink;
             productRepository.Add(newProduct);
             return RedirectToAction("Products");
+        }
+
+        public IActionResult RemoveRole(Guid roleId)
+        {
+            roleRepository.Remove(roleId);
+            return RedirectToAction("Roles");
+        }
+
+        [HttpGet]
+        public IActionResult AddRole()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddRole(Role newRole)
+        {
+            if (roleRepository.Where(r => r.Name == newRole.Name).Count() > 0)
+                ModelState.AddModelError("", "Такая роль уже существует");
+            if (!ModelState.IsValid)
+                return View();
+            newRole.Id = Guid.NewGuid();
+            roleRepository.Add(newRole);
+            return RedirectToAction("Roles");
         }
 
         [HttpGet]

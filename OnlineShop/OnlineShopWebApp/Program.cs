@@ -10,6 +10,7 @@ for (var i = 0; i < 2; i++)
 builder.Services.AddSingleton<IRepository<Favourities>, InMemoryRepository<Favourities>>();
 builder.Services.AddSingleton<IRepository<Cart>, InMemoryRepository <Cart>>();
 builder.Services.AddSingleton<IRepository<Order>, InMemoryRepository<Order>>();
+builder.Services.AddSingleton<IRepository<Role>, InMemoryRepository<Role>>();
 
 var app = builder.Build();
 
