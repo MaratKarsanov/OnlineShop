@@ -1,7 +1,12 @@
 using OnlineShopWebApp.Models;
 using OnlineShopWebApp;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, configuration) => configuration
+.ReadFrom.Configuration(context.Configuration)
+.Enrich.WithProperty("ApplicationName", "Online Shop"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -12,7 +17,7 @@ builder.Services.AddSingleton<IRepository<Cart>, InMemoryRepository <Cart>>();
 builder.Services.AddSingleton<IRepository<Order>, InMemoryRepository<Order>>();
 
 var app = builder.Build();
-
+app.UseSerilogRequestLogging();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
