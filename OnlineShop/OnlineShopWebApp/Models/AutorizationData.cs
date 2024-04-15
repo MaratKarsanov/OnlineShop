@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.Models
 {
-    public class AutorizationData
+    public class AutorizationData : RepositoryItem
     {
         [Required(ErrorMessage = "Не указан логин")]
         [StringLength(20, MinimumLength = 3,ErrorMessage = "Логин должен быть от 3 до 20 символов!")]

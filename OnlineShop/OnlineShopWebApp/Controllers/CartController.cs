@@ -29,7 +29,7 @@ namespace OnlineShopWebApp.Controllers
             if (cart is null)
                 cart = cartRepository.Add(new Cart(Constants.UserId));
             cart.Add(product);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Remove(Guid productId)
@@ -39,7 +39,7 @@ namespace OnlineShopWebApp.Controllers
             if (cart is null)
                 throw new NullReferenceException("Не найдена корзина пользователя!");
             cart.Remove(product);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }
