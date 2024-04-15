@@ -4,7 +4,7 @@
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-9">
         <h2>Список ролей</h2>
-        <a asp-controller="Administrator" asp-action="AddRole">Добавить роль</a>
+        <a asp-area="Administrator" asp-action="Add" asp-controller="Role">Добавить роль</a>
         @if (Model is not null && Model.Count() > 0)
         {
             <table class="table">
@@ -20,7 +20,7 @@
                         <tr>
                             <td>@role.Name</td>
                             <td>
-                                <a asp-action="RemoveRole" asp-controller="Administrator" asp-route-roleId="@role.Id">Удалить</a>
+                                <a asp-action="Remove" asp-area="Administrator" asp-controller="Role" asp-route-roleId="@role.Id">Удалить</a>
                             </td>
                         </tr>
                     }

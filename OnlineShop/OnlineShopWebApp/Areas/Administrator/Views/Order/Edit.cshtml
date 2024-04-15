@@ -26,11 +26,11 @@
                 <select asp-for="Status" asp-items="@Html.GetEnumSelectList<OrderStatus>()" class="form-control"></select>
             </div>
             <div>
-                <button type="submit" asp-action="UpdateOrderStatus" asp-controller="Administrator" asp-route-orderId="@Model.Id">
+                <button type="submit" asp-area="Administrator" asp-action="UpdateStatus" asp-controller="Order" asp-route-orderId="@Model.Id">
                     Внести изменения
                 </button>
             </div>
         </div>
     </div>
 </form>
-<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="ViewProducts" role="button">К списку продуктов</a>
+<a class="btn btn-light" style="margin:10px" asp-area="Administrator" asp-controller="Order" asp-action="Index" role="button">К списку заказов</a>

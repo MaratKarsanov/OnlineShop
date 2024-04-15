@@ -11,11 +11,11 @@
                 <span asp-validation-for="Name"></span>
             </div>
             <div>
-                <button type="submit" asp-action="AddRole" asp-controller="Administrator">
+                <button type="submit" asp-action="Add" asp-area="Administrator" asp-controller="Role">
                     Добавить роль
                 </button>
             </div>
         </div>
     </div>
 </form>
-<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="Products" role="button">К списку продуктов</a>
+<a class="btn btn-light" style="margin:10px" asp-area="Administrator" asp-controller="Role" asp-action="Index" role="button">К списку ролей</a>

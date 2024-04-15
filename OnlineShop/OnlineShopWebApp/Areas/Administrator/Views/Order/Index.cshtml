@@ -31,7 +31,7 @@
                         <td>@order.CreationTime.Date.ToString().Split(' ')[0]</td>
                         <td>@($"{order.CreationTime.Hour}:{order.CreationTime.Minute}")</td>
                         <td>
-                            <a asp-controller="Administrator" asp-action="EditOrder" asp-route-orderId="@order.Id">Подробнее</a>
+                            <a asp-area="Administrator" asp-action="Edit" asp-controller="Order" asp-route-orderId="@order.Id">Подробнее</a>
                         </td>
                     </tr>
                 }

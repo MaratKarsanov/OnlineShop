@@ -3,31 +3,31 @@
 <form method="post" target="_self">
     <div class="row">
         <div class="col-6">
-            <img class="" src="@Model.ImageLink" style="width: 600px; height: 400px;" />
+            <img class="" src="@Constants.ImageLink" style="width: 600px; height: 400px;" />
         </div>
         <div class="col-6">
             <div class="validation" asp-validation-summary="All"></div>
             <div>
                 <label asp-for="Name">Название:</label>
-                <input type="text" asp-for="Name" placeholder="New name" value="@Model.Name">
+                <input type="text" asp-for="Name" placeholder="Name">
                 <span asp-validation-for="Name"></span>
             </div>
             <div>
                 <label asp-for="Cost">Цена:</label>
-                <input type="number" asp-for="Cost" placeholder="New cost" value="@Model.Cost.ToString().Replace(",", ".")">
+                <input type="number" asp-for="Cost" placeholder="Cost">
                 <span asp-validation-for="Cost"></span>
             </div>
             <div>
                 <label asp-for="Description">Описание:</label>
-                <input type="text" asp-for="Description" placeholder="New description" value="@Model.Description">
+                <input type="text" asp-for="Description" placeholder="Description" value="-">
                 <span asp-validation-for="Description"></span>
             </div>
             <div>
-                <button type="submit" asp-action="EditProduct" asp-controller="Administrator" asp-route-productId="@Model.Id">
-                    Внести изменения
+                <button type="submit" asp-action="Add" asp-area="Administrator" asp-controller="Product">
+                    Добавить новый продукт
                 </button>
             </div>
         </div>
     </div>
 </form>
-<a class="btn btn-light" style="margin:10px" asp-controller="Administrator" asp-action="ViewProducts" role="button">К списку продуктов</a>
+<a class="btn btn-light" style="margin:10px" asp-area="Administrator" asp-action="Index" asp-controller="Product" role="button">К списку продуктов</a>

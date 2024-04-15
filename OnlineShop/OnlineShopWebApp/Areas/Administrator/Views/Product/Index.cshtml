@@ -6,7 +6,7 @@
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-9">
         <h2>Список продуктов</h2>
-        <a asp-controller="Administrator" asp-action="AddProduct">Добавить новый продукт</a>
+        <a asp-area="Administrator" asp-controller="Product" asp-action="Add">Добавить новый продукт</a>
         <table class="table">
             <thead>
                 <tr>
@@ -23,16 +23,16 @@
                     <tr>
                         <td>@(++productNumber)</td>
                         <td>
-                            <a style="color: black" asp-controller="Administrator" asp-action="EditProduct" asp-route-productId="@product.Id">
+                            <a style="color: black" asp-area="Administrator" asp-controller="Product" asp-action="Edit" asp-route-productId="@product.Id">
                                 @product.Name
                             </a>
                         </td>
                         <td>@product.Cost</td>
                         <td>
-                            <a asp-controller="Administrator" asp-action="EditProduct" asp-route-productId="@product.Id">Редактировать</a>
+                            <a asp-area="Administrator" asp-controller="Product" asp-action="Edit" asp-route-productId="@product.Id">Редактировать</a>
                         </td>
                         <td>
-                            <a asp-action="RemoveProduct" asp-controller="Administrator" asp-route-productId="@product.Id">Удалить</a>
+                            <a asp-action="Remove" asp-area="Administrator" asp-controller="Product" asp-route-productId="@product.Id">Удалить</a>
                         </td>
                     </tr>
                 }
