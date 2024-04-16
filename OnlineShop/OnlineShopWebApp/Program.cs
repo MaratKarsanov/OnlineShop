@@ -17,7 +17,7 @@ builder.Services.AddSingleton<IRepository<Favourities>, InMemoryRepository<Favou
 builder.Services.AddSingleton<IRepository<Cart>, InMemoryRepository <Cart>>();
 builder.Services.AddSingleton<IRepository<Order>, InMemoryRepository<Order>>();
 builder.Services.AddSingleton<IRepository<Role>, InMemoryRepository<Role>>();
-builder.Services.AddSingleton<IRepository<AutorizationData>, InMemoryRepository<AutorizationData>>();
+builder.Services.AddSingleton<IRepository<User>, InMemoryRepository<User>>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();

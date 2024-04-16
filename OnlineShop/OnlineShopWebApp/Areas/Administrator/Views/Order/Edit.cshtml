@@ -8,16 +8,16 @@
                 <p>Дата и время оформления: @Model.CreationTime.ToString()</p>
             </div>
             <div>
-                <p>Адрес доставки: @Model.Address</p>
+                <p>Адрес доставки: @Model.PersonalData.Address</p>
             </div>
             <div>
                 <p>Получатель: @Model.PersonalData.ToString()</p>
             </div>
             <div>
-                <p>Телефон: @Model.PhoneNumber</p>
+                <p>Телефон: @Model.PersonalData.PhoneNumber</p>
             </div>
             <div>
-                <p>Email: @Model.EMail</p>
+                <p>Email: @Model.PersonalData.EMail</p>
             </div>
             <div>
                 <p>Сумма заказа: @Model.TotalCost</p>

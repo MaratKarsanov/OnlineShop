@@ -5,11 +5,11 @@ namespace OnlineShopWebApp.Controllers
 {
     public class AutorizationController : Controller
     {
-        private IRepository<AutorizationData> autorizationDataRepository;
+        private IRepository<User> userRepository;
 
-        public AutorizationController(IRepository<AutorizationData> autorizationDataRepository)
+        public AutorizationController(IRepository<User> userRepository)
         {
-            this.autorizationDataRepository = autorizationDataRepository;
+            this.userRepository = userRepository;
         }
 
         public IActionResult Index()
@@ -21,14 +21,14 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return RedirectToAction(nameof(Index));
-            var autorizationDataFromRepository = autorizationDataRepository
-                .FirstOrDefault(ad => ad.Login == autorizationData.Login);
-            if (autorizationDataFromRepository is null)
+            var user = userRepository
+                .FirstOrDefault(u => u.AutorizationData.Login == autorizationData.Login);
+            if (user is null)
             {
                 ModelState.AddModelError("", "Пользователя с таким логином не существует!");
                 return RedirectToAction(nameof(Index));
             }
-            if (autorizationData.Password != autorizationDataFromRepository.Password)
+            if (autorizationData.Password != user.AutorizationData.Password)
             {
                 ModelState.AddModelError("", "Введен неверный пароль!");
                 return RedirectToAction(nameof(Index));

@@ -22,19 +22,19 @@
         <legend>Контакты</legend>
         <ul>
             <li>
-                <label asp-for="Address">Адрес:*</label>
-                <input type="text" asp-for="Address" placeholder="г.Москва, ул.Тверская, д.1">
-                <span asp-validation-for="Address"></span>
+                <label asp-for="PersonalData.Address">Адрес:*</label>
+                <input type="text" asp-for="PersonalData.Address" placeholder="г.Москва, ул.Тверская, д.1">
+                <span asp-validation-for="PersonalData.Address"></span>
             </li>
             <li>
-                <label asp-for="EMail">E-mail:*</label>
-                <input type="text" asp-for="EMail" placeholder="ivanov@gmail.com">
-                <span asp-validation-for="EMail"></span>
+                <label asp-for="PersonalData.EMail">E-mail:*</label>
+                <input type="text" asp-for="PersonalData.EMail" placeholder="ivanov@gmail.com">
+                <span asp-validation-for="PersonalData.EMail"></span>
             </li>
             <li>
-                <label asp-for="PhoneNumber">Телефон:*</label>
-                <input asp-for="PhoneNumber" placeholder="+7(900)000-00-00">
-                <span asp-validation-for="PhoneNumber"></span>
+                <label asp-for="PersonalData.PhoneNumber">Телефон:*</label>
+                <input asp-for="PersonalData.PhoneNumber" placeholder="+7(900)000-00-00">
+                <span asp-validation-for="PersonalData.PhoneNumber"></span>
             </li>
         </ul>
     </fieldset>
