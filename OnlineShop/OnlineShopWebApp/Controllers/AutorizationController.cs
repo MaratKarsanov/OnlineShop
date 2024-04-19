@@ -26,12 +26,12 @@ namespace OnlineShopWebApp.Controllers
             if (user is null)
             {
                 ModelState.AddModelError("", "Пользователя с таким логином не существует!");
-                return RedirectToAction(nameof(Index));
+                return View(nameof(Index));
             }
             if (autorizationData.Password != user.AutorizationData.Password)
             {
                 ModelState.AddModelError("", "Введен неверный пароль!");
-                return RedirectToAction(nameof(Index));
+                return View(nameof(Index));
             }
             return Content(autorizationData.ToString());
         }

@@ -20,7 +20,7 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult SignUp(RegistrationData registrationData)
         {
             if (!ModelState.IsValid)
-                return RedirectToAction(nameof(Index));
+                return View(nameof(Index));
             userRepository.Add(new User() 
             { 
                 AutorizationData = new AutorizationData()
