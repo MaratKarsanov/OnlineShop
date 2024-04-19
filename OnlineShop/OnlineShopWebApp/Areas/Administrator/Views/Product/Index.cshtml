@@ -29,10 +29,15 @@
                         </td>
                         <td>@product.Cost</td>
                         <td>
-                            <a asp-area="Administrator" asp-controller="Product" asp-action="Edit" asp-route-productId="@product.Id">Редактировать</a>
+                            <a asp-area="Administrator" asp-controller="Product" asp-action="Edit" asp-route-productId="@product.Id">
+                                Редактировать
+                            </a>
                         </td>
                         <td>
-                            <a asp-action="Remove" asp-area="Administrator" asp-controller="Product" asp-route-productId="@product.Id">Удалить</a>
+                            @* <a asp-action="Remove" asp-area="Administrator" asp-controller="Product" asp-route-productId="@product.Id">
+                                Удалить
+                            </a> *@
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#product_@product.Id">Удалить</button>
                         </td>
                     </tr>
                 }
@@ -40,3 +45,27 @@
         </table>
     </div>
 </div>
+
+@foreach (var product in Model)
+{
+    <!-- Модальное окно -->
+    <div class="modal fade" id="product_@product.Id" tabindex="-1" aria-labelledby="product_@product.Id" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="product_@product.Id">Удаление товара: @product.Name</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить этот товар?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <a class="btn btn-primary" type="button" asp-area="Administrator" asp-controller="Product" asp-action="Remove" asp-route-productId="@product.Id">
+                        Удалить
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
