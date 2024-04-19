@@ -34,6 +34,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult Add(Product newProduct)
         {
+            if (!ModelState.IsValid)
+                return View();
             newProduct.Id = Guid.NewGuid();
             newProduct.ImageLink = Constants.ImageLink;
             productRepository.Add(newProduct);
@@ -43,8 +45,6 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpGet]
         public IActionResult Edit(Guid productId)
         {
-            if (!ModelState.IsValid)
-                return View();
             var product = productRepository.TryGetElementById(productId);
             return View(product);
         }
@@ -52,6 +52,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult Edit(Product newProduct)
         {
+            if (!ModelState.IsValid)
+                return View();
             var product = productRepository.TryGetElementById(newProduct.Id);
             product.Name = newProduct.Name;
             product.Cost = newProduct.Cost;
