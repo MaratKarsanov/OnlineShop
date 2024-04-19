@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -8,17 +9,25 @@ namespace OnlineShopWebApp.Controllers
     {
         private IRepository<Product> productRepository;
         private IRepository<Favourities> favouritiesRepository;
+        private IRepository<Role> roleRepository;
         public static string searchString = "";
 
         public HomeController(IEnumerable<IRepository<Product>> productRepositories, 
-            IRepository<Favourities> favouritiesRepository)
+            IRepository<Favourities> favouritiesRepository, 
+            IRepository<Role> roleRepository)
         {
             productRepository = productRepositories.First();
             this.favouritiesRepository = favouritiesRepository;
+            this.roleRepository = roleRepository;
             if (productRepository.Count() == 0)
             {
                 for (var i = 0; i < 1000; i++)
                     productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
+            }
+            if (roleRepository.Count() == 0)
+            {
+                roleRepository.Add(new Role() { Name = "User" });
+                roleRepository.Add(new Role() { Name = "Administrator" });
             }
         }
 

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Role>
+
+<div class="row">
+    @await Html.PartialAsync("AdministratorPanel")
+    <div class="col-6">
+        <form method="post">
+            <h4 style="margin-bottom:20px">Смена роли для пользователя @ViewData["login"]</h4>
+            <div>
+                <select class="form-select-sm" name="newRole.Name">
+                    <option selected>@ViewData["roleName"]</option>
+                    @foreach (var role in Model)
+                    {
+                        <option value="@role.Name">@role.Name</option>
+                    }
+                </select>
+            </div>
+            <button 
+                style="margin-top:10px"
+                type="submit" 
+                class="btn btn-dark" 
+                asp-area="Administrator" 
+                asp-controller="User" 
+                asp-action="ChangeRole" 
+                asp-route-userId="@ViewData["userId"]">
+                Сохранить
+            </button>
+        </form>
+    </div>
+</div>

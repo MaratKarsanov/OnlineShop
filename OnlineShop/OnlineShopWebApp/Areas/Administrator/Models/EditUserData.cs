@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopWebApp.Models
+namespace OnlineShopWebApp.Areas.Administrator.Models
 {
-    public class PersonalData
+    public class EditUserData
     {
+        [Required(ErrorMessage = "Не указан логин")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Логин должен быть от 3 до 20 символов!")]
+        public string Login { get; set; }
+
         [Required(ErrorMessage = "Введите имя")]
         public string Name { get; set; }
 
@@ -20,15 +24,5 @@ namespace OnlineShopWebApp.Models
         [Required(ErrorMessage = "Введите номер телефона")]
         [Phone(ErrorMessage = "Неверный формат номера")]
         public string PhoneNumber { get; set; }
-
-        public PersonalData()
-        {
-            Name = Surname = Address = EMail = PhoneNumber = "";
-        }
-
-        public override string ToString()
-        {
-            return $"{Surname} {Name}";
-        }
     }
 }
