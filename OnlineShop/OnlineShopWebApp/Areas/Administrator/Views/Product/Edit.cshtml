@@ -23,11 +23,22 @@
                 <span asp-validation-for="Description"></span>
             </div>
             <div>
-                <button type="submit" asp-action="Edit" asp-area="Administrator" asp-controller="Product" asp-route-Id="@Model.Id">
+                <button type="submit" 
+                        style="margin-top:10px"
+                        asp-action="Edit" 
+                        asp-area="Administrator" 
+                        asp-controller="Product" 
+                        asp-route-Id="@Model.Id">
                     Внести изменения
                 </button>
             </div>
+            <button style="margin-top:10px"
+                    asp-area="Administrator"
+                    asp-controller="Product"
+                    asp-action="Index"
+                    role="button">
+                К списку продуктов
+            </button>
         </div>
     </div>
 </form>
-<a class="btn btn-light" style="margin:10px" asp-area="Administrator" asp-action="Index" asp-controller="Product" role="button">К списку продуктов</a>

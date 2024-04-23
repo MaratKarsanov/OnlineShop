@@ -7,17 +7,6 @@ namespace OnlineShopWebApp.Models
         public List<CartItem> Products { get; set; }
         public decimal TotalCost => Products.Sum(ci => ci.TotalCost);
         public PersonalData PersonalData { get; set; }
-
-        [Required(ErrorMessage = "Введите адрес")]
-        public string Address { get; set; }
-
-        [Required(ErrorMessage = "Введите e-mail")]
-        [EmailAddress(ErrorMessage = "Некорректный адрес")]
-        public string EMail { get; set; }
-
-        [Required(ErrorMessage = "Введите номер телефона")]
-        [Phone(ErrorMessage = "Неверный формат номера")]
-        public string PhoneNumber { get; set; }
         public DateTime CreationTime { get; }
         public OrderStatus Status { get; set; }
 
@@ -35,7 +24,10 @@ namespace OnlineShopWebApp.Models
 
         public override string ToString()
         {
-            return $"User name: {PersonalData.Name} {PersonalData.Surname}\nAddress: {Address}\nE-mail: {EMail}\nPhone number: {PhoneNumber}";
+            return $"User name: {PersonalData.Name} {PersonalData.Surname}\n" +
+                $"Address: {PersonalData.Address}\n" +
+                $"E-mail: {PersonalData.EMail}\n" +
+                $"Phone number: {PersonalData.PhoneNumber}";
         }
     }
 }

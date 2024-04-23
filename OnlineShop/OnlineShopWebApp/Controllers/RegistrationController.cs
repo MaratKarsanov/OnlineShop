@@ -5,6 +5,13 @@ namespace OnlineShopWebApp.Controllers
 {
     public class RegistrationController : Controller
     {
+        private IRepository<User> userRepository;
+
+        public RegistrationController(IRepository<User> userRepository)
+        {
+            this.userRepository = userRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -12,9 +19,17 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult SignUp(RegistrationData registrationData)
         {
-            if (ModelState.IsValid)
-                return Content(registrationData.ToString());
-            return RedirectToAction("Index", "Registration");
+            if (!ModelState.IsValid)
+                return View(nameof(Index));
+            userRepository.Add(new User() 
+            { 
+                AutorizationData = new AutorizationData()
+                {
+                    Login = registrationData.Login,
+                    Password = registrationData.Password
+                }
+            });
+            return RedirectToAction(nameof(AutorizationController.Index), "Autorization");
         }
     }
 }

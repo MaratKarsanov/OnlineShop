@@ -1,6 +1,51 @@
-﻿<div class="row">
+﻿@model IEnumerable<User>
+
+<div class="row">
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-9">
         <h2>Список пользователей</h2>
+        <a asp-area="Administrator" asp-action="Add" asp-controller="User">Добавить пользователя</a>
+        @if (Model.Count() > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Логин</th>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Телефон</th>
+                        <th>Электронная почта</th>
+                        <th>Роль</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-area="Administrator" asp-action="Edit" asp-controller="User" asp-route-userId="@user.Id">
+                                    @user.AutorizationData.Login
+                                </a>
+                            </td>
+                            @if (user.PersonalData is not null)
+                            {
+                                <td>@user.PersonalData.Name</td>
+                                <td>@user.PersonalData.Surname</td>
+                                <td>@user.PersonalData.PhoneNumber</td>
+                                <td>@user.PersonalData.EMail</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            }
+                            <td>@user.Role.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 </div>

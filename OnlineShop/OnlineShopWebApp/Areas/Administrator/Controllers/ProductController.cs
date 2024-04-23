@@ -22,7 +22,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Remove(Guid productId)
         {
             productRepository.Remove(productId);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -39,7 +39,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             newProduct.Id = Guid.NewGuid();
             newProduct.ImageLink = Constants.ImageLink;
             productRepository.Add(newProduct);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -59,7 +59,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             product.Cost = newProduct.Cost;
             product.Description = newProduct.Description;
             product.ImageLink = Constants.ImageLink;
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

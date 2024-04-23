@@ -30,7 +30,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             var order = orderRepository.TryGetElementById(orderId);
             order.UpdateStatus(status);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

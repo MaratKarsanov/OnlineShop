@@ -22,7 +22,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Remove(Guid roleId)
         {
             roleRepository.Remove(roleId);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -40,7 +40,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
                 return View();
             newRole.Id = Guid.NewGuid();
             roleRepository.Add(newRole);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

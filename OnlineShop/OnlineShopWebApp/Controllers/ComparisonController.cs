@@ -26,7 +26,7 @@ namespace OnlineShopWebApp.Controllers
         {
             var product = productRepository.TryGetElementById(productId);
             comparisonProducts.Add(product);
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

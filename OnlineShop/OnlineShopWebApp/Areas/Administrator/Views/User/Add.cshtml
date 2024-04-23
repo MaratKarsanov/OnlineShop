@@ -1,0 +1,60 @@
+﻿@model RegistrationData
+
+<form method="post" target="_self">
+    <div class="row">
+        @await Html.PartialAsync("AdministratorPanel")
+        <div class="col-6">
+            <div class="validation" asp-validation-summary="All"></div>
+            <div>
+                <label asp-for="Login">Логин:</label>
+                <input type="text" asp-for="Login">
+                <span asp-validation-for="Login"></span>
+            </div>
+            <div>
+                <label asp-for="Password">Пароль:</label>
+                <input type="password" asp-for="Password">
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div>
+                <label asp-for="RepeatedPassword">Повторите пароль:</label>
+                <input type="password" asp-for="RepeatedPassword">
+                <span asp-validation-for="RepeatedPassword"></span>
+            </div>
+            <div>
+                <label asp-for="PersonalData.Name">Имя:</label>
+                <input type="text" asp-for="PersonalData.Name">
+                <span asp-validation-for="PersonalData.Name"></span>
+            </div>
+            <div>
+                <label asp-for="PersonalData.Surname">Фамилия:</label>
+                <input type="text" asp-for="PersonalData.Surname">
+                <span asp-validation-for="PersonalData.Surname"></span>
+            </div>
+            <div>
+                <label asp-for="PersonalData.Address">Адрес:</label>
+                <input type="text" asp-for="PersonalData.Address">
+                <span asp-validation-for="PersonalData.Address"></span>
+            </div>
+            <div>
+                <label asp-for="PersonalData.EMail">Электронная почта:</label>
+                <input type="text" asp-for="PersonalData.EMail">
+                <span asp-validation-for="PersonalData.EMail"></span>
+            </div>
+            <div>
+                <label asp-for="PersonalData.PhoneNumber">Телефон:</label>
+                <input type="text" asp-for="PersonalData.PhoneNumber">
+                <span asp-validation-for="PersonalData.PhoneNumber"></span>
+            </div>
+            <div>
+                <button type="submit"
+                        class="btn btn-dark"
+                        style="margin-top:10px"
+                        asp-action="Add"
+                        asp-area="Administrator"
+                        asp-controller="User">
+                    Добавить
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
