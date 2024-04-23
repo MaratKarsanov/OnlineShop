@@ -2,9 +2,7 @@
 
 <form method="post" target="_self">
     <div class="row">
-        <div class="col-6">
-            <img class="" src="@Constants.ImageLink" style="width: 600px; height: 400px;" />
-        </div>
+        @await Html.PartialAsync("AdministratorPanel")
         <div class="col-6">
             <div class="validation" asp-validation-summary="All"></div>
             <div>
@@ -31,13 +29,6 @@
                     Добавить новый продукт
                 </button>
             </div>
-            <button style="margin-top:10px"
-                    asp-area="Administrator"
-                    asp-controller="Product"
-                    asp-action="Index"
-                    role="button">
-                К списку продуктов
-            </button>
         </div>
     </div>
 </form>
