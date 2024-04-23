@@ -1,0 +1,63 @@
+﻿@model User
+
+<div class="row">
+    @await Html.PartialAsync("AdministratorPanel")
+    <div class="col-6">
+        <div>
+            <p>Логин: @Model.AutorizationData.Login</p>
+        </div>
+        @if (Model.PersonalData is not null)
+        {
+            <div>
+                <p>Имя: @Model.PersonalData.Name</p>
+            </div>
+            <div>
+                <p>Фамилия: @Model.PersonalData.Surname</p>
+            </div>
+            <div>
+                <p>Телефон: @Model.PersonalData.PhoneNumber</p>
+            </div>
+            <div>
+                <p>Электронная почта: @Model.PersonalData.EMail</p>
+            </div>
+        }
+        else
+        {
+            <div>
+                <p>Имя:</p>
+            </div>
+            <div>
+                <p>Фамилия:</p>
+            </div>
+            <div>
+                <p>Телефон:</p>
+            </div>
+            <div>
+                <p>Электронная почта:</p>
+            </div>
+        }
+        <button 
+            class="btn btn-dark dropdown-toggle" 
+            type="button"
+            id="dropdownMenuButton" 
+            data-bs-toggle="dropdown" 
+            aria-haspopup="true" 
+            aria-expanded="false">
+            Действия
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangePassword" asp-route-userId="@Model.Id">
+                Смена пароля
+            </a>
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="EditData" asp-route-userId="@Model.Id">
+                Редактирование данных
+            </a>
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangeRole" asp-route-userId="@Model.Id">
+                Смена роли
+            </a>
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="Delete" asp-route-userId="@Model.Id">
+                Удалить
+            </a>
+        </div>
+    </div>
+</div>
