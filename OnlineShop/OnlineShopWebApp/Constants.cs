@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public static Guid UserId => default;
+        public static string UserId => "UserId";
         public static int PageSize => 12;
         public static int PaginationButtonsCount => 10;
         public static string ImageLink = "/images/DefaultImg.jpg";

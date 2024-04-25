@@ -2,6 +2,9 @@ using OnlineShopWebApp.Models;
 using OnlineShopWebApp;
 using Serilog;
 using OnlineShopWebApp.Areas.Administrator.Models;
+using OnlineShop.Db;
+using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,23 +12,26 @@ builder.Host.UseSerilog((context, configuration) => configuration
 .ReadFrom.Configuration(context.Configuration)
 .Enrich.WithProperty("ApplicationName", "Online Shop"));
 
-// Add services to the container.
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
+});
+
 builder.Services.AddControllersWithViews();
-for (var i = 0; i < 2; i++)
-    builder.Services.AddSingleton<IRepository<Product>, InMemoryRepository<Product>>();
-builder.Services.AddSingleton<IRepository<Favourities>, InMemoryRepository<Favourities>>();
-builder.Services.AddSingleton<IRepository<Cart>, InMemoryRepository <Cart>>();
-builder.Services.AddSingleton<IRepository<Order>, InMemoryRepository<Order>>();
-builder.Services.AddSingleton<IRepository<Role>, InMemoryRepository<Role>>();
-builder.Services.AddSingleton<IRepository<User>, InMemoryRepository<User>>();
+
+builder.Services.AddTransient<OnlineShop.Db.IRepository<Product>, DbRepository<Product>>();
+builder.Services.AddSingleton<OnlineShopWebApp.IRepository<ProductViewModel>, InMemoryRepository<ProductViewModel>>();
+builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Favourities>, InMemoryRepository<Favourities>>();
+builder.Services.AddTransient<ICartRepository, CartDbRepository>();
+builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Order>, InMemoryRepository<Order>>();
+builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Role>, InMemoryRepository<Role>>();
+builder.Services.AddSingleton<OnlineShopWebApp.IRepository<User>, InMemoryRepository<User>>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

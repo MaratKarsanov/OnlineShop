@@ -1,41 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Models;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class CartController : Controller
     {
-        private IRepository<Product> productRepository;
-        private IRepository<Cart> cartRepository;
+        private OnlineShop.Db.IRepository<Product> productRepository;
+        private ICartRepository cartRepository;
 
-        public CartController(IEnumerable<IRepository<Product>> productRepositories, IRepository<Cart> cartRepository)
+        public CartController(OnlineShop.Db.IRepository<Product> productRepository,
+            ICartRepository cartRepository)
         {
-            productRepository = productRepositories.First();
+            this.productRepository = productRepository;
             this.cartRepository = cartRepository;
         }
 
-        public IActionResult Index(Guid userId)
+        public IActionResult Index(string userId)
         {
-            var cart = cartRepository.TryGetElementById(userId);
+            var cart = cartRepository.TryGetByUserId(userId);
             if (cart is null)
-                cart = cartRepository.Add(new Cart(userId));
-            return View(cart);
+                return View(null);
+            return View(Helpers.MappingHelper.ToCartViewModel(cart));
         }
 
         public IActionResult Add(Guid productId)
         {
             var product = productRepository.TryGetElementById(productId);
-            var cart = cartRepository.TryGetElementById(Constants.UserId);
-            if (cart is null)
-                cart = cartRepository.Add(new Cart(Constants.UserId));
-            cart.Add(product);
-            return RedirectToAction(nameof(Index));
+            cartRepository.Add(product, Constants.UserId);
+            return RedirectToAction(nameof(Index), new { userId = Constants.UserId });
         }
 
         public IActionResult Remove(Guid productId)
         {
             var product = productRepository.TryGetElementById(productId);
-            var cart = cartRepository.TryGetElementById(Constants.UserId);
+            var cart = cartRepository.TryGetByUserId(Constants.UserId);
             if (cart is null)
                 throw new NullReferenceException("Не найдена корзина пользователя!");
             cart.Remove(product);

@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class FavouritiesController : Controller
     {
-        private readonly IRepository<Product> productRepository;
+        private OnlineShop.Db.IRepository<Product> productRepository;
         private readonly IRepository<Favourities> favouritiesRepository;
 
-        public FavouritiesController(IEnumerable<IRepository<Product>> productRepositories,
+        public FavouritiesController(OnlineShop.Db.IRepository<Product> productRepository,
             IRepository<Favourities> favouritiesRepository)
         {
-            productRepository = productRepositories.First();
+            this.productRepository = productRepository;
             this.favouritiesRepository = favouritiesRepository;
         }
 
@@ -28,10 +29,10 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetElementById(productId);
-            var favourities = favouritiesRepository.TryGetElementById(Constants.UserId);
+            var favourities = favouritiesRepository.TryGetElementById(default);
             if (favourities is null)
-                favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
-            favourities.Add(product);
+                favourities = favouritiesRepository.Add(new Favourities(default));
+            //favourities.Add(product);
             product.IsInFavourities = true;
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
@@ -40,9 +41,9 @@ namespace OnlineShopWebApp.Controllers
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var favourities = favouritiesRepository.TryGetElementById(Constants.UserId);
+            var favourities = favouritiesRepository.TryGetElementById(default);
             if (favourities is null)
-                favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
+                favourities = favouritiesRepository.Add(new Favourities(default));
             var product = productRepository.TryGetElementById(productId);
             favourities.Remove(productId);
             product.IsInFavourities = false;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 using System.Linq;
 
@@ -6,13 +7,13 @@ namespace OnlineShopWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private IRepository<Product> productRepository;
+        private OnlineShop.Db.IRepository<Product> productRepository;
         private IRepository<Favourities> favouritiesRepository;
 
-        public ProductController(IEnumerable<IRepository<Product>> productRepositories,
+        public ProductController(OnlineShop.Db.IRepository<Product> productRepository,
             IRepository<Favourities> favouritiesRepository)
         {
-            productRepository = productRepositories.First();
+            this.productRepository = productRepository;
             this.favouritiesRepository = favouritiesRepository;
         }
 
@@ -21,11 +22,11 @@ namespace OnlineShopWebApp.Controllers
             var product = productRepository.TryGetElementById(id);
             if (product is null)
                 throw new NullReferenceException("Товара с такиим id нет в репозитории!");
-            var favourities = favouritiesRepository.TryGetElementById(Constants.UserId);
+            var favourities = favouritiesRepository.TryGetElementById(default);
             if (favourities is null)
-                favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
-            ViewBag.isInFavourities = favourities.Contains(product);
-            return View(product);
+                favourities = favouritiesRepository.Add(new Favourities(default));
+            ViewBag.isInFavourities = favourities.Contains(Helpers.MappingHelper.ToProductViewModel(product));
+            return View(Helpers.MappingHelper.ToProductViewModel(product));
         }
     }
 }

@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class OrderController : Controller
     {
-        private IRepository<Cart> cartRepository;
+        private ICartRepository cartRepository;
         private IRepository<Order> orderRepository;
 
-        public OrderController(IRepository<Cart> cartRepository, IRepository<Order> orderRepository)
+        public OrderController(ICartRepository cartRepository, 
+            IRepository<Order> orderRepository)
         {
             this.cartRepository = cartRepository;
             this.orderRepository = orderRepository;
@@ -24,16 +27,11 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
-            var cart = cartRepository.TryGetElementById(Constants.UserId);
-            newOrder.Products = cart.ToList();
+            var cart = cartRepository.TryGetByUserId(Constants.UserId);
+            newOrder.Products = Helpers.MappingHelper.ToCartViewModels(cart).ToList();
             orderRepository.Add(newOrder);
-            cart.Clear();
-            return RedirectToAction(nameof(Success), new { order = newOrder.ToString() });
-        }
-
-        public IActionResult Success(string order)
-        {
-            return View((object)order);
+            cart.Items.Clear();
+            return RedirectToAction(nameof(Index), "Home");
         }
     }
 }

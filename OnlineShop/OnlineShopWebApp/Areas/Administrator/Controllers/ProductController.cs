@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
 using System.Data;
 
@@ -7,16 +8,16 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class ProductController : Controller
     {
-        private IRepository<Product> productRepository;
+        private OnlineShop.Db.IRepository<Product> productRepository;
 
-        public ProductController(IEnumerable<IRepository<Product>> productRepositories)
+        public ProductController(OnlineShop.Db.IRepository<Product> productRepository)
         {
-            productRepository = productRepositories.First();
+            this.productRepository = productRepository;
         }
 
         public IActionResult Index()
         {
-            return View(productRepository.OrderBy(p => p.Name));
+            return View(Helpers.MappingHelper.ToProductViewModels(productRepository).OrderBy(p => p.Name));
         }
 
         public IActionResult Remove(Guid productId)
@@ -50,7 +51,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Product newProduct)
+        public IActionResult Edit(ProductViewModel newProduct)
         {
             if (!ModelState.IsValid)
                 return View();

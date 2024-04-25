@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
 
@@ -7,23 +8,23 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private IRepository<Product> productRepository;
+        private OnlineShop.Db.IRepository<Product> productRepository;
         private IRepository<Favourities> favouritiesRepository;
         private IRepository<Role> roleRepository;
         public static string searchString = "";
 
-        public HomeController(IEnumerable<IRepository<Product>> productRepositories, 
+        public HomeController(OnlineShop.Db.IRepository<Product> productRepository, 
             IRepository<Favourities> favouritiesRepository, 
             IRepository<Role> roleRepository)
         {
-            productRepository = productRepositories.First();
+            this.productRepository = productRepository;
             this.favouritiesRepository = favouritiesRepository;
             this.roleRepository = roleRepository;
-            if (productRepository.Count() == 0)
-            {
-                for (var i = 0; i < 1000; i++)
-                    productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
-            }
+            //if (productRepository.Count() == 0)
+            //{
+            //    for (var i = 0; i < 1000; i++)
+            //        productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
+            //}
             if (roleRepository.Count() == 0)
             {
                 roleRepository.Add(new Role() { Name = "User" });
@@ -46,11 +47,11 @@ namespace OnlineShopWebApp.Controllers
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
                 .ToList();
-            var favourities = favouritiesRepository.TryGetElementById(Constants.UserId);
+            var favourities = favouritiesRepository.TryGetElementById(default);
             if (favourities is null)
-                favourities = favouritiesRepository.Add(new Favourities(Constants.UserId));
+                favourities = favouritiesRepository.Add(new Favourities(default));
             ViewBag.pageNumber = pageNumber;
-            return View(showingProducts);
+            return View(Helpers.MappingHelper.ToProductViewModels(showingProducts));
         }
 
         public IActionResult Privacy()
