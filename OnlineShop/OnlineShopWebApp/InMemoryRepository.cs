@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp
 {
-    public class InMemoryRepository<T> : IEnumerable<T>, IRepository<T>
+    public class InMemoryRepository<T> : IRepository<T>
         where T : RepositoryItem
     {
         private List<T> Elements;
@@ -16,6 +16,11 @@ namespace OnlineShopWebApp
         public InMemoryRepository(List<T> elements)
         {
             Elements = elements;
+        }
+
+        public List<T> GetAll()
+        {
+            return Elements;
         }
 
         public T TryGetElementById(Guid id)
@@ -49,17 +54,6 @@ namespace OnlineShopWebApp
         public bool Contains(T element)
         {
             return Elements.Contains(element);
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var element in Elements)
-                yield return element;
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         public override string ToString()

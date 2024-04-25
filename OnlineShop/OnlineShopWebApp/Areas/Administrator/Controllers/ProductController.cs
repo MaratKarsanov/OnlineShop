@@ -17,7 +17,10 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.ToProductViewModels(productRepository).OrderBy(p => p.Name));
+            return View(Helpers.MappingHelper.
+                ToProductViewModels(productRepository.
+                GetAll()).
+                OrderBy(p => p.Name));
         }
 
         public IActionResult Remove(Guid productId)

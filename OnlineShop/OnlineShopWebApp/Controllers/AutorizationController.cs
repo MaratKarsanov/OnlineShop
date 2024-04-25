@@ -22,6 +22,7 @@ namespace OnlineShopWebApp.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction(nameof(Index));
             var user = userRepository
+                .GetAll()
                 .FirstOrDefault(u => u.AutorizationData.Login == autorizationData.Login);
             if (user is null)
             {

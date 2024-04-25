@@ -31,14 +31,10 @@ namespace OnlineShopWebApp.Controllers
             return RedirectToAction(nameof(Index), new { userId = Constants.UserId });
         }
 
-        public IActionResult Remove(Guid productId)
+        public IActionResult DecreaseAmount(Guid productId)
         {
-            var product = productRepository.TryGetElementById(productId);
-            var cart = cartRepository.TryGetByUserId(Constants.UserId);
-            if (cart is null)
-                throw new NullReferenceException("Не найдена корзина пользователя!");
-            cart.Remove(product);
-            return RedirectToAction(nameof(Index));
+            cartRepository.DecreaseAmount(productId, Constants.UserId);
+            return RedirectToAction(nameof(Index), new { userId = Constants.UserId });
         }
     }
 }

@@ -32,17 +32,17 @@ namespace OnlineShopWebApp.Helpers
             return new CartViewModel()
             {
                 Id = cart.Id,
-                Items = ToCartViewModels(cart.Items).ToList()
+                Items = ToCartViewModels(cart).ToList()
             };
         }
-        public static IEnumerable<CartItemViewModel> ToCartViewModels(IEnumerable<CartItem> cartDbItems)
+        public static IEnumerable<CartItemViewModel> ToCartViewModels(Cart cartDb)
         {
             var carItems = new List<CartItemViewModel>();
-            foreach (var cartDbItem in cartDbItems)
+            foreach (var cartDbItem in cartDb.Items)
             {
                 var cartItem = new CartItemViewModel()
                 {
-                    Id = cartDbItem.Id,
+                    //Id = cartDbItem.Id,
                     Amount = cartDbItem.Amount,
                     Product = ToProductViewModel(cartDbItem.Product)
                 };

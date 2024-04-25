@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Db.Models
 {
-    public class Cart : IEnumerable<CartItem>
+    public class Cart
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
@@ -29,17 +29,6 @@ namespace OnlineShop.Db.Models
                     item.Amount--;
                     return;
                 }
-        }
-
-        public IEnumerator<CartItem> GetEnumerator()
-        {
-            foreach (var item in Items)
-                yield return item;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

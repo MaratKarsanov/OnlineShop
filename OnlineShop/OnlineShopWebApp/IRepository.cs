@@ -1,8 +1,9 @@
 ﻿namespace OnlineShopWebApp
 {
-    public interface IRepository<T> : IEnumerable<T>
+    public interface IRepository<T>
         where T : RepositoryItem
     {
+        public List<T> GetAll();
         public T TryGetElementById(Guid id);
         public T Add(T element);
         public void Remove(Guid id);

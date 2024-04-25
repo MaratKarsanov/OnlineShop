@@ -3,7 +3,7 @@ using System.Text;
 
 namespace OnlineShop.Db
 {
-    public class DbRepository<T> : IEnumerable<T>, IRepository<T>
+    public class DbRepository<T> : IRepository<T>
         where T : RepositoryItem
     {
         private readonly DatabaseContext databaseContext;
@@ -56,23 +56,17 @@ namespace OnlineShop.Db
             return dbSet.Contains(element);
         }
 
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var element in dbSet)
-                yield return element;
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         public override string ToString()
         {
             var result = new StringBuilder();
             foreach (var e in dbSet)
                 result.Append(e.ToString() + "\n\n");
             return result.ToString();
+        }
+
+        public List<T> GetAll()
+        {
+            return dbSet.ToList();
         }
     }
 }

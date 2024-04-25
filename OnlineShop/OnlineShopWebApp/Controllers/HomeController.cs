@@ -25,7 +25,7 @@ namespace OnlineShopWebApp.Controllers
             //    for (var i = 0; i < 1000; i++)
             //        productRepository.Add(new Product($"Name{i + 1}", (i + 1) * 1000));
             //}
-            if (roleRepository.Count() == 0)
+            if (roleRepository.GetAll().Count() == 0)
             {
                 roleRepository.Add(new Role() { Name = "User" });
                 roleRepository.Add(new Role() { Name = "Administrator" });
@@ -39,6 +39,7 @@ namespace OnlineShopWebApp.Controllers
             if (searchString == "emptySearchString")
                 HomeController.searchString = "";
             var foundedProducts = productRepository
+                .GetAll()
                 .Where(p => p.Name.Contains(HomeController.searchString))
                 .ToList();
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);

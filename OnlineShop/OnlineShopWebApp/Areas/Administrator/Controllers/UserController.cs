@@ -15,11 +15,13 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             this.userRepository = userRepository;
             this.roleRepository = roleRepository;
-            if (userRepository.Count() == 0)
+            if (userRepository.GetAll().Count == 0)
             {
                 userRepository.Add(new User()
                 {
-                    Role = roleRepository.FirstOrDefault(r => r.Name == "Administrator"),
+                    Role = roleRepository
+                    .GetAll()
+                    .FirstOrDefault(r => r.Name == "Administrator"),
                     AutorizationData = new AutorizationData()
                     {
                         Login = "MaratKarsanov",
@@ -141,7 +143,9 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             ViewData["userId"] = user.Id;
             ViewData["roleName"] = user.Role.Name;
             ViewData["login"] = user.AutorizationData.Login;
-            return View(roleRepository.Where(r => r.Name != user.Role.Name));
+            return View(roleRepository
+                .GetAll()
+                .Where(r => r.Name != user.Role.Name));
         }
 
         [HttpPost]

@@ -34,7 +34,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult Add(Role newRole)
         {
-            if (roleRepository.Where(r => r.Name == newRole.Name).Count() > 0)
+            if (roleRepository.GetAll().Where(r => r.Name == newRole.Name).Count() > 0)
                 ModelState.AddModelError("", "Такая роль уже существует");
             if (!ModelState.IsValid)
                 return View();
