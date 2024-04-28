@@ -1,4 +1,4 @@
-﻿@model Favourities
+﻿@model IEnumerable<ProductViewModel>
 
 @if (Model is null || Model.Count() == 0)
 {
@@ -28,7 +28,11 @@
                 </td>
                 <td>@product.Cost</td>
                 <td>
-                    <a asp-controller="Favourities" asp-action="Remove" asp-route-productId="@product.Id" asp-route-controllerName="Favourities" >
+                    <a 
+                        asp-controller="Favourites" 
+                        asp-action="Remove" 
+                        asp-route-productId="@product.Id" 
+                        asp-route-controllerName="Favourites" >
                         Удалить
                     </a>
                 </td>

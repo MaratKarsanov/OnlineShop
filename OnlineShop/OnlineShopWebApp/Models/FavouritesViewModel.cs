@@ -2,14 +2,14 @@
 
 namespace OnlineShopWebApp.Models
 {
-    public class Favourities : RepositoryItem, IEnumerable<ProductViewModel>
+    public class FavouritesViewModel : RepositoryItem
     {
-        private List<ProductViewModel> Items;
+        public string UserId { get; set; }
+        public List<ProductViewModel> Items { get; set; }
         public int Count => Items?.Count ?? 0;
 
-        public Favourities(Guid id)
+        public FavouritesViewModel()
         {
-            Id = id;
             Items = new List<ProductViewModel>();
         }
 
@@ -28,17 +28,6 @@ namespace OnlineShopWebApp.Models
         public bool Contains(ProductViewModel product)
         {
             return Items.Contains(product);
-        }
-
-        public IEnumerator<ProductViewModel> GetEnumerator()
-        {
-            foreach (var item in Items)
-                yield return item;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

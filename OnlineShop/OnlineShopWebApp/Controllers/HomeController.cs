@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
@@ -9,12 +10,12 @@ namespace OnlineShopWebApp.Controllers
     public class HomeController : Controller
     {
         private OnlineShop.Db.IRepository<Product> productRepository;
-        private IRepository<Favourities> favouritiesRepository;
+        private IFavouritesRepository favouritiesRepository;
         private IRepository<Role> roleRepository;
         public static string searchString = "";
 
-        public HomeController(OnlineShop.Db.IRepository<Product> productRepository, 
-            IRepository<Favourities> favouritiesRepository, 
+        public HomeController(OnlineShop.Db.IRepository<Product> productRepository,
+            IFavouritesRepository favouritiesRepository, 
             IRepository<Role> roleRepository)
         {
             this.productRepository = productRepository;
@@ -48,9 +49,9 @@ namespace OnlineShopWebApp.Controllers
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
                 .ToList();
-            var favourities = favouritiesRepository.TryGetElementById(default);
-            if (favourities is null)
-                favourities = favouritiesRepository.Add(new Favourities(default));
+            //var favourities = favouritiesRepository.TryGetByUserId(default);
+            //if (favourities is null)
+            //    favourities = favouritiesRepository.Add(new Favourities(default));
             ViewBag.pageNumber = pageNumber;
             return View(Helpers.MappingHelper.ToProductViewModels(showingProducts));
         }

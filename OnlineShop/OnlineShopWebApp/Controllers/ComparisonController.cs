@@ -1,31 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 using OnlineShop.Db.Models;
-using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class ComparisonController : Controller
     {
         private OnlineShop.Db.IRepository<Product> productRepository;
-        private IRepository<ProductViewModel> comparisonProducts;
+        private IComparisonRepository comparisonRepository;
 
-        public ComparisonController(IRepository<ProductViewModel> productRepositories,
+        public ComparisonController(IComparisonRepository productRepositories,
             OnlineShop.Db.IRepository<Product> productRepository)
         {
             this.productRepository = productRepository;
-            comparisonProducts = productRepositories;
+            comparisonRepository = productRepositories;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string userId)
         {
-            return View(comparisonProducts);
+            var comparison = comparisonRepository.TryGetByUserId(userId);
+            if (comparison is null)
+                return View(null);
+            return View(Helpers.MappingHelper.ToComparisonViewModel(comparison));
         }
 
-        public IActionResult Add(Guid productId)
+        public IActionResult Add(Guid productId,
+            string controllerName = "Home",
+            int pageNumber = 1)
         {
             var product = productRepository.TryGetElementById(productId);
-            //comparisonProducts.Add(product);
-            return RedirectToAction(nameof(Index));
+            comparisonRepository.Add(product, Constants.UserId);
+            return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId, userId = Constants.UserId});
+        }
+
+        public IActionResult Remove(Guid productId,
+            string controllerName = "Home",
+            int pageNumber = 1)
+        {
+            var product = productRepository.TryGetElementById(productId);
+            comparisonRepository.Remove(product, Constants.UserId);
+            return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId, userId = Constants.UserId });
         }
     }
 }

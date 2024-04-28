@@ -41,7 +41,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(userRepository);
+            return View(userRepository.GetAll());
         }
 
         [HttpGet]

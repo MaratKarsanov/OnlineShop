@@ -1,0 +1,11 @@
+﻿@model int
+@if (Model > 0)
+{
+    <p class="text-dark">@Model</p>
+}
+<a class="nav-link text-dark"
+    asp-controller="Comparison" 
+    asp-action="Index" 
+    asp-route-userId="@Constants.UserId">
+    Comparison
+</a>

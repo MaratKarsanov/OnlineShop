@@ -14,6 +14,7 @@ namespace OnlineShopWebApp.Models
         [Required(ErrorMessage = "Нет описания")]
         public string Description { get; set; }
         public string ImageLink { get; set; }
-        public bool IsInFavourities { get; set; }
+        public bool IsInFavourites { get; set; }
+        public bool IsInComparison { get; set; }
     }
 }

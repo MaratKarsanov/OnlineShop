@@ -1,20 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Models;
+using OnlineShop.Db;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Favourites
 {
     public class FavouritesViewComponent : ViewComponent
     {
-        private readonly IRepository<Favourities> favouritiesRepository;
+        private readonly IFavouritesRepository favouritesRepository;
 
-        public FavouritesViewComponent(IRepository<Favourities> favouritiesRepository)
+        public FavouritesViewComponent(IFavouritesRepository favouritesRepository)
         {
-            this.favouritiesRepository = favouritiesRepository;
+            this.favouritesRepository = favouritesRepository;
         }
 
         public IViewComponentResult Invoke()
         {
-            var favourities = favouritiesRepository.TryGetElementById(default);
+            var favourities = favouritesRepository.TryGetByUserId(Constants.UserId);
             return View("Favourites", favourities?.Count ?? 0);
         }
     }

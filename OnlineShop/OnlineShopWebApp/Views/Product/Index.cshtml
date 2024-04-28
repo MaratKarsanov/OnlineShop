@@ -13,16 +13,51 @@
 </div>
 <a class="btn btn-light" style="margin:10px" href="/home/index" role="button">Продолжить покупки</a>
 <a class="btn btn-light" style="margin:10px" href="/cart/add?productId=@Model.Id" role="button">Добавить в корзину</a>
-@if (!ViewBag.isInFavourities)
+@if (!Model.IsInFavourites)
 {
-    <a class="btn btn-light" asp-action="Add" asp-controller="Favourities" asp-route-productId="@Model.Id" asp-route-controllerName="Product" role="button">
+    <a class="btn btn-light" 
+        asp-action="Add" 
+        asp-controller="Favourites" 
+        asp-route-productId="@Model.Id" 
+        asp-route-controllerName="Product" 
+        role="button">
         Добавить в избранное
     </a>
 }
 else
 {
-    <a class="btn btn-light" asp-action="Remove" asp-controller="Favourities" asp-route-productId="@Model.Id" asp-route-controllerName="Product" role="button">
+    <a class="btn btn-light" 
+        asp-action="Remove" 
+        asp-controller="Favourites" 
+        asp-route-productId="@Model.Id" 
+        asp-route-controllerName="Product" 
+        role="button">
         Удалить из избранного
     </a>
 }
-<a class="btn btn-light" style="margin:10px" href="/comparison/add?productId=@Model.Id" role="button">Добавить в сравнение</a>
+@if (!Model.IsInComparison)
+{
+    <a 
+        class="btn btn-light" 
+        asp-controller="Comparison"
+        asp-action="Add" 
+        asp-route-productId="@Model.Id" 
+        asp-route-pageNumber="@ViewBag.pageNumber" 
+        asp-route-controllerName="Product" 
+        role="button">
+        Сравнить
+    </a>
+}
+else
+{
+    <a 
+        class="btn btn-light" 
+        asp-controller="Comparison"
+        asp-action="Remove" 
+        asp-route-productId="@Model.Id" 
+        asp-route-pageNumber="@ViewBag.pageNumber" 
+        asp-route-controllerName="Product" 
+        role="button">
+        Убрать из сравнения
+    </a>
+}

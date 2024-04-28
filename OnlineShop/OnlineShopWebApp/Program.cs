@@ -20,8 +20,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<OnlineShop.Db.IRepository<Product>, DbRepository<Product>>();
-builder.Services.AddSingleton<OnlineShopWebApp.IRepository<ProductViewModel>, InMemoryRepository<ProductViewModel>>();
-builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Favourities>, InMemoryRepository<Favourities>>();
+builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
+builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();
 builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Order>, InMemoryRepository<Order>>();
 builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Role>, InMemoryRepository<Role>>();

@@ -1,4 +1,4 @@
-﻿@model List<ProductViewModel>
+﻿@model IEnumerable<ProductViewModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -25,16 +25,45 @@
                     <h5>@product.Name</h5>
                 </a>
                 <h5>@product.Cost</h5>
-                <a class="btn btn-light" href="/comparison/add?productId=@product.Id" role="button">Сравнить</a>
-                @if (!product.IsInFavourities)
+                @if (!product.IsInComparison)
                 {
-                    <a class="btn btn-light" asp-controller="Favourities" asp-action="Add" asp-route-productId="@product.Id" asp-route-pageNumber="@ViewBag.pageNumber" role="button">
+                    <a 
+                        class="btn btn-light" 
+                        asp-controller="Comparison"
+                        asp-action="Add" 
+                        asp-route-productId="@product.Id" 
+                        asp-route-pageNumber="@ViewBag.pageNumber" 
+                        role="button">
+                        Сравнить
+                    </a>
+                }
+                else
+                {
+                    <a 
+                        class="btn btn-light" 
+                        asp-controller="Comparison"
+                        asp-action="Remove" 
+                        asp-route-productId="@product.Id" 
+                        asp-route-pageNumber="@ViewBag.pageNumber" 
+                        role="button">
+                        Убрать из сравнения
+                    </a>
+                }
+                @if (!product.IsInFavourites)
+                {
+                    <a 
+                        class="btn btn-light" 
+                        asp-controller="Favourites" 
+                        asp-action="Add" 
+                        asp-route-productId="@product.Id" 
+                        asp-route-pageNumber="@ViewBag.pageNumber" 
+                        role="button">
                         Добавить в избранное
                     </a>
                 }
                 else
                 {
-                    <a class="btn btn-light" href="/favourities/remove?productId=@product.Id" role="button">Удалить из избранного</a>
+                    <a class="btn btn-light" href="/favourites/remove?productId=@product.Id" role="button">Удалить из избранного</a>
                 }
                 <a class="btn btn-light" href="/cart/add?productId=@product.Id" role="button">Добавить в корзину</a>
             </div>

@@ -15,20 +15,5 @@ namespace OnlineShop.Db.Models
         {
             Items = new List<CartItem>();
         }
-
-        public void Remove(Product product)
-        {
-            foreach (var item in Items)
-                if (item.Product == product)
-                {
-                    if (item.Amount == 1)
-                    {
-                        Items.Remove(item);
-                        return;
-                    }
-                    item.Amount--;
-                    return;
-                }
-        }
     }
 }

@@ -7,10 +7,8 @@ namespace OnlineShopWebApp.Helpers
     {
         public static IEnumerable<ProductViewModel> ToProductViewModels(IEnumerable<Product> products)
         {
-            var productViewModels = new List<ProductViewModel>();
-            foreach (var product in products)
-                productViewModels.Add(ToProductViewModel(product));
-            return productViewModels;
+            return products
+                .Select(ToProductViewModel);
         }
 
         public static ProductViewModel ToProductViewModel(Product dbProduct)
@@ -21,7 +19,9 @@ namespace OnlineShopWebApp.Helpers
                 Name = dbProduct.Name,
                 Cost = dbProduct.Cost,
                 Description = dbProduct.Description,
-                ImageLink = dbProduct.ImageLink
+                ImageLink = dbProduct.ImageLink,
+                IsInFavourites = dbProduct.IsInFavourites,
+                IsInComparison = dbProduct.IsInComparison
             };
         }
 
@@ -35,20 +35,60 @@ namespace OnlineShopWebApp.Helpers
                 Items = ToCartViewModels(cart).ToList()
             };
         }
+
         public static IEnumerable<CartItemViewModel> ToCartViewModels(Cart cartDb)
         {
-            var carItems = new List<CartItemViewModel>();
+            var cartItems = new List<CartItemViewModel>();
             foreach (var cartDbItem in cartDb.Items)
             {
                 var cartItem = new CartItemViewModel()
                 {
-                    //Id = cartDbItem.Id,
+                    Id = cartDbItem.Id,
                     Amount = cartDbItem.Amount,
                     Product = ToProductViewModel(cartDbItem.Product)
                 };
-                carItems.Add(cartItem);
+                cartItems.Add(cartItem);
             }
-            return carItems;
+            return cartItems;
+        }
+
+        public static FavouritesViewModel? ToFavouritesViewModel(Favourites favouritesDb)
+        {
+            if (favouritesDb is null)
+                return null;
+            return new FavouritesViewModel()
+            {
+                Id = favouritesDb.Id,
+                Items = ToProductViewModels(favouritesDb.Items).ToList()
+            };
+        }
+
+        public static IEnumerable<FavouritesViewModel> ToFavoutitesViewModels(
+            IEnumerable<Favourites> favouritesDbCollection)
+        {
+            return favouritesDbCollection
+                .Select(ToFavouritesViewModel);
+        }
+
+        public static ComparisonItemViewModel ToComparisonItemViewModel(ComparisonItem comparisonItem)
+        {
+            return new ComparisonItemViewModel()
+            {
+                Id = comparisonItem.Id,
+                Product = ToProductViewModel(comparisonItem.Product)
+            };
+        }
+
+        public static ComparisonViewModel ToComparisonViewModel(Comparison comparison)
+        {
+            return new ComparisonViewModel()
+            {
+                Id = comparison.Id,
+                UserId = comparison.UserId,
+                Items = comparison.Items
+                    .Select(ToComparisonItemViewModel)
+                    .ToList()
+            };
         }
     }
 }

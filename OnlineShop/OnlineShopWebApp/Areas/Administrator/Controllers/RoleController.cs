@@ -16,7 +16,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(roleRepository);
+            return View(roleRepository.GetAll());
         }
 
         public IActionResult Remove(Guid roleId)

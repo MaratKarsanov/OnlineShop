@@ -28,6 +28,7 @@
                     </ul>
                 </div>
                 <a class="nav-link text-dark" asp-area="" asp-controller="Autorization" asp-action="Index">Autorization</a>
+                @await Component.InvokeAsync("Comparison")
                 @await Component.InvokeAsync("Favourites")
                 @await Component.InvokeAsync("Cart")
             </div>

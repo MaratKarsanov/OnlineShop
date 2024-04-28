@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Server.HttpSys;
-using System.Collections;
-using System.Linq;
+﻿using System.Collections;
 
 namespace OnlineShopWebApp.Models
 {
