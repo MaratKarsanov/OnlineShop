@@ -19,21 +19,15 @@ namespace OnlineShop.Db
                 databaseContext.Comparisons.Add(new Comparison()
                 {
                     UserId = userId,
-                    Items = new List<ComparisonItem>()
+                    Items = new List<Product>()
                     {
-                        new ComparisonItem()
-                        {
-                            Product = product
-                        }
+                        product
                     }
                 });
             }
             else
             {
-                comparison.Items.Add(new ComparisonItem()
-                {
-                    Product = product
-                });
+                comparison.Items.Add(product);
             }
             product.IsInComparison = true;
             databaseContext.SaveChanges();
@@ -43,7 +37,7 @@ namespace OnlineShop.Db
         {
             var comparison = TryGetByUserId(userId);
             comparison.Items = comparison.Items
-                .Where(ci => ci.Product.Id != product.Id)
+                .Where(p => p.Id != product.Id)
                 .ToList();
             product.IsInComparison = false;
             databaseContext.SaveChanges();
@@ -53,7 +47,6 @@ namespace OnlineShop.Db
         {
             return databaseContext.Comparisons
                 .Include(c => c.Items)
-                .ThenInclude(ci => ci.Product)
                 .FirstOrDefault(f => f.UserId == userId);
         }
     }

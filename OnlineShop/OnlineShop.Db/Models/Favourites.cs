@@ -10,22 +10,5 @@
         {
             Items = new List<Product>();
         }
-
-        public void Add(Product product)
-        {
-            Items.Add(product);
-        }
-
-        public void Remove(Guid id)
-        {
-            var product = Items.FirstOrDefault(p => p.Id == id);
-            if (product is not null)
-                Items.Remove(product);
-        }
-
-        public bool Contains(Product product)
-        {
-            return Items.Contains(product);
-        }
     }
 }

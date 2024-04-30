@@ -70,15 +70,6 @@ namespace OnlineShopWebApp.Helpers
                 .Select(ToFavouritesViewModel);
         }
 
-        public static ComparisonItemViewModel ToComparisonItemViewModel(ComparisonItem comparisonItem)
-        {
-            return new ComparisonItemViewModel()
-            {
-                Id = comparisonItem.Id,
-                Product = ToProductViewModel(comparisonItem.Product)
-            };
-        }
-
         public static ComparisonViewModel ToComparisonViewModel(Comparison comparison)
         {
             return new ComparisonViewModel()
@@ -86,7 +77,7 @@ namespace OnlineShopWebApp.Helpers
                 Id = comparison.Id,
                 UserId = comparison.UserId,
                 Items = comparison.Items
-                    .Select(ToComparisonItemViewModel)
+                    .Select(ToProductViewModel)
                     .ToList()
             };
         }

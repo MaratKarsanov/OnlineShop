@@ -10,31 +10,31 @@ else
     <table class="table">
         <thead>
             <tr>
-                @foreach (var comparisonItem in Model.Items)
+                @foreach (var product in Model.Items)
                 {
-                    <th>@comparisonItem.Product.Name</th>
+                    <th>@product.Name</th>
                 }
             </tr>
         </thead>
         <tbody>
             <tr>
-                @foreach (var comparisonItem in Model.Items)
+                @foreach (var product in Model.Items)
                 {
-                    <td>Name: @comparisonItem.Product.Name
-                        <br/>Cost: @comparisonItem.Product.Cost
+                    <td>
+                        Name: @product.Name
+                        <br />Cost: @product.Cost
                         <br/>
                         <a 
                             class="btn btn-dark" 
                             asp-controller="Comparison"
-                            asp-action="Remove" 
-                            asp-route-productId="@comparisonItem.Product.Id" 
+                            asp-action="Remove"
+                            asp-route-productId="@product.Id"
                             asp-route-pageNumber="@ViewBag.pageNumber" 
                             asp-route-controllerName="Comparison" 
                             role="button">
                             Убрать из сравнения
                         </a>
                     </td>
-                    
                 }
             </tr>
         </tbody>
