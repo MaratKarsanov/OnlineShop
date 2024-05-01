@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.Models
 {
-    public class PersonalData
+    public class DeliveryDataViewModel
     {
         [Required(ErrorMessage = "Введите имя")]
         public string Name { get; set; }
@@ -21,7 +21,7 @@ namespace OnlineShopWebApp.Models
         [Phone(ErrorMessage = "Неверный формат номера")]
         public string PhoneNumber { get; set; }
 
-        public PersonalData()
+        public DeliveryDataViewModel()
         {
             Name = Surname = Address = EMail = PhoneNumber = "";
         }

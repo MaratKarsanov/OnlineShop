@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class FavouritesController : Controller
     {
-        private OnlineShop.Db.IRepository<Product> productRepository;
+        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
         private readonly IFavouritesRepository favouritesRepository;
 
-        public FavouritesController(OnlineShop.Db.IRepository<Product> productRepository,
+        public FavouritesController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository,
             IFavouritesRepository favouritesRepository)
         {
             this.productRepository = productRepository;

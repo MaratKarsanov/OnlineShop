@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Repositories.Interfaces;
 using System.Text;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories
 {
     public class DbRepository<T> : IRepository<T>
         where T : RepositoryItem

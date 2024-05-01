@@ -15,11 +15,11 @@ namespace OnlineShopWebApp.Models
         [Required(ErrorMessage = "Повторите пароль")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string RepeatedPassword { get; set; }
-        public PersonalData PersonalData { get; set; }
+        public DeliveryDataViewModel PersonalData { get; set; }
 
         public RegistrationData()
         {
-            PersonalData = new PersonalData();
+            PersonalData = new DeliveryDataViewModel();
         }
 
         public override string ToString()

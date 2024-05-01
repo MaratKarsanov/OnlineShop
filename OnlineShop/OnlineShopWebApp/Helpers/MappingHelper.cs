@@ -1,5 +1,6 @@
 ﻿using OnlineShop.Db.Models;
 using OnlineShopWebApp.Models;
+using System.Numerics;
 
 namespace OnlineShopWebApp.Helpers
 {
@@ -32,24 +33,24 @@ namespace OnlineShopWebApp.Helpers
             return new CartViewModel()
             {
                 Id = cart.Id,
-                Items = ToCartViewModels(cart).ToList()
+                Items = ToCartItemViewModels(cart.Items).ToList()
             };
         }
 
-        public static IEnumerable<CartItemViewModel> ToCartViewModels(Cart cartDb)
+        public static IEnumerable<CartItemViewModel> ToCartItemViewModels(IEnumerable<CartItem> cartItems)
         {
-            var cartItems = new List<CartItemViewModel>();
-            foreach (var cartDbItem in cartDb.Items)
+            var cartItemsVm = new List<CartItemViewModel>();
+            foreach (var cartItem in cartItems)
             {
-                var cartItem = new CartItemViewModel()
+                var cartItemVm = new CartItemViewModel()
                 {
-                    Id = cartDbItem.Id,
-                    Amount = cartDbItem.Amount,
-                    Product = ToProductViewModel(cartDbItem.Product)
+                    Id = cartItem.Id,
+                    Amount = cartItem.Amount,
+                    Product = ToProductViewModel(cartItem.Product)
                 };
-                cartItems.Add(cartItem);
+                cartItemsVm.Add(cartItemVm);
             }
-            return cartItems;
+            return cartItemsVm;
         }
 
         public static FavouritesViewModel? ToFavouritesViewModel(Favourites favouritesDb)
@@ -80,6 +81,38 @@ namespace OnlineShopWebApp.Helpers
                     .Select(ToProductViewModel)
                     .ToList()
             };
+        }
+
+        public static DeliveryDataViewModel ToPersonalDataViewModel(DeliveryData personalData)
+        {
+            return new DeliveryDataViewModel()
+            {
+                Id = personalData.Id,
+                Name = personalData.Name,
+                Surname = personalData.Surname,
+                Address = personalData.Address,
+                EMail = personalData.EMail,
+                PhoneNumber = personalData.PhoneNumber
+            };
+        }
+
+        public static OrderViewModel ToOrderViewModel(Order order)
+        {
+            return new OrderViewModel()
+            {
+                Id = order.Id,
+                UserId = order.UserId,
+                Items = ToCartItemViewModels(order.Items).ToList(),
+                PersonalData = ToPersonalDataViewModel(order.PersonalData),
+                CreationTime = order.CreationTime,
+                Status = order.Status
+            };
+        }
+
+        public static IEnumerable<OrderViewModel> ToOrderViewModels(IEnumerable<Order> orders)
+        {
+            return orders
+                .Select(ToOrderViewModel);
         }
     }
 }

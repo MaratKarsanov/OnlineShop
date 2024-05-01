@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
+using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Favourites
 {

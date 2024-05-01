@@ -7,17 +7,17 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class UserController : Controller
     {
-        private IRepository<User> userRepository;
+        private IRepository<UserViewModel> userRepository;
         private IRepository<Role> roleRepository;
 
-        public UserController(IRepository<User> userRepository,
+        public UserController(IRepository<UserViewModel> userRepository,
             IRepository<Role> roleRepository)
         {
             this.userRepository = userRepository;
             this.roleRepository = roleRepository;
             if (userRepository.GetAll().Count == 0)
             {
-                userRepository.Add(new User()
+                userRepository.Add(new UserViewModel()
                 {
                     Role = roleRepository
                     .GetAll()
@@ -27,7 +27,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
                         Login = "MaratKarsanov",
                         Password = "marmar"
                     },
-                    PersonalData = new PersonalData()
+                    PersonalData = new DeliveryDataViewModel()
                     {
                         Name = "Marat",
                         Surname = "Karsanov",
@@ -55,7 +55,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            var user = new User();
+            var user = new UserViewModel();
             user.AutorizationData.Login = registrationData.Login;
             user.AutorizationData.Password = registrationData.Password;
             user.PersonalData.Name = registrationData.PersonalData.Name;

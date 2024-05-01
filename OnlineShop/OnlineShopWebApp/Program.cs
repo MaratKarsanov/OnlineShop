@@ -5,6 +5,8 @@ using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShop.Db;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShop.Db.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +21,11 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<OnlineShop.Db.IRepository<Product>, DbRepository<Product>>();
+builder.Services.AddTransient<OnlineShop.Db.Repositories.Interfaces.IRepository<Product>, DbRepository<Product>>();
 builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();
-builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Order>, InMemoryRepository<Order>>();
+builder.Services.AddTransient<IOrderRepository, OrderDbRepository>();
 builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Role>, InMemoryRepository<Role>>();
 builder.Services.AddSingleton<OnlineShopWebApp.IRepository<User>, InMemoryRepository<User>>();
 

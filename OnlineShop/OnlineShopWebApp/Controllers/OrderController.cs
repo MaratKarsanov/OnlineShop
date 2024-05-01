@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Models;
-using OnlineShopWebApp.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class OrderController : Controller
     {
         private ICartRepository cartRepository;
-        private IRepository<Order> orderRepository;
+        private IOrderRepository orderRepository;
 
-        public OrderController(ICartRepository cartRepository, 
-            IRepository<Order> orderRepository)
+        public OrderController(ICartRepository cartRepository,
+            IOrderRepository orderRepository)
         {
             this.cartRepository = cartRepository;
             this.orderRepository = orderRepository;
@@ -23,14 +22,19 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Order newOrder)
+        public IActionResult Add(DeliveryData personalData)
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
             var cart = cartRepository.TryGetByUserId(Constants.UserId);
-            newOrder.Products = Helpers.MappingHelper.ToCartViewModels(cart).ToList();
+            var newOrder = new Order()
+            {
+                UserId = Constants.UserId,
+                Items = cart.Items,
+                PersonalData = personalData
+            };
             orderRepository.Add(newOrder);
-            cart.Items.Clear();
+            cartRepository.Remove(Constants.UserId);
             return RedirectToAction(nameof(Index), "Home");
         }
     }

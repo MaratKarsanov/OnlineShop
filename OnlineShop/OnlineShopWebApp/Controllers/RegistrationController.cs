@@ -5,9 +5,9 @@ namespace OnlineShopWebApp.Controllers
 {
     public class RegistrationController : Controller
     {
-        private IRepository<User> userRepository;
+        private IRepository<UserViewModel> userRepository;
 
-        public RegistrationController(IRepository<User> userRepository)
+        public RegistrationController(IRepository<UserViewModel> userRepository)
         {
             this.userRepository = userRepository;
         }
@@ -21,7 +21,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
-            userRepository.Add(new User() 
+            userRepository.Add(new UserViewModel() 
             { 
                 AutorizationData = new AutorizationData()
                 {

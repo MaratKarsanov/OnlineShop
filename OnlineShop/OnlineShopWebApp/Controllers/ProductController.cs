@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private OnlineShop.Db.IRepository<Product> productRepository;
+        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
 
-        public ProductController(OnlineShop.Db.IRepository<Product> productRepository)
+        public ProductController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository)
         {
             this.productRepository = productRepository;
         }

@@ -1,4 +1,4 @@
-﻿namespace OnlineShop.Db
+﻿namespace OnlineShop.Db.Repositories.Interfaces
 {
     public interface IRepository<T>
         where T : RepositoryItem

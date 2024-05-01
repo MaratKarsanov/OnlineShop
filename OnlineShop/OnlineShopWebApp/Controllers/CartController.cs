@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class CartController : Controller
     {
-        private OnlineShop.Db.IRepository<Product> productRepository;
+        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
         private ICartRepository cartRepository;
 
-        public CartController(OnlineShop.Db.IRepository<Product> productRepository,
+        public CartController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository,
             ICartRepository cartRepository)
         {
             this.productRepository = productRepository;

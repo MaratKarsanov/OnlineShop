@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories
 {
     public class FavouritesDbRepository : IFavouritesRepository
     {

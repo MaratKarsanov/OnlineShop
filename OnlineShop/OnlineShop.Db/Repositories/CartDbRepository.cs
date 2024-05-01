@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories
 {
     public class CartDbRepository : ICartRepository
     {
@@ -30,8 +31,7 @@ namespace OnlineShop.Db
                 newCart.Items.Add(new CartItem()
                 {
                     Amount = 1,
-                    Product = product,
-                    Cart = newCart
+                    Product = product
                 });
                 databaseContext.Carts.Add(newCart);
                 databaseContext.SaveChanges();
@@ -47,8 +47,7 @@ namespace OnlineShop.Db
                 cart.Items.Add(new CartItem
                 {
                     Amount = 1,
-                    Product = product,
-                    Cart = cart
+                    Product = product
                 });
             }
             databaseContext.SaveChanges();
@@ -65,7 +64,7 @@ namespace OnlineShop.Db
             databaseContext.SaveChanges();
         }
 
-        public void Clear(string userId)
+        public void Remove(string userId)
         {
             var cart = TryGetByUserId(userId);
             databaseContext.Carts.Remove(cart);

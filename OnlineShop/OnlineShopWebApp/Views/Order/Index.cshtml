@@ -1,4 +1,4 @@
-﻿@model Order
+﻿@model DeliveryData
 
 <form method="post" target="_self">
     <h2>Информация о заказе</h2>
@@ -7,14 +7,14 @@
         <legend>Персональные данные</legend>
         <ul>
             <li>
-                <label asp-for="PersonalData.Name">Имя:*</label>
-                <input type="text" asp-for="PersonalData.Name" placeholder="Иван">
-                <span asp-validation-for="PersonalData.Name"></span>
+                <label asp-for="Name">Имя:*</label>
+                <input type="text" asp-for="Name" placeholder="Иван">
+                <span asp-validation-for="Name"></span>
             </li>
             <li>
-                <label asp-for="PersonalData.Surname">Фамилия:*</label>
-                <input type="text" asp-for="PersonalData.Surname" placeholder="Иванов">
-                <span asp-validation-for="PersonalData.Surname"></span>
+                <label asp-for="Surname">Фамилия:*</label>
+                <input type="text" asp-for="Surname" placeholder="Иванов">
+                <span asp-validation-for="Surname"></span>
             </li>
         </ul>
     </fieldset>
@@ -22,19 +22,19 @@
         <legend>Контакты</legend>
         <ul>
             <li>
-                <label asp-for="PersonalData.Address">Адрес:*</label>
-                <input type="text" asp-for="PersonalData.Address" placeholder="г.Москва, ул.Тверская, д.1">
-                <span asp-validation-for="PersonalData.Address"></span>
+                <label asp-for="Address">Адрес:*</label>
+                <input type="text" asp-for="Address" placeholder="г.Москва, ул.Тверская, д.1">
+                <span asp-validation-for="Address"></span>
             </li>
             <li>
-                <label asp-for="PersonalData.EMail">E-mail:*</label>
-                <input type="text" asp-for="PersonalData.EMail" placeholder="ivanov@gmail.com">
-                <span asp-validation-for="PersonalData.EMail"></span>
+                <label asp-for="EMail">E-mail:*</label>
+                <input type="text" asp-for="EMail" placeholder="ivanov@gmail.com">
+                <span asp-validation-for="EMail"></span>
             </li>
             <li>
-                <label asp-for="PersonalData.PhoneNumber">Телефон:*</label>
-                <input asp-for="PersonalData.PhoneNumber" placeholder="+7(900)000-00-00">
-                <span asp-validation-for="PersonalData.PhoneNumber"></span>
+                <label asp-for="PhoneNumber">Телефон:*</label>
+                <input asp-for="PhoneNumber" placeholder="+7(900)000-00-00">
+                <span asp-validation-for="PhoneNumber"></span>
             </li>
         </ul>
     </fieldset>

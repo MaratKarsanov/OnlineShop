@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class ComparisonController : Controller
     {
-        private OnlineShop.Db.IRepository<Product> productRepository;
+        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
         private IComparisonRepository comparisonRepository;
 
         public ComparisonController(IComparisonRepository productRepositories,
-            OnlineShop.Db.IRepository<Product> productRepository)
+            OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository)
         {
             this.productRepository = productRepository;
             comparisonRepository = productRepositories;

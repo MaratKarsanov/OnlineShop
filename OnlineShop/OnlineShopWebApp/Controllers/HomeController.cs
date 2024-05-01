@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
 
@@ -9,12 +9,12 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private OnlineShop.Db.IRepository<Product> productRepository;
+        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
         private IFavouritesRepository favouritiesRepository;
         private IRepository<Role> roleRepository;
         public static string searchString = "";
 
-        public HomeController(OnlineShop.Db.IRepository<Product> productRepository,
+        public HomeController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository,
             IFavouritesRepository favouritiesRepository, 
             IRepository<Role> roleRepository)
         {

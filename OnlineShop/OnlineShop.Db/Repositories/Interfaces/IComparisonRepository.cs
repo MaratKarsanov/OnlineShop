@@ -1,6 +1,6 @@
 ﻿using OnlineShop.Db.Models;
 
-namespace OnlineShop.Db
+namespace OnlineShop.Db.Repositories.Interfaces
 {
     public interface IComparisonRepository
     {
