@@ -1,4 +1,5 @@
-﻿using OnlineShop.Db.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShop.Db.Repositories
@@ -23,7 +24,9 @@ namespace OnlineShop.Db.Repositories
 
         public List<User> GetAll()
         {
-            return databaseContext.Users.ToList();
+            return databaseContext.Users
+                .Include(u => u.DeliveryDatas)
+                .ToList();
         }
 
         public void Remove(string login)
@@ -66,18 +69,19 @@ namespace OnlineShop.Db.Repositories
             databaseContext.SaveChanges();
         }
 
-        //public void AddDelivery(string login, DeliveryData deliveryData)
-        //{
-        //    var user = TryGetByLogin(login);
-        //    if (user is null)
-        //        return;
-        //    user.DeliveryDatas.Add(deliveryData);
-        //    databaseContext.SaveChanges();
-        //}
+        public void AddDelivery(string login, DeliveryData deliveryData)
+        {
+            var user = TryGetByLogin(login);
+            if (user is null)
+                return;
+            user.DeliveryDatas.Add(deliveryData);
+            databaseContext.SaveChanges();
+        }
 
         public User TryGetByLogin(string login)
         {
             return databaseContext.Users
+                .Include(u => u.DeliveryDatas)
                 .FirstOrDefault(u => u.Login == login);
         }
     }

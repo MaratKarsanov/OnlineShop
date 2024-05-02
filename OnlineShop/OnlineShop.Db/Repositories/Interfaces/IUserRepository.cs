@@ -11,6 +11,6 @@ namespace OnlineShop.Db.Repositories.Interfaces
         void EditData(string login, EditUserData newData);
         void ChangePassword(string login, string newPassword);
         void ChangeRole(string login, string newRoleName);
-        //public void AddDelivery(string login, DeliveryData deliveryData);
+        public void AddDelivery(string login, DeliveryData deliveryData);
     }
 }

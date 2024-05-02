@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
@@ -15,7 +14,11 @@ namespace OnlineShop.Db.Repositories
 
         public List<Order> GetAll()
         {
-            return databaseContext.Orders.ToList();
+            return databaseContext.Orders
+                .Include(o => o.DeliveryData)
+                .Include(o => o.Items)
+                .ThenInclude(ci => ci.Product)
+                .ToList();
         }
 
         public void Add(Order order)
@@ -48,6 +51,7 @@ namespace OnlineShop.Db.Repositories
         public Order TryGetOrderById(Guid orderId)
         {
             return databaseContext.Orders
+                .Include(o => o.DeliveryData)
                 .Include(o => o.Items)
                 .ThenInclude(ci => ci.Product)
                 .FirstOrDefault(o => o.Id == orderId);

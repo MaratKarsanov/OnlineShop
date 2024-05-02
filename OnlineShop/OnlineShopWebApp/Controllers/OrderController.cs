@@ -57,14 +57,13 @@ namespace OnlineShopWebApp.Controllers
                 return View(nameof(Index));
             var cart = cartRepository.TryGetByUserId(Constants.Login);
             var deliveryData = Helpers.MappingHelper.ToDeliveryData(deliveryDataVm);
-            //userRepository.AddDelivery(Constants.Login, deliveryData);
+            userRepository.AddDelivery(Constants.Login, deliveryData);
             var newOrder = new Order()
             {
                 Login = Constants.Login,
                 Items = cart.Items,
                 DeliveryData = deliveryData
             };
-            //orderRepository.Add(Constants.Login, cart.Items, deliveryData);
             orderRepository.Add(newOrder);
             cartRepository.Remove(Constants.Login);
             return RedirectToAction(nameof(Index), "Home");
