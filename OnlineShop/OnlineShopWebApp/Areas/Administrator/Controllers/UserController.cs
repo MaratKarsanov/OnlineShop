@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
 
@@ -7,41 +10,39 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class UserController : Controller
     {
-        private IRepository<UserViewModel> userRepository;
-        private IRepository<Role> roleRepository;
+        private IUserRepository userRepository;
+        private IRoleRepository roleRepository;
 
-        public UserController(IRepository<UserViewModel> userRepository,
-            IRepository<Role> roleRepository)
+        public UserController(IUserRepository userRepository,
+            IRoleRepository roleRepository)
         {
             this.userRepository = userRepository;
             this.roleRepository = roleRepository;
+            if (roleRepository.GetAll().FirstOrDefault(r => r.Name == "Administrator") is null)
+            {
+                roleRepository.Add(new Role() { Name = "Administrator" });
+                roleRepository.Add(new Role() { Name = "User" });
+            }
             if (userRepository.GetAll().Count == 0)
             {
-                userRepository.Add(new UserViewModel()
+                userRepository.Add(new User()
                 {
                     Role = roleRepository
                     .GetAll()
                     .FirstOrDefault(r => r.Name == "Administrator"),
-                    AutorizationData = new AutorizationData()
-                    {
-                        Login = "MaratKarsanov",
-                        Password = "marmar"
-                    },
-                    PersonalData = new DeliveryDataViewModel()
-                    {
-                        Name = "Marat",
-                        Surname = "Karsanov",
-                        Address = "Vatutina 37",
-                        PhoneNumber = "9187080533",
-                        EMail = "karsanov@mail.ru"
-                    }
+                    Login = Constants.Login,
+                    Password = "marmar",
+                    Name = "Marat",
+                    Surname = "Karsanov",
+                    Address = "Vatutina 37",
+                    PhoneNumber = "9187080533"
                 });
             }
         }
 
         public IActionResult Index()
         {
-            return View(userRepository.GetAll());
+            return View(Helpers.MappingHelper.ToUserViewModels(userRepository.GetAll()));
         }
 
         [HttpGet]
@@ -55,112 +56,100 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            var user = new UserViewModel();
-            user.AutorizationData.Login = registrationData.Login;
-            user.AutorizationData.Password = registrationData.Password;
-            user.PersonalData.Name = registrationData.PersonalData.Name;
-            user.PersonalData.Address = registrationData.PersonalData.Address;
-            user.PersonalData.PhoneNumber = registrationData.PersonalData.PhoneNumber;
-            user.PersonalData.Surname = registrationData.PersonalData.Surname;
-            user.PersonalData.EMail = registrationData.PersonalData.EMail;
+            var user = new User()
+            {
+                Role = roleRepository
+                    .GetAll()
+                    .FirstOrDefault(r => r.Name == "User"),
+                Login = registrationData.Login,
+                Password = registrationData.Password,
+                Name = registrationData.Name,
+                Address = registrationData.Address,
+                PhoneNumber = registrationData.PhoneNumber,
+                Surname = registrationData.Surname,
+            };
             userRepository.Add(user);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(Guid userId)
+        public IActionResult Edit(string login)
         {
-            var user = userRepository.TryGetElementById(userId);
+            var user = userRepository.TryGetByLogin(login);
             if (user is null)
                 throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            return View(user);
+            return View(Helpers.MappingHelper.ToUserViewModel(user));
         }
 
         [HttpGet]
-        public IActionResult EditData(Guid userId)
+        public IActionResult EditData(string login)
         {
-            var user = userRepository.TryGetElementById(userId);
+            var user = userRepository.TryGetByLogin(login);
             if (user is null)
                 throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            var userData = new EditUserData()
+            var userData = new EditUserDataViewModel()
             {
-                Login = user.AutorizationData.Login,
-                Name = user.PersonalData.Name,
-                Surname = user.PersonalData.Surname,
-                Address = user.PersonalData.Address,
-                EMail = user.PersonalData.EMail,
-                PhoneNumber = user.PersonalData.PhoneNumber
+                Name = user.Name,
+                Surname = user.Surname,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber
             };
-            ViewData["userId"] = user.Id;
+            ViewData["login"] = login;
             return View(userData);
         }
 
         [HttpPost]
-        public IActionResult EditData(Guid userId, EditUserData newUserData)
+        public IActionResult EditData(string login, EditUserData newUserData)
         {
             if (!ModelState.IsValid)
                 return View();
-            var user = userRepository.TryGetElementById(userId);
+            var user = userRepository.TryGetByLogin(login);
             if (user is null)
                 throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            user.AutorizationData.Login = newUserData.Login;
-            user.PersonalData.Address = newUserData.Login;
-            user.PersonalData.PhoneNumber = newUserData.PhoneNumber;
-            user.PersonalData.Name = newUserData.Name;
-            user.PersonalData.Surname = newUserData.Surname;
-            user.PersonalData.EMail = newUserData.EMail;
-            return RedirectToAction(nameof(Edit), new { userId });
+            userRepository.EditData(login, newUserData);
+            return RedirectToAction(nameof(Edit), new { login });
         }
 
         [HttpGet]
-        public IActionResult ChangePassword(Guid userId)
+        public IActionResult ChangePassword(string login)
         {
-            var user = userRepository.TryGetElementById(userId);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            ViewData["userId"] = user.Id;
+            ViewData["login"] = login;
             return View();
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangeUserPassword password, Guid userId)
+        public IActionResult ChangePassword(ChangeUserPasswordViewModel password, string login)
         {
             if (!ModelState.IsValid)
-                //return View();
-                return Content(ModelState.ErrorCount.ToString());
-            var user = userRepository.TryGetElementById(userId);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            user.AutorizationData.Password = password.NewPassword;
-            return RedirectToAction(nameof(Edit), new { userId });
+                return View();
+            userRepository.ChangePassword(login, password.NewPassword);
+            return RedirectToAction(nameof(Edit), new { login });
         }
 
         [HttpGet]
-        public IActionResult ChangeRole(Guid userId)
+        public IActionResult ChangeRole(string login)
         {
-            var user = userRepository.TryGetElementById(userId);
+            var user = userRepository.TryGetByLogin(login);
             if (user is null)
                 throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            ViewData["userId"] = user.Id;
+            ViewData["login"] = user.Login;
             ViewData["roleName"] = user.Role.Name;
-            ViewData["login"] = user.AutorizationData.Login;
-            return View(roleRepository
+            return View(Helpers.MappingHelper.ToRoleViewModels(roleRepository
                 .GetAll()
-                .Where(r => r.Name != user.Role.Name));
+                .Where(r => r.Name != user.Role.Name)));
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(Role newRole, Guid userId)
+        public IActionResult ChangeRole(Role newRole, string login)
         {
-            var user = userRepository.TryGetElementById(userId);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            user.Role = newRole;
-            return RedirectToAction(nameof(Edit), new { userId });
+            if (!ModelState.IsValid)
+                return View();
+            userRepository.ChangeRole(login, newRole.Name);
+            return RedirectToAction(nameof(Edit), new { login });
         }
 
-        public IActionResult Delete(Guid userId)
+        public IActionResult Delete(string login)
         {
-            userRepository.Remove(userId);
+            userRepository.Remove(login);
             return RedirectToAction(nameof(Index));
         }
     }

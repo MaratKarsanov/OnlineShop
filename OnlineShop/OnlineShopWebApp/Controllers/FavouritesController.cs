@@ -29,7 +29,7 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetElementById(productId);
-            favouritesRepository.Add(product, Constants.UserId);
+            favouritesRepository.Add(product, Constants.Login);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
 
@@ -38,7 +38,7 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetElementById(productId);
-            favouritesRepository.Remove(product, Constants.UserId);
+            favouritesRepository.Remove(product, Constants.Login);
             return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId});
         }
     }

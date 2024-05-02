@@ -28,12 +28,12 @@ namespace OnlineShop.Db.Repositories
             return dbSet.FirstOrDefault(e => e.Id == id);
         }
 
-        public T Add(T element)
+        public void Add(T element)
         {
-            if (TryGetElementById(element.Id) is null)
-                dbSet.Add(element);
+            if (TryGetElementById(element.Id) is not null)
+                return;
+            dbSet.Add(element);
             databaseContext.SaveChanges();
-            return element;
         }
 
         public void Clear()

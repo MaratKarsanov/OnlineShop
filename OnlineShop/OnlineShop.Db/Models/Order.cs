@@ -3,10 +3,10 @@
     public class Order
     {
         public Guid Id { get; set; }
-        public string? UserId { get; set; }
+        public string? Login { get; set; }
         public List<CartItem> Items { get; set; }
         public decimal TotalCost => Items.Sum(ci => ci.TotalCost);
-        public DeliveryData PersonalData { get; set; }
+        public DeliveryData DeliveryData { get; set; }
         public DateTime CreationTime { get; set; }
         public OrderStatus Status { get; set; }
 
@@ -15,7 +15,6 @@
             Items = new List<CartItem>();
             CreationTime = DateTime.Now;
             Status = OrderStatus.Created;
-            //PersonalData = new PersonalData();
         }
     }
 }

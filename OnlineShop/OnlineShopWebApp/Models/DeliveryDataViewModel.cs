@@ -4,6 +4,7 @@ namespace OnlineShopWebApp.Models
 {
     public class DeliveryDataViewModel
     {
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Введите имя")]
         public string Name { get; set; }
 

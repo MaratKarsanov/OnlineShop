@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
+using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class RegistrationController : Controller
     {
-        private IRepository<UserViewModel> userRepository;
+        private IUserRepository userRepository;
 
-        public RegistrationController(IRepository<UserViewModel> userRepository)
+        public RegistrationController(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
@@ -21,13 +23,14 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
-            userRepository.Add(new UserViewModel() 
+            userRepository.Add(new User() 
             { 
-                AutorizationData = new AutorizationData()
-                {
-                    Login = registrationData.Login,
-                    Password = registrationData.Password
-                }
+                Login = registrationData.Login,
+                Password = registrationData.Password,
+                Name = registrationData.Name,
+                Surname = registrationData.Surname,
+                Address = registrationData.Address,
+                PhoneNumber = registrationData.PhoneNumber
             });
             return RedirectToAction(nameof(AutorizationController.Index), "Autorization");
         }

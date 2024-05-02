@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Db
-{ 
-    public class Role : RepositoryItem
+{
+    public class Role
     {
-        [Required(ErrorMessage = "Не указано имя")]
+        [Key]
         public string Name { get; set; }
     }
 }

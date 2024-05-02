@@ -2,8 +2,9 @@
 
 namespace OnlineShopWebApp.Models
 {
-    public class ProductViewModel : RepositoryItem
+    public class ProductViewModel
     {
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "Не указано имя товара")]
         public string Name { get; set; }
 
@@ -16,5 +17,10 @@ namespace OnlineShopWebApp.Models
         public string ImageLink { get; set; }
         public bool IsInFavourites { get; set; }
         public bool IsInComparison { get; set; }
+
+        public ProductViewModel()
+        {
+            Id = Guid.NewGuid();
+        }
     }
 }

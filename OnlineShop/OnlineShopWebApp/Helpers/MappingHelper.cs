@@ -1,4 +1,6 @@
-﻿using OnlineShop.Db.Models;
+﻿using OnlineShop.Db;
+using OnlineShop.Db.Models;
+using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
 using System.Numerics;
 
@@ -83,16 +85,29 @@ namespace OnlineShopWebApp.Helpers
             };
         }
 
-        public static DeliveryDataViewModel ToPersonalDataViewModel(DeliveryData personalData)
+        public static DeliveryDataViewModel ToDeliveryDataViewModel(DeliveryData deliveryData)
         {
             return new DeliveryDataViewModel()
             {
-                Id = personalData.Id,
-                Name = personalData.Name,
-                Surname = personalData.Surname,
-                Address = personalData.Address,
-                EMail = personalData.EMail,
-                PhoneNumber = personalData.PhoneNumber
+                Id = deliveryData.Id,
+                Name = deliveryData.Name,
+                Surname = deliveryData.Surname,
+                Address = deliveryData.Address,
+                EMail = deliveryData.EMail,
+                PhoneNumber = deliveryData.PhoneNumber
+            };
+        }
+
+        public static DeliveryData ToDeliveryData(DeliveryDataViewModel deliveryDataVm)
+        {
+            return new DeliveryData()
+            {
+                Id = deliveryDataVm.Id,
+                Name = deliveryDataVm.Name,
+                Surname = deliveryDataVm.Surname,
+                Address = deliveryDataVm.Address,
+                EMail = deliveryDataVm.EMail,
+                PhoneNumber = deliveryDataVm.PhoneNumber
             };
         }
 
@@ -101,9 +116,9 @@ namespace OnlineShopWebApp.Helpers
             return new OrderViewModel()
             {
                 Id = order.Id,
-                UserId = order.UserId,
+                UserId = order.Login,
                 Items = ToCartItemViewModels(order.Items).ToList(),
-                PersonalData = ToPersonalDataViewModel(order.PersonalData),
+                DeliveryData = ToDeliveryDataViewModel(order.DeliveryData),
                 CreationTime = order.CreationTime,
                 Status = order.Status
             };
@@ -113,6 +128,41 @@ namespace OnlineShopWebApp.Helpers
         {
             return orders
                 .Select(ToOrderViewModel);
+        }
+
+        public static UserViewModel ToUserViewModel(User user)
+        {
+            return new UserViewModel()
+            {
+                Login = user.Login,
+                Password = user.Password,
+                Name = user.Name,
+                Surname = user.Surname,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                Role = ToRoleViewModel(user.Role),
+                RememberMe = user.RememberMe
+            };
+        }
+
+        public static IEnumerable<UserViewModel> ToUserViewModels(IEnumerable<User> users)
+        {
+            return users
+                .Select(ToUserViewModel);
+        }
+
+        public static RoleViewModel ToRoleViewModel(Role role)
+        {
+            return new RoleViewModel()
+            {
+                Name = role.Name
+            };
+        }
+
+        public static IEnumerable<RoleViewModel> ToRoleViewModels(IEnumerable<Role> roles)
+        {
+            return roles
+                .Select(ToRoleViewModel);
         }
     }
 }

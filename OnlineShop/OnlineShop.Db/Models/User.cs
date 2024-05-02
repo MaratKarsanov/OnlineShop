@@ -13,7 +13,7 @@ namespace OnlineShop.Db
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
         public bool RememberMe { get; set; }
-        public Role Role { get; set; } = new Role() { Name = "User" };
-        public List<DeliveryData> Deliveries { get; set; }
+        public Role Role { get; set; }
+        //public List<DeliveryData> DeliveryDatas { get; set; } = new List<DeliveryData>();
     }
 }

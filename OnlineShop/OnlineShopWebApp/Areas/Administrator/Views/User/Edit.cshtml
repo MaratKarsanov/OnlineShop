@@ -4,38 +4,20 @@
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-6">
         <div>
-            <p>Логин: @Model.AutorizationData.Login</p>
+            <p>Логин: @Model.Login</p>
         </div>
-        @if (Model.PersonalData is not null)
-        {
-            <div>
-                <p>Имя: @Model.PersonalData.Name</p>
-            </div>
-            <div>
-                <p>Фамилия: @Model.PersonalData.Surname</p>
-            </div>
-            <div>
-                <p>Телефон: @Model.PersonalData.PhoneNumber</p>
-            </div>
-            <div>
-                <p>Электронная почта: @Model.PersonalData.EMail</p>
-            </div>
-        }
-        else
-        {
-            <div>
-                <p>Имя:</p>
-            </div>
-            <div>
-                <p>Фамилия:</p>
-            </div>
-            <div>
-                <p>Телефон:</p>
-            </div>
-            <div>
-                <p>Электронная почта:</p>
-            </div>
-        }
+        <div>
+            <p>Имя: @Model.Name</p>
+        </div>
+        <div>
+            <p>Фамилия: @Model.Surname</p>
+        </div>
+        <div>
+            <p>Адрес: @Model.Address</p>
+        </div>
+        <div>
+            <p>Телефон: @Model.PhoneNumber</p>
+        </div>
         <button 
             class="btn btn-dark dropdown-toggle" 
             type="button"
@@ -46,16 +28,16 @@
             Действия
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangePassword" asp-route-userId="@Model.Id">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangePassword" asp-route-login="@Model.Login">
                 Смена пароля
             </a>
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="EditData" asp-route-userId="@Model.Id">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="EditData" asp-route-login="@Model.Login">
                 Редактирование данных
             </a>
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangeRole" asp-route-userId="@Model.Id">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangeRole" asp-route-login="@Model.Login">
                 Смена роли
             </a>
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="Delete" asp-route-userId="@Model.Id">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="Delete" asp-route-login="@Model.Login">
                 Удалить
             </a>
         </div>

@@ -29,8 +29,8 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetElementById(productId);
-            comparisonRepository.Add(product, Constants.UserId);
-            return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId, userId = Constants.UserId});
+            comparisonRepository.Add(product, Constants.Login);
+            return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId, userId = Constants.Login});
         }
 
         public IActionResult Remove(Guid productId,
@@ -38,8 +38,8 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetElementById(productId);
-            comparisonRepository.Remove(product, Constants.UserId);
-            return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId, userId = Constants.UserId });
+            comparisonRepository.Remove(product, Constants.Login);
+            return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId, userId = Constants.Login });
         }
     }
 }

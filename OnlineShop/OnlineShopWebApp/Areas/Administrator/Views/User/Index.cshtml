@@ -14,7 +14,6 @@
                         <th>Имя</th>
                         <th>Фамилия</th>
                         <th>Телефон</th>
-                        <th>Электронная почта</th>
                         <th>Роль</th>
                     </tr>
                 </thead>
@@ -23,24 +22,13 @@
                     {
                         <tr>
                             <td>
-                                <a asp-area="Administrator" asp-action="Edit" asp-controller="User" asp-route-userId="@user.Id">
-                                    @user.AutorizationData.Login
+                                <a asp-area="Administrator" asp-action="Edit" asp-controller="User" asp-route-login="@user.Login">
+                                    @user.Login
                                 </a>
                             </td>
-                            @if (user.PersonalData is not null)
-                            {
-                                <td>@user.PersonalData.Name</td>
-                                <td>@user.PersonalData.Surname</td>
-                                <td>@user.PersonalData.PhoneNumber</td>
-                                <td>@user.PersonalData.EMail</td>
-                            }
-                            else
-                            {
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            }
+                            <td>@user.Name</td>
+                            <td>@user.Surname</td>
+                            <td>@user.PhoneNumber</td>
                             <td>@user.Role.Name</td>
                         </tr>
                     }

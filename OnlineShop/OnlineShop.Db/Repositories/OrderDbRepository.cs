@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
@@ -20,6 +21,17 @@ namespace OnlineShop.Db.Repositories
         public void Add(Order order)
         {
             databaseContext.Orders.Add(order);
+            databaseContext.SaveChanges();
+        }
+
+        public void Add(string login, List<CartItem> items, DeliveryData deliveryData)
+        {
+            Add(new Order()
+            {
+                Login = login,
+                Items = items,
+                DeliveryData = deliveryData
+            });
             databaseContext.SaveChanges();
         }
 

@@ -21,13 +21,13 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<OnlineShop.Db.Repositories.Interfaces.IRepository<Product>, DbRepository<Product>>();
+builder.Services.AddTransient<IRepository<Product>, DbRepository<Product>>();
 builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderDbRepository>();
-builder.Services.AddSingleton<OnlineShopWebApp.IRepository<Role>, InMemoryRepository<Role>>();
-builder.Services.AddSingleton<OnlineShopWebApp.IRepository<User>, InMemoryRepository<User>>();
+builder.Services.AddTransient<IRoleRepository, RoleDbRepository>();
+builder.Services.AddTransient<IUserRepository, UserDbRepository>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();

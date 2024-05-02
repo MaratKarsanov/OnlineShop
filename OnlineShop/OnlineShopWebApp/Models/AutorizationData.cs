@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OnlineShop.Db;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Models
 {
@@ -6,6 +7,7 @@ namespace OnlineShopWebApp.Models
     {
         [Required(ErrorMessage = "Не указан логин")]
         [StringLength(20, MinimumLength = 3,ErrorMessage = "Логин должен быть от 3 до 20 символов!")]
+        [EmailAddress(ErrorMessage = "Логин должен быть в формате email")]
         public string? Login { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]

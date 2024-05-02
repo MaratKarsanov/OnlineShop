@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Role>
+﻿@model IEnumerable<RoleViewModel>
 
 <div class="row">
     @await Html.PartialAsync("AdministratorPanel")
@@ -21,7 +21,7 @@
                 asp-area="Administrator" 
                 asp-controller="User" 
                 asp-action="ChangeRole" 
-                asp-route-userId="@ViewData["userId"]">
+                asp-route-login="@ViewData["login"]">
                 Сохранить
             </button>
         </form>

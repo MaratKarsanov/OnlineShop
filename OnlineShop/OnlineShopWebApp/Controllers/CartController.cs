@@ -27,14 +27,14 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Add(Guid productId)
         {
             var product = productRepository.TryGetElementById(productId);
-            cartRepository.Add(product, Constants.UserId);
-            return RedirectToAction(nameof(Index), new { userId = Constants.UserId });
+            cartRepository.Add(product, Constants.Login);
+            return RedirectToAction(nameof(Index), new { userId = Constants.Login });
         }
 
         public IActionResult DecreaseAmount(Guid productId)
         {
-            cartRepository.DecreaseAmount(productId, Constants.UserId);
-            return RedirectToAction(nameof(Index), new { userId = Constants.UserId });
+            cartRepository.DecreaseAmount(productId, Constants.Login);
+            return RedirectToAction(nameof(Index), new { userId = Constants.Login });
         }
     }
 }

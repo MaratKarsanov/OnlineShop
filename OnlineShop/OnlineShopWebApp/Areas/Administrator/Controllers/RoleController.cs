@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShopWebApp.Areas.Administrator.Models;
+using OnlineShop.Db;
+using OnlineShop.Db.Repositories.Interfaces;
 using System.Data;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
@@ -7,21 +8,21 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class RoleController : Controller
     {
-        private IRepository<Role> roleRepository;
+        private IRoleRepository roleRepository;
 
-        public RoleController(IRepository<Role> roleRepository)
+        public RoleController(IRoleRepository roleRepository)
         {
             this.roleRepository = roleRepository;
         }
 
         public IActionResult Index()
         {
-            return View(roleRepository.GetAll());
+            return View(Helpers.MappingHelper.ToRoleViewModels(roleRepository.GetAll()));
         }
 
-        public IActionResult Remove(Guid roleId)
+        public IActionResult Remove(string roleName)
         {
-            roleRepository.Remove(roleId);
+            roleRepository.Remove(roleName);
             return RedirectToAction(nameof(Index));
         }
 
@@ -35,10 +36,12 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Add(Role newRole)
         {
             if (roleRepository.GetAll().Where(r => r.Name == newRole.Name).Count() > 0)
+            {
                 ModelState.AddModelError("", "Такая роль уже существует");
+                return View();
+            }
             if (!ModelState.IsValid)
                 return View();
-            newRole.Id = Guid.NewGuid();
             roleRepository.Add(newRole);
             return RedirectToAction(nameof(Index));
         }

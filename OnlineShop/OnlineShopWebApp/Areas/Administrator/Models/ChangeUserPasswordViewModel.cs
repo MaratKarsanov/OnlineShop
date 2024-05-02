@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.Areas.Administrator.Models
 {
-    public class ChangeUserPassword
+    public class ChangeUserPasswordViewModel
     {
 
         [Required(ErrorMessage = "Не указан новый пароль")]

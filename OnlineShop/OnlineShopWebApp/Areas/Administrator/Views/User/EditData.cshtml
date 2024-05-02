@@ -1,15 +1,10 @@
-﻿@model EditUserData
+﻿@model EditUserDataViewModel
 
 <form method="post" target="_self">
     <div class="row">
         @await Html.PartialAsync("AdministratorPanel")
         <div class="col-6">
             <div class="validation" asp-validation-summary="All"></div>
-            <div>
-                <label asp-for="Login">Логин:</label>
-                <input type="text" asp-for="Login" placeholder="Login" value="@Model.Login">
-                <span asp-validation-for="Login"></span>
-            </div>
             <div>
                 <label asp-for="Name">Имя:</label>
                 <input type="text" asp-for="Name" placeholder="Name" value="@Model.Name">
@@ -26,11 +21,6 @@
                 <span asp-validation-for="Address"></span>
             </div>
             <div>
-                <label asp-for="EMail">Электронная почта:</label>
-                <input type="text" asp-for="EMail" placeholder="email" value="@Model.EMail">
-                <span asp-validation-for="EMail"></span>
-            </div>
-            <div>
                 <label asp-for="PhoneNumber">Телефон:</label>
                 <input type="text" asp-for="PhoneNumber" placeholder="Phone number" value="@Model.PhoneNumber">
                 <span asp-validation-for="PhoneNumber"></span>
@@ -41,7 +31,7 @@
                         asp-action="EditData"
                         asp-area="Administrator"
                         asp-controller="User"
-                        asp-route-userId="@ViewData["userId"]">
+                        asp-route-login="@ViewData["login"]">
                     Внести изменения
                 </button>
             </div>

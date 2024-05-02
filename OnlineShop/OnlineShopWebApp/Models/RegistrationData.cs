@@ -6,6 +6,7 @@ namespace OnlineShopWebApp.Models
     {
         [Required(ErrorMessage = "Не указан логин")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "Логин должен быть от 3 до 20 символов!")]
+        [EmailAddress(ErrorMessage = "Логин должен быть в формате email")]
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Не указан пароль")]
@@ -15,17 +16,18 @@ namespace OnlineShopWebApp.Models
         [Required(ErrorMessage = "Повторите пароль")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string RepeatedPassword { get; set; }
-        public DeliveryDataViewModel PersonalData { get; set; }
 
-        public RegistrationData()
-        {
-            PersonalData = new DeliveryDataViewModel();
-        }
+        [Required(ErrorMessage = "Введите имя")]
+        public string Name { get; set; }
 
-        public override string ToString()
-        {
-            return $"{Login} {Password} {RepeatedPassword}";
-        }
+        [Required(ErrorMessage = "Введите фамилию")]
+        public string Surname { get; set; }
 
+        [Required(ErrorMessage = "Введите адрес")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Введите номер телефона")]
+        [Phone(ErrorMessage = "Неверный формат номера")]
+        public string PhoneNumber { get; set; }
     }
 }
