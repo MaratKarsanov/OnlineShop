@@ -6,10 +6,10 @@ namespace OnlineShopWebApp.Controllers
 {
     public class FavouritesController : Controller
     {
-        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
+        private IProductRepository productRepository;
         private readonly IFavouritesRepository favouritesRepository;
 
-        public FavouritesController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository,
+        public FavouritesController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository)
         {
             this.productRepository = productRepository;
@@ -28,7 +28,7 @@ namespace OnlineShopWebApp.Controllers
             string controllerName = "Home", 
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetElementById(productId);
+            var product = productRepository.TryGetById(productId);
             favouritesRepository.Add(product, Constants.Login);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
@@ -37,7 +37,7 @@ namespace OnlineShopWebApp.Controllers
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetElementById(productId);
+            var product = productRepository.TryGetById(productId);
             favouritesRepository.Remove(product, Constants.Login);
             return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId});
         }

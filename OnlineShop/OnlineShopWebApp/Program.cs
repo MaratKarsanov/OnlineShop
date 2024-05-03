@@ -21,7 +21,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddTransient<IRepository<Product>, DbRepository<Product>>();
+builder.Services.AddTransient<IProductRepository, ProductDbRepository>();
 builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();

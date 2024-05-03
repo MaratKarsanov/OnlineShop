@@ -18,5 +18,20 @@ namespace OnlineShop.Db
         {
             Database.Migrate();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            var basicProducts = new List<Product>();
+            for (var i = 0; i < 100; i++)
+            {
+                basicProducts.Add(new Product()
+                {
+                    Name = $"Name{i}",
+                    Cost = i * 100,
+                    Description = "Very good product!",
+                });
+            }
+            modelBuilder.Entity<Product>().HasData(basicProducts);
+        }
     }
 }

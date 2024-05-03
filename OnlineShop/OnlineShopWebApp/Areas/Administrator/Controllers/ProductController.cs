@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 using System.Data;
 
@@ -8,9 +9,9 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Area("Administrator")]
     public class ProductController : Controller
     {
-        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
+        private IProductRepository productRepository;
 
-        public ProductController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository)
+        public ProductController(IProductRepository productRepository)
         {
             this.productRepository = productRepository;
         }
@@ -49,7 +50,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpGet]
         public IActionResult Edit(Guid productId)
         {
-            var product = productRepository.TryGetElementById(productId);
+            var product = productRepository.TryGetById(productId);
             return View(product);
         }
 
@@ -58,7 +59,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            var product = productRepository.TryGetElementById(newProduct.Id);
+            var product = productRepository.TryGetById(newProduct.Id);
             product.Name = newProduct.Name;
             product.Cost = newProduct.Cost;
             product.Description = newProduct.Description;

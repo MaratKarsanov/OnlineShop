@@ -6,11 +6,11 @@ namespace OnlineShopWebApp.Controllers
 {
     public class ComparisonController : Controller
     {
-        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
+        private IProductRepository productRepository;
         private IComparisonRepository comparisonRepository;
 
         public ComparisonController(IComparisonRepository productRepositories,
-            OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository)
+            IProductRepository productRepository)
         {
             this.productRepository = productRepository;
             comparisonRepository = productRepositories;
@@ -28,7 +28,7 @@ namespace OnlineShopWebApp.Controllers
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetElementById(productId);
+            var product = productRepository.TryGetById(productId);
             comparisonRepository.Add(product, Constants.Login);
             return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId, userId = Constants.Login});
         }
@@ -37,7 +37,7 @@ namespace OnlineShopWebApp.Controllers
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetElementById(productId);
+            var product = productRepository.TryGetById(productId);
             comparisonRepository.Remove(product, Constants.Login);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId, userId = Constants.Login });
         }

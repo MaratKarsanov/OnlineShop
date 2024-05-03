@@ -8,11 +8,11 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private IRepository<Product> productRepository;
+        private IProductRepository productRepository;
         private IFavouritesRepository favouritiesRepository;
         public static string searchString = "";
 
-        public HomeController(IRepository<Product> productRepository,
+        public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritiesRepository)
         {
             this.productRepository = productRepository;

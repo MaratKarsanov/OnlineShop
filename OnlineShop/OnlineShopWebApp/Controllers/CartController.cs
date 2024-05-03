@@ -6,10 +6,10 @@ namespace OnlineShopWebApp.Controllers
 {
     public class CartController : Controller
     {
-        private OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository;
+        private IProductRepository productRepository;
         private ICartRepository cartRepository;
 
-        public CartController(OnlineShop.Db.Repositories.Interfaces.IRepository<Product> productRepository,
+        public CartController(IProductRepository productRepository,
             ICartRepository cartRepository)
         {
             this.productRepository = productRepository;
@@ -26,7 +26,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Add(Guid productId)
         {
-            var product = productRepository.TryGetElementById(productId);
+            var product = productRepository.TryGetById(productId);
             cartRepository.Add(product, Constants.Login);
             return RedirectToAction(nameof(Index), new { userId = Constants.Login });
         }

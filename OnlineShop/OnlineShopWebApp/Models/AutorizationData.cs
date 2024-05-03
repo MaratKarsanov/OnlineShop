@@ -1,10 +1,11 @@
-﻿using OnlineShop.Db;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Models
 {
-    public class AutorizationData : RepositoryItem
+    public class AutorizationData
     {
+        public Guid Id { get; set; }
+
         [Required(ErrorMessage = "Не указан логин")]
         [StringLength(20, MinimumLength = 3,ErrorMessage = "Логин должен быть от 3 до 20 символов!")]
         [EmailAddress(ErrorMessage = "Логин должен быть в формате email")]
