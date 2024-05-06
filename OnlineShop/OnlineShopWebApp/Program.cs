@@ -1,10 +1,6 @@
-using OnlineShopWebApp.Models;
-using OnlineShopWebApp;
 using Serilog;
-using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShop.Db;
 using Microsoft.EntityFrameworkCore;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShop.Db.Repositories;
 

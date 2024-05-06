@@ -25,6 +25,7 @@ namespace OnlineShop.Db.Repositories
         public List<User> GetAll()
         {
             return databaseContext.Users
+                .Include(u => u.Role)
                 .Include(u => u.DeliveryDatas)
                 .ToList();
         }
@@ -81,6 +82,7 @@ namespace OnlineShop.Db.Repositories
         public User TryGetByLogin(string login)
         {
             return databaseContext.Users
+                .Include(u => u.Role)
                 .Include(u => u.DeliveryDatas)
                 .FirstOrDefault(u => u.Login == login);
         }
