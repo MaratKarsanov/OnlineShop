@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
@@ -16,9 +15,9 @@ namespace OnlineShopWebApp.Controllers
             this.favouritesRepository = favouritesRepository;
         }
 
-        public IActionResult Index(string userId)
+        public IActionResult Index()
         {
-            var favourites = favouritesRepository.TryGetByUserId(userId);
+            var favourites = favouritesRepository.TryGetByUserId(Request.Cookies["userLogin"]);
             if (favourites is null)
                 return View(null);
             return View(Helpers.MappingHelper.ToProductViewModels(favourites.Items));
@@ -29,7 +28,10 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            favouritesRepository.Add(product, Constants.Login);
+            var userLogin = Request.Cookies["userLogin"];
+            if (userLogin is null || userLogin == string.Empty)
+                return RedirectToAction(nameof(Index));
+            favouritesRepository.AddProduct(product, userLogin);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
 
@@ -38,7 +40,10 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            favouritesRepository.Remove(product, Constants.Login);
+            var userLogin = Request.Cookies["userLogin"];
+            if (userLogin is null || userLogin == string.Empty)
+                return RedirectToAction(nameof(Index));
+            favouritesRepository.Remove(product, userLogin);
             return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId});
         }
     }

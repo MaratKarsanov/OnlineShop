@@ -4,9 +4,10 @@ namespace OnlineShop.Db.Repositories.Interfaces
 {
     public interface ICartRepository
     {
-        void Add(Product product, string userId);
+        void AddProduct(Product product, string userId);
+        void AddCart(string userId);
         void Remove(string userId);
         void DecreaseAmount(Guid productId, string userId);
-        Cart TryGetByUserId(string userId);
+        Cart TryGetByLogin(string login);
     }
 }

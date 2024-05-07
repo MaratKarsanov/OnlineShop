@@ -55,7 +55,7 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
-            var cart = cartRepository.TryGetByUserId(Constants.Login);
+            var cart = cartRepository.TryGetByLogin(Constants.Login);
             var deliveryData = Helpers.MappingHelper.ToDeliveryData(deliveryDataVm);
             userRepository.AddDelivery(Constants.Login, deliveryData);
             var newOrder = new Order()

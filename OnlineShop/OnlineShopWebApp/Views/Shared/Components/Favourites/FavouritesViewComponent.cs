@@ -14,7 +14,8 @@ namespace OnlineShopWebApp.Views.Shared.Components.Favourites
 
         public IViewComponentResult Invoke()
         {
-            var favourities = favouritesRepository.TryGetByUserId(Constants.Login);
+            var userLogin = Request.Cookies["userLogin"];
+            var favourities = favouritesRepository.TryGetByUserId(userLogin);
             return View("Favourites", favourities?.Count ?? 0);
         }
     }

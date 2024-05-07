@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
+using System;
 
 namespace OnlineShop.Db.Repositories
 {
@@ -12,7 +13,19 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public void Add(Product product, string userId)
+        public void AddComparison(string userId)
+        {
+            if (TryGetByUserId(userId) is null)
+            {
+                databaseContext.Comparisons.Add(new Comparison()
+                {
+                    UserId = userId,
+                    Items = new List<Product>()
+                });
+            }
+        }
+
+        public void AddProduct(Product product, string userId)
         {
             var comparison = TryGetByUserId(userId);
             if (comparison is null)

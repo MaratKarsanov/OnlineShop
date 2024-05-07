@@ -14,7 +14,8 @@ namespace OnlineShopWebApp.Views.Shared.Components.Comparison
 
         public IViewComponentResult Invoke()
         {
-            var comparison = comparisonRepository.TryGetByUserId(Constants.Login);
+            var userLogin = Request.Cookies["userLogin"];
+            var comparison = comparisonRepository.TryGetByUserId(userLogin);
             var productsCount = comparison?.Items.Count ?? 0;
             return View("Comparison", productsCount);
         }

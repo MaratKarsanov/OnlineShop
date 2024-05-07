@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 
@@ -36,7 +35,21 @@ namespace OnlineShopWebApp.Controllers
                 ModelState.AddModelError("", "Введен неверный пароль!");
                 return View(nameof(Index));
             }
-            return Content(autorizationData.ToString());
+            var cookieOptions = new CookieOptions();
+            if (autorizationData.RememberMe)
+                cookieOptions.Expires = DateTime.Now.AddMonths(1);
+            Response.Cookies.Append("userLogin", autorizationData.Login, cookieOptions);
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult SignOut()
+        {
+            var cookieOptions = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddMonths(-1)
+            };
+            Response.Cookies.Append("userLogin", string.Empty, cookieOptions);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

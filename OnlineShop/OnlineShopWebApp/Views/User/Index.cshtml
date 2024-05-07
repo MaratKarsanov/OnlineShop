@@ -1,5 +1,17 @@
 ﻿@model UserViewModel
 
+@if (Model is null)
+{
+    <p>Вы не авторизованы</p>
+    <a class="btn btn-light"
+       asp-area=""
+       asp-controller="Autorization"
+       asp-action="Index"
+       role="button">
+        Авторизоваться
+    </a>
+    return;
+}
 <div class="row">
     <div class="col-6">
         <div>
@@ -35,6 +47,34 @@
             <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="Delete" asp-route-login="@Model.Login">
                 Удалить
             </a>
+        </div>
+        <button class="btn btn-dark dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton2"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+            Информация о предыдущих заказах
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            @if (Model.DeliveryDatas.Count == 0)
+            {
+                <a class="dropdown-item">
+                    Заказов дæм нæй
+                </a>
+            }
+            else
+            {
+                @foreach (var deliveryData in Model.DeliveryDatas)
+                {
+                    <a class="dropdown-item">
+                        @deliveryData.Name;
+                        @deliveryData.Surname;
+                        @deliveryData.Address;
+                        @deliveryData.PhoneNumber
+                    </a>
+                }
+            }
         </div>
     </div>
 </div>

@@ -22,12 +22,10 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Administrator" asp-controller="Order" asp-action="Index">Administrator</a>
-                        </li>
+                        @await Component.InvokeAsync("Administrator")
                     </ul>
                 </div>
-                <a class="nav-link text-dark" asp-area="" asp-controller="Autorization" asp-action="Index">Autorization</a>
+                @await Component.InvokeAsync("Autorization")
                 @await Component.InvokeAsync("Comparison")
                 @await Component.InvokeAsync("Favourites")
                 @await Component.InvokeAsync("Cart")

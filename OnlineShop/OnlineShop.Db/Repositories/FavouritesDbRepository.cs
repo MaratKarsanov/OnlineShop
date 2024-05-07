@@ -12,7 +12,19 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public void Add(Product product, string userId)
+        public void AddFavourites(string userId)
+        {
+            if (TryGetByUserId(userId) is null)
+            {
+                databaseContext.Favourites.Add(new Favourites()
+                {
+                    UserId = userId,
+                    Items = new List<Product>()
+                });
+            }
+        }
+
+        public void AddProduct(Product product, string userId)
         {
             var favourites = TryGetByUserId(userId);
             if (favourites is null)

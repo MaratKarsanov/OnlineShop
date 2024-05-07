@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
@@ -16,9 +15,9 @@ namespace OnlineShopWebApp.Controllers
             this.cartRepository = cartRepository;
         }
 
-        public IActionResult Index(string userId)
+        public IActionResult Index()
         {
-            var cart = cartRepository.TryGetByUserId(userId);
+            var cart = cartRepository.TryGetByLogin(Request.Cookies["userLogin"]);
             if (cart is null)
                 return View(null);
             return View(Helpers.MappingHelper.ToCartViewModel(cart));
@@ -26,15 +25,21 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Add(Guid productId)
         {
+            var userLogin = Request.Cookies["userLogin"];
+            if (userLogin is null || userLogin == string.Empty)
+                return RedirectToAction(nameof(Index));
             var product = productRepository.TryGetById(productId);
-            cartRepository.Add(product, Constants.Login);
-            return RedirectToAction(nameof(Index), new { userId = Constants.Login });
+            cartRepository.AddProduct(product, userLogin);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult DecreaseAmount(Guid productId)
         {
-            cartRepository.DecreaseAmount(productId, Constants.Login);
-            return RedirectToAction(nameof(Index), new { userId = Constants.Login });
+            var userLogin = Request.Cookies["userLogin"];
+            if (userLogin is null || userLogin == string.Empty)
+                return RedirectToAction(nameof(Index));
+            cartRepository.DecreaseAmount(productId, userLogin);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

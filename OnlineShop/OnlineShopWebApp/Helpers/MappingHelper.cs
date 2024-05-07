@@ -98,6 +98,12 @@ namespace OnlineShopWebApp.Helpers
             };
         }
 
+        public static IEnumerable<DeliveryDataViewModel> ToDeliveryDataViewModels(IEnumerable<DeliveryData> deliveryDatas)
+        {
+            return deliveryDatas
+                .Select(ToDeliveryDataViewModel);
+        }
+
         public static DeliveryData ToDeliveryData(DeliveryDataViewModel deliveryDataVm)
         {
             return new DeliveryData()
@@ -141,7 +147,8 @@ namespace OnlineShopWebApp.Helpers
                 Address = user.Address,
                 PhoneNumber = user.PhoneNumber,
                 Role = ToRoleViewModel(user.Role),
-                RememberMe = user.RememberMe
+                RememberMe = user.RememberMe,
+                DeliveryDatas = ToDeliveryDataViewModels(user.DeliveryDatas).ToList()
             };
         }
 

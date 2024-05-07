@@ -28,6 +28,7 @@ namespace OnlineShopWebApp.Models
         public string PhoneNumber { get; set; }
         public bool RememberMe { get; set; }
         public RoleViewModel Role { get; set; }
+        public List<DeliveryDataViewModel> DeliveryDatas { get; set; }
 
         public UserViewModel() : base()
         {

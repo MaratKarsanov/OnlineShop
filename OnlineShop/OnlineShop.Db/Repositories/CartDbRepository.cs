@@ -13,17 +13,17 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public Cart TryGetByUserId(string userId)
+        public Cart TryGetByLogin(string login)
         {
             return databaseContext.Carts
                 .Include(c => c.Items)
                 .ThenInclude(ci => ci.Product)
-                .FirstOrDefault(c => c.UserId == userId);
+                .FirstOrDefault(c => c.UserId == login);
         }
 
-        public void Add(Product product, string userId)
+        public void AddProduct(Product product, string userId)
         {
-            var cart = TryGetByUserId(userId);
+            var cart = TryGetByLogin(userId);
             if (cart is null)
             {
                 var newCart = new Cart()
@@ -57,7 +57,7 @@ namespace OnlineShop.Db.Repositories
 
         public void DecreaseAmount(Guid productId, string userId)
         {
-            var cart = TryGetByUserId(userId);
+            var cart = TryGetByLogin(userId);
             var cartItem = cart?.Items?.FirstOrDefault(ci => ci.Product.Id == productId);
             if (cartItem is null)
                 return;
@@ -68,9 +68,23 @@ namespace OnlineShop.Db.Repositories
 
         public void Remove(string userId)
         {
-            var cart = TryGetByUserId(userId);
+            var cart = TryGetByLogin(userId);
             databaseContext.Carts.Remove(cart);
             databaseContext.SaveChanges();
+        }
+
+        public void AddCart(string userId)
+        {
+            if (TryGetByLogin(userId) is null)
+            {
+                var newCart = new Cart()
+                {
+                    UserId = userId,
+                    Items = new List<CartItem>()
+                };
+                databaseContext.Carts.Add(newCart);
+                databaseContext.SaveChanges();
+            }
         }
     }
 }

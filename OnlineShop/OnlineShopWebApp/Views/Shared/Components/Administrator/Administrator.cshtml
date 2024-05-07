@@ -1,0 +1,13 @@
+﻿@model OnlineShopWebApp.Areas.Administrator.Models.RoleViewModel
+
+@if (Model is not null && Model.Name == "Administrator")
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark"
+           asp-area="Administrator"
+           asp-controller="Order"
+           asp-action="Index">
+            Administrator
+        </a>
+    </li>
+}

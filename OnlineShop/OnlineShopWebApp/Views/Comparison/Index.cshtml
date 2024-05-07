@@ -1,6 +1,18 @@
 ﻿@model ComparisonViewModel
 
-@if (Model is null || Model.Items.Count() == 0)
+@if (Model is null)
+{
+    <p>Вы не авторизованы</p>
+    <a class="btn btn-light"
+       asp-area=""
+       asp-controller="Autorization"
+       asp-action="Index"
+       role="button">
+        Авторизоваться
+    </a>
+    return;
+}
+@if (Model.Items.Count() == 0)
 {
     <p>Вы не выбрали товары для сравнения!</p>
 }

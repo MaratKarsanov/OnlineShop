@@ -16,9 +16,9 @@ namespace OnlineShopWebApp.Controllers
             comparisonRepository = productRepositories;
         }
 
-        public IActionResult Index(string userId)
+        public IActionResult Index()
         {
-            var comparison = comparisonRepository.TryGetByUserId(userId);
+            var comparison = comparisonRepository.TryGetByUserId(Request.Cookies["userLogin"]);
             if (comparison is null)
                 return View(null);
             return View(Helpers.MappingHelper.ToComparisonViewModel(comparison));
@@ -29,8 +29,11 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            comparisonRepository.Add(product, Constants.Login);
-            return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId, userId = Constants.Login});
+            var userLogin = Request.Cookies["userLogin"];
+            if (userLogin is null || userLogin == string.Empty)
+                return RedirectToAction(nameof(Index));
+            comparisonRepository.AddProduct(product, userLogin);
+            return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
 
         public IActionResult Remove(Guid productId,
@@ -38,8 +41,11 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            comparisonRepository.Remove(product, Constants.Login);
-            return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId, userId = Constants.Login });
+            var userLogin = Request.Cookies["userLogin"];
+            if (userLogin is null || userLogin == string.Empty)
+                return RedirectToAction(nameof(Index));
+            comparisonRepository.Remove(product, userLogin);
+            return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
     }
 }
