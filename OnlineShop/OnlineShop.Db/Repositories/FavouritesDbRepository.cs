@@ -12,16 +12,19 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public void AddFavourites(string userId)
+        public Favourites AddFavourites(string userId)
         {
-            if (TryGetByUserId(userId) is null)
+            var favourites = TryGetByUserId(userId);
+            if (favourites is null)
             {
-                databaseContext.Favourites.Add(new Favourites()
+                favourites = new Favourites()
                 {
                     UserId = userId,
                     Items = new List<Product>()
-                });
+                };
+                databaseContext.Favourites.Add(favourites);
             }
+            return favourites;
         }
 
         public void AddProduct(Product product, string userId)
@@ -53,7 +56,17 @@ namespace OnlineShop.Db.Repositories
             databaseContext.SaveChanges();
         }
 
-        public void Remove(Product product, string userId)
+        public void RemoveFavourites(string userId)
+        {
+            var favourites = TryGetByUserId(userId);
+            if (favourites is not null)
+            {
+                databaseContext.Favourites.Remove(favourites);
+                databaseContext.SaveChanges();
+            }
+        }
+
+        public void RemoveProduct(Product product, string userId)
         {
             var favourites = TryGetByUserId(userId);
             if (favourites is null)

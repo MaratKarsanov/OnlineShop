@@ -8,6 +8,19 @@ namespace OnlineShopWebApp.Helpers
 {
     public class MappingHelper
     {
+        public static Product ToProduct(ProductViewModel productViewModel)
+        {
+            return new Product()
+            {
+                Id = productViewModel.Id,
+                Name = productViewModel.Name,
+                Cost = productViewModel.Cost,
+                Description = productViewModel.Description,
+                ImageLink = productViewModel.ImageLink,
+                IsInComparison = productViewModel.IsInComparison,
+                IsInFavourites = productViewModel.IsInFavourites
+            };
+        }
         public static IEnumerable<ProductViewModel> ToProductViewModels(IEnumerable<Product> products)
         {
             return products

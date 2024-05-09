@@ -5,9 +5,10 @@ namespace OnlineShop.Db.Repositories.Interfaces
     public interface IFavouritesRepository
     {
         void AddProduct(Product product, string userId);
-        void AddFavourites(string userId);
+        Favourites AddFavourites(string userId);
         void Clear(string userId);
-        void Remove(Product product, string userId);
+        void RemoveProduct(Product product, string userId);
+        void RemoveFavourites(string userId);
         Favourites TryGetByUserId(string userId);
     }
 }

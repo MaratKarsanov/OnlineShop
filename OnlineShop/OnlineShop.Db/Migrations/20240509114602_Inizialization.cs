@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OnlineShop.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialization : Migration
+    public partial class Inizialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,23 +48,6 @@ namespace OnlineShop.Db.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsInFavourites = table.Column<bool>(type: "bit", nullable: false),
-                    IsInComparison = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -76,51 +59,32 @@ namespace OnlineShop.Db.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComparisonProduct",
+                name: "Products",
                 columns: table => new
                 {
-                    ComparisonsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsInFavourites = table.Column<bool>(type: "bit", nullable: false),
+                    IsInComparison = table.Column<bool>(type: "bit", nullable: false),
+                    ComparisonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    FavouritesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComparisonProduct", x => new { x.ComparisonsId, x.ItemsId });
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ComparisonProduct_Comparisons_ComparisonsId",
-                        column: x => x.ComparisonsId,
+                        name: "FK_Products_Comparisons_ComparisonId",
+                        column: x => x.ComparisonId,
                         principalTable: "Comparisons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ComparisonProduct_Products_ItemsId",
-                        column: x => x.ItemsId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FavouritesProduct",
-                columns: table => new
-                {
-                    FavouritesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ItemsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FavouritesProduct", x => new { x.FavouritesId, x.ItemsId });
-                    table.ForeignKey(
-                        name: "FK_FavouritesProduct_Favourites_FavouritesId",
+                        name: "FK_Products_Favourites_FavouritesId",
                         column: x => x.FavouritesId,
                         principalTable: "Favourites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FavouritesProduct_Products_ItemsId",
-                        column: x => x.ItemsId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -236,24 +200,24 @@ namespace OnlineShop.Db.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComparisonProduct_ItemsId",
-                table: "ComparisonProduct",
-                column: "ItemsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DeliveryData_UserLogin",
                 table: "DeliveryData",
                 column: "UserLogin");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FavouritesProduct_ItemsId",
-                table: "FavouritesProduct",
-                column: "ItemsId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Orders_DeliveryDataId",
                 table: "Orders",
                 column: "DeliveryDataId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ComparisonId",
+                table: "Products",
+                column: "ComparisonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_FavouritesId",
+                table: "Products",
+                column: "FavouritesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleName",
@@ -268,28 +232,22 @@ namespace OnlineShop.Db.Migrations
                 name: "CartItem");
 
             migrationBuilder.DropTable(
-                name: "ComparisonProduct");
-
-            migrationBuilder.DropTable(
-                name: "FavouritesProduct");
-
-            migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Comparisons");
-
-            migrationBuilder.DropTable(
-                name: "Favourites");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "DeliveryData");
+
+            migrationBuilder.DropTable(
+                name: "Comparisons");
+
+            migrationBuilder.DropTable(
+                name: "Favourites");
 
             migrationBuilder.DropTable(
                 name: "Users");

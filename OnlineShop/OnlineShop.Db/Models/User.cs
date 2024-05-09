@@ -14,6 +14,7 @@ namespace OnlineShop.Db
         public string PhoneNumber { get; set; }
         public bool RememberMe { get; set; }
         public Role Role { get; set; }
+        public string RoleName { get; set; }
         public List<DeliveryData> DeliveryDatas { get; set; } = new List<DeliveryData>();
     }
 }

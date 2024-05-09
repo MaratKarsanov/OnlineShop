@@ -26,12 +26,33 @@ namespace OnlineShop.Db
             {
                 basicProducts.Add(new Product()
                 {
+                    Id = Guid.NewGuid(),
                     Name = $"Name{i}",
                     Cost = i * 100,
                     Description = "Very good product!",
                 });
             }
+            var basicRoles = new List<Role>()
+            {
+                new Role(){ Name = "Administrator" },
+                new Role(){ Name = "User" }
+            };
+            var basicUsers = new List<User>()
+            {
+                new User()
+                {
+                    Login = "karsanov@mail.ru",
+                    Password = "marmar",
+                    Name = "Marat",
+                    Surname = "Karsanov",
+                    Address = "Vatutina 37",
+                    PhoneNumber = "89187080533",
+                    RoleName = "Administrator"
+                }
+            };
             modelBuilder.Entity<Product>().HasData(basicProducts);
+            modelBuilder.Entity<Role>().HasData(basicRoles);
+            modelBuilder.Entity<User>().HasData(basicUsers);
         }
     }
 }

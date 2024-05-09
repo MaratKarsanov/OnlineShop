@@ -12,8 +12,8 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240503141243_Initialization")]
-    partial class Initialization
+    [Migration("20240509114602_Inizialization")]
+    partial class Inizialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,36 +24,6 @@ namespace OnlineShop.Db.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ComparisonProduct", b =>
-                {
-                    b.Property<Guid>("ComparisonsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ComparisonsId", "ItemsId");
-
-                    b.HasIndex("ItemsId");
-
-                    b.ToTable("ComparisonProduct");
-                });
-
-            modelBuilder.Entity("FavouritesProduct", b =>
-                {
-                    b.Property<Guid>("FavouritesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ItemsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FavouritesId", "ItemsId");
-
-                    b.HasIndex("ItemsId");
-
-                    b.ToTable("FavouritesProduct");
-                });
 
             modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>
                 {
@@ -196,12 +166,18 @@ namespace OnlineShop.Db.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ComparisonId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("FavouritesId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageLink")
                         .HasColumnType("nvarchar(max)");
@@ -217,6 +193,10 @@ namespace OnlineShop.Db.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ComparisonId");
+
+                    b.HasIndex("FavouritesId");
 
                     b.ToTable("Products");
                 });
@@ -269,36 +249,6 @@ namespace OnlineShop.Db.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ComparisonProduct", b =>
-                {
-                    b.HasOne("OnlineShop.Db.Models.Comparison", null)
-                        .WithMany()
-                        .HasForeignKey("ComparisonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineShop.Db.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FavouritesProduct", b =>
-                {
-                    b.HasOne("OnlineShop.Db.Models.Favourites", null)
-                        .WithMany()
-                        .HasForeignKey("FavouritesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineShop.Db.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
                 {
                     b.HasOne("OnlineShop.Db.Models.Cart", null)
@@ -310,7 +260,7 @@ namespace OnlineShop.Db.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("OnlineShop.Db.Models.Product", "Product")
-                        .WithMany("CartItems")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -336,6 +286,17 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("DeliveryData");
                 });
 
+            modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
+                {
+                    b.HasOne("OnlineShop.Db.Models.Comparison", null)
+                        .WithMany("Items")
+                        .HasForeignKey("ComparisonId");
+
+                    b.HasOne("OnlineShop.Db.Models.Favourites", null)
+                        .WithMany("Items")
+                        .HasForeignKey("FavouritesId");
+                });
+
             modelBuilder.Entity("OnlineShop.Db.User", b =>
                 {
                     b.HasOne("OnlineShop.Db.Role", "Role")
@@ -350,14 +311,19 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+            modelBuilder.Entity("OnlineShop.Db.Models.Comparison", b =>
                 {
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
+            modelBuilder.Entity("OnlineShop.Db.Models.Favourites", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("OnlineShop.Db.User", b =>

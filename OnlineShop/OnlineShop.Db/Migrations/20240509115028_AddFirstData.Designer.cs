@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Db;
 
@@ -11,9 +12,11 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240509115028_AddFirstData")]
+    partial class AddFirstData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,7 +203,7 @@ namespace OnlineShop.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f7fafc58-1811-4d18-8356-cd568ee803c8"),
+                            Id = new Guid("1551d956-8426-47c8-bf45-01cc83914754"),
                             Cost = 0m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -210,7 +213,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fa6ea92c-9ec8-43f4-9fd5-11fdfb4973af"),
+                            Id = new Guid("f34821cd-591b-4b28-8765-a86cd19ef042"),
                             Cost = 100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -220,7 +223,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5764666e-4212-48fa-96b8-efb776209b7d"),
+                            Id = new Guid("050b015e-e557-4afe-a91c-375010aed665"),
                             Cost = 200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -230,7 +233,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fe5ca804-bc57-4ec5-a3ed-c7f8f27aad0e"),
+                            Id = new Guid("32bd3ec5-45b1-4820-ae6d-d474e1848c65"),
                             Cost = 300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -240,7 +243,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f8880ffe-1f5b-48bf-adad-347b54cbb131"),
+                            Id = new Guid("da551d68-c07f-4402-baf9-e1e00102fb06"),
                             Cost = 400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -250,7 +253,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7453169e-d79c-4689-9420-06a98d5b8bca"),
+                            Id = new Guid("93f3bc12-243f-4e13-8b3a-c0e14563889a"),
                             Cost = 500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -260,7 +263,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("14d10c52-cbe1-4031-b5cb-e2f39a347153"),
+                            Id = new Guid("99e14540-68f1-44d2-bfd8-a1c864a19d42"),
                             Cost = 600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -270,7 +273,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e043bb94-ae83-4b69-afec-ba3dd7d767fb"),
+                            Id = new Guid("9c4af692-e56c-44f2-8b8f-b5faf4ff2c20"),
                             Cost = 700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -280,7 +283,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("425b0f08-f505-4ad3-9f94-10681824eae6"),
+                            Id = new Guid("3436edd5-f7dc-4c86-a81f-08b2c99c82b9"),
                             Cost = 800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -290,7 +293,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("59f20b4a-0735-412a-acb3-d05a302e093c"),
+                            Id = new Guid("57b4f572-21b2-4cf8-8844-fc1d91e38014"),
                             Cost = 900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -300,7 +303,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d2ac1be1-7887-4c91-827b-1449b3a47a7f"),
+                            Id = new Guid("4232e07f-8f3e-411e-9b7e-b3b8b63e38f5"),
                             Cost = 1000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -310,7 +313,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f168addd-7f8f-4671-a447-a22fb8013591"),
+                            Id = new Guid("46d22e79-e4e7-4786-8eb1-5113c8b569ab"),
                             Cost = 1100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -320,7 +323,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("70da25f7-448d-475c-8b44-aecf07129de4"),
+                            Id = new Guid("c8cc6510-daa7-4667-a92b-89c63cb1171c"),
                             Cost = 1200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -330,7 +333,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("5145b1d7-115d-411a-9a04-48718aed016b"),
+                            Id = new Guid("341691b1-f9dc-4d20-a477-88b07abe86f4"),
                             Cost = 1300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -340,7 +343,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0e5b4da1-5628-4f13-a32b-b1b7f1ece6c9"),
+                            Id = new Guid("6bb3fee2-9752-4bd4-ba63-455c6e0d9181"),
                             Cost = 1400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -350,7 +353,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8509278e-7df7-4427-94d1-34e75b18e556"),
+                            Id = new Guid("7285a46c-2d57-4cc0-952f-07449f4dadec"),
                             Cost = 1500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -360,7 +363,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1cc1e387-77f2-4e7c-ba79-13be2b568da8"),
+                            Id = new Guid("b7d74fe3-055b-4eda-addd-2553f7a1b8ff"),
                             Cost = 1600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -370,7 +373,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b5267945-0180-4fb7-8718-97fd3f6c6601"),
+                            Id = new Guid("941b2bb0-fbfd-4b46-972a-0c0c76fe3af5"),
                             Cost = 1700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -380,7 +383,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d7baa3fe-658d-44bf-ad7a-9c07b7f9c01f"),
+                            Id = new Guid("4facd484-4c5d-4722-8ef5-6cf7135c6a7b"),
                             Cost = 1800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -390,7 +393,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("be96a883-8437-4bff-8565-342667a8a8bb"),
+                            Id = new Guid("32ec1f99-3f24-4b9a-8b6f-05a7ec517b37"),
                             Cost = 1900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -400,7 +403,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3de50e20-0527-4d6d-a920-1fe28b6494ec"),
+                            Id = new Guid("89cbc656-0ab6-45a1-91a9-d0ba3c91c22c"),
                             Cost = 2000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -410,7 +413,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f829762d-53da-41cc-94ee-0d606ab05795"),
+                            Id = new Guid("94a1a81c-bed8-4480-be1d-78fac69a7a5b"),
                             Cost = 2100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -420,7 +423,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a9fef1b3-c7f5-4fd6-8fe0-2b1ddc0d778f"),
+                            Id = new Guid("9c0fc76b-91e8-4a31-a83e-7bb7aec4522a"),
                             Cost = 2200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -430,7 +433,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("91ae481d-e539-4e9a-a3e0-469d9d48ece9"),
+                            Id = new Guid("3bb84bec-3c62-4311-925e-bba0118d4a0e"),
                             Cost = 2300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -440,7 +443,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3353009c-8de7-4cbc-808a-0268dbaf2cf4"),
+                            Id = new Guid("4d478d92-b5bf-47ab-bd71-e1ec99e8c7a6"),
                             Cost = 2400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -450,7 +453,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2cd88341-3628-4e2a-9118-0a63b181c2ac"),
+                            Id = new Guid("d4a516d8-6929-4cfe-b940-037195ce1a82"),
                             Cost = 2500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -460,7 +463,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("189ea2ef-1f6d-403c-9b89-734c56e4200b"),
+                            Id = new Guid("e70f6985-111d-4d34-819c-468ca5028570"),
                             Cost = 2600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -470,7 +473,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9bfaa4df-4540-4fae-a656-c512ab5b1499"),
+                            Id = new Guid("2d19858b-baea-4212-9038-1bc154888b2f"),
                             Cost = 2700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -480,7 +483,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("34290b4b-45e0-4a9d-ac91-a88516d18178"),
+                            Id = new Guid("5dd4ce1f-8612-485e-8676-cd8cbd099040"),
                             Cost = 2800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -490,7 +493,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1734013b-7a91-450e-abe3-86967cb90ea6"),
+                            Id = new Guid("abf4dc6b-4d32-4036-bc55-9179b861b693"),
                             Cost = 2900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -500,7 +503,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("75a2c608-1d27-4161-9f4c-28e2249bc1d0"),
+                            Id = new Guid("dc58ed14-f4e2-4e20-96a2-14ff9bb8ab78"),
                             Cost = 3000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -510,7 +513,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("39c882f1-7c78-4c99-9a1a-684601ab44af"),
+                            Id = new Guid("ff21d764-ba2d-4cf5-a640-f9d300e835dc"),
                             Cost = 3100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -520,7 +523,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f4433020-4eac-43c9-95e4-ee7754cfcfe9"),
+                            Id = new Guid("6023a32f-1328-4be9-bc68-00a63f597a17"),
                             Cost = 3200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -530,7 +533,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("746ed55e-05d1-46f3-818e-19799709b402"),
+                            Id = new Guid("8eca91d8-0303-4083-9762-ec4160b2b8c4"),
                             Cost = 3300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -540,7 +543,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("214dc587-ac46-4094-b0d8-1b9e41773bc5"),
+                            Id = new Guid("06c6591d-ba20-404a-8c72-8afb61887da7"),
                             Cost = 3400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -550,7 +553,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4f98eba7-9f3f-4ae3-b12c-b5d69c7034f1"),
+                            Id = new Guid("7561be6b-57e8-4321-a780-310a80d9b45a"),
                             Cost = 3500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -560,7 +563,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b481a390-a744-4b66-a34f-d916be857723"),
+                            Id = new Guid("517c15e2-f5d1-4700-b020-c11aa932e9f8"),
                             Cost = 3600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -570,7 +573,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9f485c28-0034-4349-8c8f-4bb13e5f69bc"),
+                            Id = new Guid("92412742-598d-4eba-9fe7-26a841739e42"),
                             Cost = 3700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -580,7 +583,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9cfa5605-3b01-4e67-adc0-90c5061e401d"),
+                            Id = new Guid("6664cb5e-ab60-4d80-bc9b-e4e4630a7d31"),
                             Cost = 3800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -590,7 +593,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("909c2cc7-6ea3-4d40-b693-fc52f8898466"),
+                            Id = new Guid("96e1255b-4440-487d-9463-f0ce04bd1f8f"),
                             Cost = 3900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -600,7 +603,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f05ce6b6-6f65-4f19-93e6-4f0b55bec3e0"),
+                            Id = new Guid("0ff76584-03f3-42f2-a4f0-1c876f6bd0c0"),
                             Cost = 4000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -610,7 +613,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a4840c3d-974e-4006-8260-6f36f72346a1"),
+                            Id = new Guid("7619090a-4e1d-4996-a5eb-453dc6d70679"),
                             Cost = 4100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -620,7 +623,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6dd86860-5b4a-4922-84ef-912dd01f01d8"),
+                            Id = new Guid("38ff2633-3b1b-4a4e-9884-c72355922573"),
                             Cost = 4200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -630,7 +633,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("05d4a10f-8157-4d04-aacb-ed6783d3c1ef"),
+                            Id = new Guid("07826e11-7ce3-4cc9-b8bd-37616b318d60"),
                             Cost = 4300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -640,7 +643,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("729a8ea5-f02f-4fe0-b7ef-cf23c419973f"),
+                            Id = new Guid("cf74126d-5f0f-493f-8b36-6413f73e21dd"),
                             Cost = 4400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -650,7 +653,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3d8f7cf6-0f21-4131-a893-93e0d6b4161c"),
+                            Id = new Guid("6f1c4a7f-ab25-4cf1-b764-e01eff8324ba"),
                             Cost = 4500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -660,7 +663,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bb355cf8-44ba-476e-a943-4420e468528c"),
+                            Id = new Guid("b4920d1a-9172-46dc-992e-8b63f67db3c0"),
                             Cost = 4600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -670,7 +673,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ae86f80b-c078-4d0d-a0d2-1f6ad0808972"),
+                            Id = new Guid("61d2e576-6a49-48f3-b7cd-73e86ba50e64"),
                             Cost = 4700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -680,7 +683,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6df305c6-8d4d-4f37-b216-8d4346d0bbfe"),
+                            Id = new Guid("218b79cb-f5de-4544-9ee1-1c7645808ea4"),
                             Cost = 4800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -690,7 +693,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("34fec9ee-3063-46da-959a-db86c57fd6ac"),
+                            Id = new Guid("7d92c6a9-bd74-43b8-855b-401bc6d8430a"),
                             Cost = 4900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -700,7 +703,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("efe3c82e-331f-4d69-9b32-79e1be2b947e"),
+                            Id = new Guid("a9fb7004-6cb4-47b4-ba8a-12727c0bbb68"),
                             Cost = 5000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -710,7 +713,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9519b474-4cdb-4a8e-a2e0-0f6d0b9b9853"),
+                            Id = new Guid("3fc3b090-1d4f-49af-a85b-624c99e53adf"),
                             Cost = 5100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -720,7 +723,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("be3148e0-746a-4e9b-ae96-7443d1f13e7f"),
+                            Id = new Guid("f402298c-465a-441b-b71a-3ae66fcb2649"),
                             Cost = 5200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -730,7 +733,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f789aeb5-5058-4a8e-8720-c514194ce4f3"),
+                            Id = new Guid("1e682c66-9b4e-4884-bef3-889c1ccd087a"),
                             Cost = 5300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -740,7 +743,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("30f72784-b3b6-4de8-b7f9-8bf5f151295b"),
+                            Id = new Guid("0c4e5bbd-6f24-46ea-9c65-e2fb36a03a98"),
                             Cost = 5400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -750,7 +753,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("67cb5eeb-99c6-4ee3-9cae-c271428942e0"),
+                            Id = new Guid("7a860da9-1688-40b7-97a7-e0780ab8495c"),
                             Cost = 5500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -760,7 +763,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("eb17b146-2ae1-4376-a66c-9ade3188a31b"),
+                            Id = new Guid("0458d28b-c3fe-48ed-bc79-e5a714b594d3"),
                             Cost = 5600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -770,7 +773,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1b4fdea9-a543-4468-9339-288067e1ad03"),
+                            Id = new Guid("38c3ba56-fdbb-4fcd-b6d8-550a5dab0d3f"),
                             Cost = 5700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -780,7 +783,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("126f668d-1c22-4806-8f0d-e00bac477e6b"),
+                            Id = new Guid("baf76dba-b268-4877-a22f-793dc008fe57"),
                             Cost = 5800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -790,7 +793,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2f49fc5f-8a11-4778-84d2-17bbeccd1553"),
+                            Id = new Guid("41fed191-1d3d-43ca-9e01-ef145e4feecb"),
                             Cost = 5900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -800,7 +803,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("54e5e444-677c-4ec9-a588-bdce33746d92"),
+                            Id = new Guid("cf396d7e-1d62-4335-9fad-db0f42964d2a"),
                             Cost = 6000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -810,7 +813,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b9c4036e-ed91-42b8-ae8c-46d6ae85534a"),
+                            Id = new Guid("4caaed6c-8d70-4d6c-b31e-066c2584f98a"),
                             Cost = 6100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -820,7 +823,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2aafdd0f-3fe2-4c0d-b087-60019f49dc02"),
+                            Id = new Guid("1a0f3dd1-67f7-465e-bdea-449be7cc146b"),
                             Cost = 6200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -830,7 +833,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b2db8889-53cf-4d01-8083-fc75e79296a8"),
+                            Id = new Guid("020ee465-ebcb-4fd4-8e8b-84a69cf4ddbe"),
                             Cost = 6300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -840,7 +843,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3aaaa6ca-683b-423b-aab0-c080e8cc57b9"),
+                            Id = new Guid("caa1b394-812f-490b-b86d-07398cf3bdde"),
                             Cost = 6400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -850,7 +853,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("05325365-e58a-42a4-9257-bef1d3d2fea7"),
+                            Id = new Guid("6e317fc0-e620-4aa9-b6e3-9512380d690d"),
                             Cost = 6500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -860,7 +863,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("36a670ad-ac6a-4a98-9cea-48610d3f3dba"),
+                            Id = new Guid("9d9a53de-c836-47d3-926c-778c798b24a7"),
                             Cost = 6600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -870,7 +873,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8a1bf9be-f32a-442b-be5c-f65c26f47d77"),
+                            Id = new Guid("654915d2-1420-4b3d-8b57-98b9623e04d9"),
                             Cost = 6700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -880,7 +883,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("31417907-0c62-436e-a5b7-24fbb449f82d"),
+                            Id = new Guid("4ff18dae-7eed-4a7e-aafd-874ec6b1cd12"),
                             Cost = 6800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -890,7 +893,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4c4bcfbc-5dc1-4d58-be89-418191a01b47"),
+                            Id = new Guid("782d0042-46bd-45e7-9eae-1e2e64cb9360"),
                             Cost = 6900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -900,7 +903,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9d3788db-41cd-4f8f-b7b7-71c8d4949d10"),
+                            Id = new Guid("80a7326e-8f94-4dad-b766-075d7758d31f"),
                             Cost = 7000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -910,7 +913,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3e5ffc5a-b267-4b35-b57b-6585cdc8563c"),
+                            Id = new Guid("d27b9bbf-6529-4104-846d-8fbe9ec088d3"),
                             Cost = 7100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -920,7 +923,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("186f831c-0aae-4f29-85e6-a2313ddc23c3"),
+                            Id = new Guid("67ea9e0b-2372-44e6-a287-2c60b759951c"),
                             Cost = 7200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -930,7 +933,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("41eb8835-b59e-46a7-ab5e-5754362069c9"),
+                            Id = new Guid("a0b0b061-5a23-491f-995a-006642ecab01"),
                             Cost = 7300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -940,7 +943,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3e1c2ed3-af6d-4771-b103-6d7677265cc5"),
+                            Id = new Guid("7a0ce445-1b3e-435c-a867-f8f8365875f7"),
                             Cost = 7400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -950,7 +953,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2ae4d4ea-c010-46a9-a385-fcc21f0b3efc"),
+                            Id = new Guid("a11cc316-68df-4197-ac2e-4e38729bda16"),
                             Cost = 7500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -960,7 +963,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("db65fa95-1d7d-452b-9b2c-b84a2f2b393d"),
+                            Id = new Guid("4d475bf5-3f0c-45ed-9a19-d141ac11aba5"),
                             Cost = 7600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -970,7 +973,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f0bda594-aec0-4677-8573-3a58220f7508"),
+                            Id = new Guid("1b09ddb7-e476-4fac-9c71-fd2b948d1df2"),
                             Cost = 7700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -980,7 +983,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("756f398f-3174-4475-b6b8-f030afa87640"),
+                            Id = new Guid("d2fa8058-5990-4499-9e59-edfc13b4594e"),
                             Cost = 7800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -990,7 +993,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f821cbc5-0841-435f-b14c-558532c4b8b6"),
+                            Id = new Guid("e081fc59-2bb6-4dc4-b5f0-18a0c6212ef0"),
                             Cost = 7900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1000,7 +1003,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4d5ecc14-9887-414b-91ce-a847aef43509"),
+                            Id = new Guid("fd0b990c-f173-42fc-9f12-46079ee88876"),
                             Cost = 8000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1010,7 +1013,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d0dd7cee-21e5-4436-8ca5-ebb96c01a494"),
+                            Id = new Guid("0683aa36-ab01-4e98-bed4-2176f468292f"),
                             Cost = 8100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1020,7 +1023,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8647da53-1dfc-434f-98b6-c768937fd6ed"),
+                            Id = new Guid("9cb6cd30-5d3e-4b49-a03a-ff167ae9db23"),
                             Cost = 8200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1030,7 +1033,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d99450ec-0c22-44e1-8f27-b3f1fb133ca2"),
+                            Id = new Guid("5d58cc18-55d1-4754-b5c0-5f90fa35653c"),
                             Cost = 8300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1040,7 +1043,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("67c74d76-37d0-4677-adb0-bbbaa5b98e75"),
+                            Id = new Guid("b51f94ca-62c6-4524-be86-d574c5be3a4d"),
                             Cost = 8400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1050,7 +1053,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4b510fe8-bcba-4b63-b494-5fa67d3c0c45"),
+                            Id = new Guid("b633a560-3a1a-4a07-85a0-96452dba3be3"),
                             Cost = 8500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1060,7 +1063,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ad71c416-a662-42c9-a8bb-d0ba9cbb6889"),
+                            Id = new Guid("eaea7c5e-a493-40ac-86d7-33f99808d2cd"),
                             Cost = 8600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1070,7 +1073,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("60207254-145d-4f86-a119-21ec65b7f251"),
+                            Id = new Guid("a079052d-1cb4-42a7-8fc5-675c0e6ae991"),
                             Cost = 8700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1080,7 +1083,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("66177840-73c5-4dd4-995b-543437873500"),
+                            Id = new Guid("d25ee23a-1350-4d15-a04e-98f5128415df"),
                             Cost = 8800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1090,7 +1093,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a7abc60e-7ea4-4a8c-bfc9-88db539c84dd"),
+                            Id = new Guid("98c6ae8a-1d08-4b27-b361-c91ba5920a42"),
                             Cost = 8900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1100,7 +1103,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("44205fa1-ca38-460a-b113-c8981acd3f68"),
+                            Id = new Guid("e7db8eb0-d373-429d-85f5-a7a7efa9db67"),
                             Cost = 9000m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1110,7 +1113,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1aadf54f-e195-46b1-aaed-e6a86b01323c"),
+                            Id = new Guid("fb1ba2f7-d384-4b30-b727-9760b3f7ee31"),
                             Cost = 9100m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1120,7 +1123,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1a1508c0-088a-4aed-bf52-46a05cf995ba"),
+                            Id = new Guid("0d49521f-0b3b-41fc-804d-d7b1b596e563"),
                             Cost = 9200m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1130,7 +1133,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("77a16df0-b0ff-4396-a891-a8d7be50811e"),
+                            Id = new Guid("71590f62-edfe-493b-bb9d-738ddb3bb966"),
                             Cost = 9300m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1140,7 +1143,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3f4702e6-4f7b-49a8-9357-3e59c3886ccd"),
+                            Id = new Guid("db2ec1a7-6ba1-483f-85b2-9c3c1351b9d8"),
                             Cost = 9400m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1150,7 +1153,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("e1388950-d9b7-476b-8f47-6b1fd8442624"),
+                            Id = new Guid("84471332-7522-496f-8b4e-15ea9c3e649c"),
                             Cost = 9500m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1160,7 +1163,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("45447ec8-57f2-489c-ad6c-5bae2072cd09"),
+                            Id = new Guid("6d53413e-5538-48b1-8a18-01d302724c13"),
                             Cost = 9600m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1170,7 +1173,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1d7262bb-855d-4ff6-8c14-26119f5d2ddc"),
+                            Id = new Guid("2adaf171-50a5-43ab-bf0f-53cf0ac460f9"),
                             Cost = 9700m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1180,7 +1183,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("43bba197-df20-4e0a-9086-fd087043ec5d"),
+                            Id = new Guid("41fd53b2-d9b0-445a-9c58-16e327d20138"),
                             Cost = 9800m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1190,7 +1193,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("dcbca455-bb43-4450-9125-368c63cba15c"),
+                            Id = new Guid("64f38adb-3bbd-4041-85c3-7a5701acd0c7"),
                             Cost = 9900m,
                             Description = "Very good product!",
                             ImageLink = "/images/DefaultImg.jpg",
@@ -1245,7 +1248,6 @@ namespace OnlineShop.Db.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Surname")
@@ -1257,19 +1259,6 @@ namespace OnlineShop.Db.Migrations
                     b.HasIndex("RoleName");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Login = "karsanov@mail.ru",
-                            Address = "Vatutina 37",
-                            Name = "Marat",
-                            Password = "marmar",
-                            PhoneNumber = "89187080533",
-                            RememberMe = false,
-                            RoleName = "Administrator",
-                            Surname = "Karsanov"
-                        });
                 });
 
             modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
@@ -1324,9 +1313,7 @@ namespace OnlineShop.Db.Migrations
                 {
                     b.HasOne("OnlineShop.Db.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleName");
 
                     b.Navigation("Role");
                 });

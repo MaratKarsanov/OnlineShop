@@ -35,7 +35,7 @@ namespace OnlineShop.Db.Repositories
             var user = TryGetByLogin(login);
             if (user is null)
                 return;
-            databaseContext.Remove(user);
+            databaseContext.Users.Remove(user);
             databaseContext.SaveChanges();
         }
 

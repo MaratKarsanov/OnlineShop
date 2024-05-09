@@ -44,7 +44,7 @@ namespace OnlineShopWebApp.Controllers
             var userLogin = Request.Cookies["userLogin"];
             if (userLogin is null || userLogin == string.Empty)
                 return RedirectToAction(nameof(Index));
-            comparisonRepository.Remove(product, userLogin);
+            comparisonRepository.RemoveProduct(product, userLogin);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
     }

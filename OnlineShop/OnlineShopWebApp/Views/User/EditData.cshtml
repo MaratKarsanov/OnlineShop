@@ -1,0 +1,39 @@
+﻿@model EditUserDataViewModel
+
+<form method="post" target="_self">
+    <div class="row">
+        <div class="col-6">
+            <div class="validation" asp-validation-summary="All"></div>
+            <div>
+                <label asp-for="Name">Имя:</label>
+                <input type="text" asp-for="Name" placeholder="Name" value="@Model.Name">
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div>
+                <label asp-for="Surname">Фамилия:</label>
+                <input type="text" asp-for="Surname" placeholder="Surname" value="@Model.Surname">
+                <span asp-validation-for="Surname"></span>
+            </div>
+            <div>
+                <label asp-for="Address">Адрес:</label>
+                <input type="text" asp-for="Address" placeholder="Address" value="@Model.Address">
+                <span asp-validation-for="Address"></span>
+            </div>
+            <div>
+                <label asp-for="PhoneNumber">Телефон:</label>
+                <input type="text" asp-for="PhoneNumber" placeholder="Phone number" value="@Model.PhoneNumber">
+                <span asp-validation-for="PhoneNumber"></span>
+            </div>
+            <div>
+                <button type="submit"
+                        style="margin-top:10px"
+                        asp-action="EditData"
+                        asp-area=""
+                        asp-controller="User"
+                        asp-route-login="@ViewData["login"]">
+                    Внести изменения
+                </button>
+            </div>
+        </div>
+    </div>
+</form>

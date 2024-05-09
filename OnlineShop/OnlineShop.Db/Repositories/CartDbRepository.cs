@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
+using System.Runtime.CompilerServices;
 
 namespace OnlineShop.Db.Repositories
 {
@@ -69,8 +70,11 @@ namespace OnlineShop.Db.Repositories
         public void Remove(string userId)
         {
             var cart = TryGetByLogin(userId);
-            databaseContext.Carts.Remove(cart);
-            databaseContext.SaveChanges();
+            if (cart is not null)
+            {
+                databaseContext.Carts.Remove(cart);
+                databaseContext.SaveChanges();
+            }
         }
 
         public void AddCart(string userId)

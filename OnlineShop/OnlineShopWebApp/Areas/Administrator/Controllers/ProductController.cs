@@ -51,7 +51,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Edit(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            return View(product);
+            return View(Helpers.MappingHelper.ToProductViewModel(product));
         }
 
         [HttpPost]
@@ -59,11 +59,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            var product = productRepository.TryGetById(newProduct.Id);
-            product.Name = newProduct.Name;
-            product.Cost = newProduct.Cost;
-            product.Description = newProduct.Description;
-            product.ImageLink = Constants.ImageLink;
+            productRepository.EditProduct(Helpers.MappingHelper.ToProduct(newProduct));
             return RedirectToAction(nameof(Index));
         }
     }

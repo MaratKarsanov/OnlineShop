@@ -4,9 +4,12 @@ namespace OnlineShop.Db.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        public List<Product> GetAll();
-        public Product TryGetById(Guid id);
-        public void Add(Product product);
-        public void Remove(Guid id);
+        List<Product> GetAll();
+        Product TryGetById(Guid id);
+        void Add(Product product);
+        void Remove(Guid id);
+        void EditProduct(Product newProduct);
+        void UpdateInFavouritesCondition(HashSet<Product> products);
+        void UpdateInComparisonCondition(HashSet<Product> products);
     }
 }

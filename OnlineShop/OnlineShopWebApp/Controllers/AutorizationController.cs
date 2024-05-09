@@ -1,16 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
+using System.Linq;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class AutorizationController : Controller
     {
         private IUserRepository userRepository;
+        private IComparisonRepository comparisonRepository;
+        private IFavouritesRepository favouritesRepository;
+        private IProductRepository productRepository;
 
-        public AutorizationController(IUserRepository userRepository)
+        public AutorizationController(IUserRepository userRepository,
+            IComparisonRepository comparisonRepository,
+            IFavouritesRepository favouritesRepository,
+            IProductRepository productRepository)
         {
             this.userRepository = userRepository;
+            this.favouritesRepository = favouritesRepository;
+            this.comparisonRepository = comparisonRepository;
+            this.productRepository = productRepository;
         }
 
         public IActionResult Index()
@@ -39,11 +50,23 @@ namespace OnlineShopWebApp.Controllers
             if (autorizationData.RememberMe)
                 cookieOptions.Expires = DateTime.Now.AddMonths(1);
             Response.Cookies.Append("userLogin", autorizationData.Login, cookieOptions);
+            var favourites = favouritesRepository.TryGetByUserId(autorizationData.Login);
+            if (favourites is null)
+                favourites = favouritesRepository.AddFavourites(autorizationData.Login);
+            var comparison = comparisonRepository.TryGetByUserId(autorizationData.Login);
+            if (comparison is null)
+                comparison = comparisonRepository.AddComparison(autorizationData.Login);
+            var favouriteProducts = favourites.Items.ToHashSet();
+            var comparisonProducts = comparison.Items.ToHashSet();
+            productRepository.UpdateInFavouritesCondition(favouriteProducts);
+            productRepository.UpdateInComparisonCondition(comparisonProducts);
             return RedirectToAction("Index", "Home");
         }
 
         public IActionResult SignOut()
         {
+            productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
+            productRepository.UpdateInComparisonCondition(new HashSet<Product>());
             var cookieOptions = new CookieOptions()
             {
                 Expires = DateTime.Now.AddMonths(-1)

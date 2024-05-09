@@ -1,8 +1,5 @@
 ﻿@model int
-@if (Model > 0)
-{
-    <p class="text-dark">@Model</p>
-}
+
 <a class="nav-link text-dark"
     asp-area=""
     asp-controller="Comparison" 
@@ -10,3 +7,7 @@
     asp-route-userId="@Constants.Login">
     Comparison
 </a>
+@if (Model > 0)
+{
+    <p class="text-dark">@Model</p>
+}

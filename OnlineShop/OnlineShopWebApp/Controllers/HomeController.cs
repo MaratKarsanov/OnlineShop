@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 
@@ -8,14 +9,17 @@ namespace OnlineShopWebApp.Controllers
     public class HomeController : Controller
     {
         private IProductRepository productRepository;
-        private IFavouritesRepository favouritiesRepository;
+        private IFavouritesRepository favouritesRepository;
+        private IComparisonRepository comparisonRepository;
         public static string searchString = "";
 
         public HomeController(IProductRepository productRepository,
-            IFavouritesRepository favouritiesRepository)
+            IFavouritesRepository favouritesRepository,
+            IComparisonRepository comparisonRepository)
         {
             this.productRepository = productRepository;
-            this.favouritiesRepository = favouritiesRepository;
+            this.favouritesRepository = favouritesRepository;
+            this.comparisonRepository = comparisonRepository;
         }
 
         public IActionResult Index(string searchString, int pageNumber = 1)
@@ -24,6 +28,25 @@ namespace OnlineShopWebApp.Controllers
                 HomeController.searchString = searchString;
             if (searchString == "emptySearchString")
                 HomeController.searchString = "";
+            var login = Request.Cookies["userLogin"];
+            if (login is not null && login != string.Empty)
+            {
+                var favourites = favouritesRepository.TryGetByUserId(login);
+                if (favourites is null)
+                    favourites = favouritesRepository.AddFavourites(login);
+                var comparison = comparisonRepository.TryGetByUserId(login);
+                if (comparison is null)
+                    comparison = comparisonRepository.AddComparison(login);
+                var favouriteProducts = favourites.Items.ToHashSet();
+                var comparisonProducts = comparison.Items.ToHashSet();
+                productRepository.UpdateInFavouritesCondition(favouriteProducts);
+                productRepository.UpdateInComparisonCondition(comparisonProducts);
+            }
+            else
+            {
+                productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
+                productRepository.UpdateInComparisonCondition(new HashSet<Product>());
+            }
             var foundedProducts = productRepository
                 .GetAll()
                 .Where(p => p.Name.Contains(HomeController.searchString))

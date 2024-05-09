@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
-using System;
 
 namespace OnlineShop.Db.Repositories
 {
@@ -13,16 +12,19 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public void AddComparison(string userId)
+        public Comparison AddComparison(string userId)
         {
-            if (TryGetByUserId(userId) is null)
+            var comparison = TryGetByUserId(userId);
+            if (comparison is null)
             {
-                databaseContext.Comparisons.Add(new Comparison()
+                comparison = new Comparison()
                 {
                     UserId = userId,
                     Items = new List<Product>()
-                });
+                };
+                databaseContext.Comparisons.Add(comparison);
             }
+            return comparison;
         }
 
         public void AddProduct(Product product, string userId)
@@ -47,7 +49,17 @@ namespace OnlineShop.Db.Repositories
             databaseContext.SaveChanges();
         }
 
-        public void Remove(Product product, string userId)
+        public void RemoveComparison(string userId)
+        {
+            var comparison = TryGetByUserId(userId);
+            if (comparison is not null)
+            {
+                databaseContext.Comparisons.Remove(comparison);
+                databaseContext.SaveChanges();
+            }
+        }
+
+        public void RemoveProduct(Product product, string userId)
         {
             var comparison = TryGetByUserId(userId);
             comparison.Items = comparison.Items
