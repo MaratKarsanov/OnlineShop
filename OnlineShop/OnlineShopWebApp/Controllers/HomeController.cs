@@ -42,14 +42,10 @@ namespace OnlineShopWebApp.Controllers
                 productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
                 productRepository.UpdateInComparisonCondition(new HashSet<Product>());
             }
-            var foundedProducts = productRepository.GetAll();
-            if (searchString != "")
-            {
-                foundedProducts = foundedProducts
-                    .Where(p => LevenshteinDistance(searchString.ToLower(),
-                                    p.Name.Trim().ToLower().Substring(0, searchString.Length)) < 2)
-                    .ToList();
-            }
+            var searchStringLower = searchString.ToLower();
+            var foundedProducts = productRepository
+                .GetAll()
+                .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower));
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
             var showingProducts = foundedProducts
@@ -58,28 +54,6 @@ namespace OnlineShopWebApp.Controllers
                 .ToList();
             ViewBag.pageNumber = pageNumber;
             return View(Helpers.MappingHelper.ToProductViewModels(showingProducts));
-        }
-
-        private static int LevenshteinDistance(string firstString, string secondString)
-        {
-            var opt = new int[firstString.Length + 1, secondString.Length + 1];
-            for (var i = 0; i <= firstString.Length; ++i)
-                opt[i, 0] = i;
-            for (var i = 0; i <= secondString.Length; ++i)
-                opt[0, i] = i;
-            for (var i = 1; i <= firstString.Length; ++i)
-            {
-                for (var j = 1; j <= secondString.Length; ++j)
-                {
-                    if (firstString[i - 1] == secondString[j - 1])
-                        opt[i, j] = opt[i - 1, j - 1];
-                    else
-                        opt[i, j] = Math.Min(
-                            Math.Min(1 + opt[i - 1, j], 1 + opt[i, j - 1]),
-                            1 + opt[i - 1, j - 1]);
-                }
-            }
-            return opt[firstString.Length, secondString.Length];
         }
     }
 }
