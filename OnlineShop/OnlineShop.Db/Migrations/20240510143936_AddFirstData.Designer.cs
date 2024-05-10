@@ -12,8 +12,8 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240509114602_Inizialization")]
-    partial class Inizialization
+    [Migration("20240510143936_AddFirstData")]
+    partial class AddFirstData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,168 @@ namespace OnlineShop.Db.Migrations
                     b.HasIndex("FavouritesId");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8f94f1dc-887d-451f-a9fd-56a0d4e7e374"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaCeylonTea.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea Ceylon"
+                        },
+                        new
+                        {
+                            Id = new Guid("022d0a79-f8cb-44a5-9709-124359512159"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaClassicGrey.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea Classic Grey"
+                        },
+                        new
+                        {
+                            Id = new Guid("c1b61939-ca84-4a14-a698-0946540612a0"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaClassikBlackTea.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea Classic Black"
+                        },
+                        new
+                        {
+                            Id = new Guid("d054d31e-5b33-4447-b7af-46dc26c74572"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaEnglishBreakfast.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea English Breakfast"
+                        },
+                        new
+                        {
+                            Id = new Guid("270684d3-4d4f-4652-b59b-f87fd58a8297"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaLondonAfternoon.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea London Afternoon"
+                        },
+                        new
+                        {
+                            Id = new Guid("f25f268a-b0e9-40cc-989d-4e186592a469"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaPearStrudel.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea Pear Strudel"
+                        },
+                        new
+                        {
+                            Id = new Guid("a7b663b9-0132-45ff-96eb-bcab037c9190"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/ahmadTeaStrawberryMousse.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Ahmad Tea Strawberry Mousse"
+                        },
+                        new
+                        {
+                            Id = new Guid("7795c6d9-9a8b-4c36-9c42-99f73d79871c"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/azer.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Azer Tea"
+                        },
+                        new
+                        {
+                            Id = new Guid("d579d880-9616-4e06-8249-62f6c482ad1d"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/curtisIsabellaGrape.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Curtis Isabella Grape"
+                        },
+                        new
+                        {
+                            Id = new Guid("18b7172c-26f6-43c5-af1c-289615e4e82a"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/curtisSummerBerries.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Curtis Summer Berries"
+                        },
+                        new
+                        {
+                            Id = new Guid("1c94fbd2-aa6e-40fe-955c-444f94d119a7"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/curtisSunnyLemon.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Curtis Sunny Lemon"
+                        },
+                        new
+                        {
+                            Id = new Guid("0e523662-9c79-4121-82e9-e5fcac260d9b"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/curtisWhiteBountea.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Curtis White Bountea"
+                        },
+                        new
+                        {
+                            Id = new Guid("d777d305-279e-4e99-8a5f-c0155019a08f"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/tessBerryBar.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Tess Berry Bar"
+                        },
+                        new
+                        {
+                            Id = new Guid("b8744ed8-31c0-40b0-b988-7f1578cbc4b3"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/tessDark.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Tess Dark"
+                        },
+                        new
+                        {
+                            Id = new Guid("13bb4596-526b-4e4b-a083-086fba4784bf"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/tessFlirt.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Tess Flirt"
+                        },
+                        new
+                        {
+                            Id = new Guid("34a03e74-090b-4699-85d5-cc212e4597ca"),
+                            Cost = 500m,
+                            Description = "Очень вкусный и ароматный чай",
+                            ImageLink = "/images/teas/tessForestDream.png",
+                            IsInComparison = false,
+                            IsInFavourites = false,
+                            Name = "Tess Forest Dream"
+                        });
                 });
 
             modelBuilder.Entity("OnlineShop.Db.Role", b =>
@@ -209,6 +371,16 @@ namespace OnlineShop.Db.Migrations
                     b.HasKey("Name");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "Administrator"
+                        },
+                        new
+                        {
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("OnlineShop.Db.User", b =>
@@ -236,6 +408,7 @@ namespace OnlineShop.Db.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Surname")
@@ -247,6 +420,19 @@ namespace OnlineShop.Db.Migrations
                     b.HasIndex("RoleName");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Login = "karsanov@mail.ru",
+                            Address = "Vatutina 37",
+                            Name = "Marat",
+                            Password = "marmar",
+                            PhoneNumber = "89187080533",
+                            RememberMe = false,
+                            RoleName = "Administrator",
+                            Surname = "Karsanov"
+                        });
                 });
 
             modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
@@ -301,7 +487,9 @@ namespace OnlineShop.Db.Migrations
                 {
                     b.HasOne("OnlineShop.Db.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleName");
+                        .HasForeignKey("RoleName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Role");
                 });

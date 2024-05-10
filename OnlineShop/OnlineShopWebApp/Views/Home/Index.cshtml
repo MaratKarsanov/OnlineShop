@@ -5,13 +5,24 @@
 
 <div class="row">
     <div class="col-md-6">
-        <form class="d-flex" asp-action="Index" asp-controller="Home">
-            <input name="searchString" class="form-control me-1" type="search" placeholder="Search" aria-label="Search" value="@ViewData["CurrentFilter"]">
+        <form class="d-flex" asp-area="" asp-action="Index" asp-controller="Home" method="get">
+            <input name="searchString"
+                   class="form-control me-1"
+                   type="search"
+                   placeholder="Search"
+                   aria-label="Search"
+                   value="@ViewData["searchString"]">
             <button class="btn btn-dark" type="submit">Search by name</button>
         </form>
     </div>
     <div class="col-md-6">
-        <a href="/home/index?searchString=emptySearchString" class="text-dark">Back to Full List</a>
+        <a class="text-dark"
+           asp-area=""
+           asp-controller="Home"
+           asp-action="Index"
+           asp-route-searchString="">
+            Back to Full List
+        </a>
     </div>
 </div>
 
@@ -19,7 +30,9 @@
     @foreach (var product in Model)
     {
         <div class="col-3 card shadow">
-            <img class="card-img-top" src="@product.ImageLink" />
+            <img class="card-img-top"
+                 src="@product.ImageLink"
+                 style="width:200px;height:200px"/>
             <div class="card-body">
                 <a style="color: black" href="/product/index/@product.Id">
                     <h5>@product.Name</h5>
@@ -27,37 +40,34 @@
                 <h5>@product.Cost</h5>
                 @if (!product.IsInComparison)
                 {
-                    <a 
-                        class="btn btn-light" 
-                        asp-controller="Comparison"
-                        asp-action="Add" 
-                        asp-route-productId="@product.Id" 
-                        asp-route-pageNumber="@ViewBag.pageNumber" 
-                        role="button">
+                    <a class="btn btn-light"
+                       asp-controller="Comparison"
+                       asp-action="Add"
+                       asp-route-productId="@product.Id"
+                       asp-route-pageNumber="@ViewBag.pageNumber"
+                       role="button">
                         Сравнить
                     </a>
                 }
                 else
                 {
-                    <a 
-                        class="btn btn-light" 
-                        asp-controller="Comparison"
-                        asp-action="Remove" 
-                        asp-route-productId="@product.Id" 
-                        asp-route-pageNumber="@ViewBag.pageNumber" 
-                        role="button">
+                    <a class="btn btn-light"
+                       asp-controller="Comparison"
+                       asp-action="Remove"
+                       asp-route-productId="@product.Id"
+                       asp-route-pageNumber="@ViewBag.pageNumber"
+                       role="button">
                         Убрать из сравнения
                     </a>
                 }
                 @if (!product.IsInFavourites)
                 {
-                    <a 
-                        class="btn btn-light" 
-                        asp-controller="Favourites" 
-                        asp-action="Add" 
-                        asp-route-productId="@product.Id" 
-                        asp-route-pageNumber="@ViewBag.pageNumber" 
-                        role="button">
+                    <a class="btn btn-light"
+                       asp-controller="Favourites"
+                       asp-action="Add"
+                       asp-route-productId="@product.Id"
+                       asp-route-pageNumber="@ViewBag.pageNumber"
+                       role="button">
                         Добавить в избранное
                     </a>
                 }
@@ -71,4 +81,4 @@
     }
 </div>
 
-<partial name="_Pager" model="ViewBag.Pager"/>
+<partial name="_Pager" model="ViewBag.Pager" />

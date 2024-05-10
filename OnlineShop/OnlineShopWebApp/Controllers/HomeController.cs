@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
@@ -11,7 +10,6 @@ namespace OnlineShopWebApp.Controllers
         private IProductRepository productRepository;
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
-        public static string searchString = "";
 
         public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
@@ -22,12 +20,9 @@ namespace OnlineShopWebApp.Controllers
             this.comparisonRepository = comparisonRepository;
         }
 
-        public IActionResult Index(string searchString, int pageNumber = 1)
+        public IActionResult Index(string searchString = "", int pageNumber = 1)
         {
-            if (searchString is not null)
-                HomeController.searchString = searchString;
-            if (searchString == "emptySearchString")
-                HomeController.searchString = "";
+            ViewData["searchString"] = searchString;
             var login = Request.Cookies["userLogin"];
             if (login is not null && login != string.Empty)
             {
@@ -47,10 +42,14 @@ namespace OnlineShopWebApp.Controllers
                 productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
                 productRepository.UpdateInComparisonCondition(new HashSet<Product>());
             }
-            var foundedProducts = productRepository
-                .GetAll()
-                .Where(p => p.Name.Contains(HomeController.searchString))
-                .ToList();
+            var foundedProducts = productRepository.GetAll();
+            if (searchString != "")
+            {
+                foundedProducts = foundedProducts
+                    .Where(p => LevenshteinDistance(searchString.ToLower(),
+                                    p.Name.Trim().ToLower().Substring(0, searchString.Length)) < 2)
+                    .ToList();
+            }
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
             var showingProducts = foundedProducts
@@ -61,15 +60,26 @@ namespace OnlineShopWebApp.Controllers
             return View(Helpers.MappingHelper.ToProductViewModels(showingProducts));
         }
 
-        public IActionResult Privacy()
+        private static int LevenshteinDistance(string firstString, string secondString)
         {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var opt = new int[firstString.Length + 1, secondString.Length + 1];
+            for (var i = 0; i <= firstString.Length; ++i)
+                opt[i, 0] = i;
+            for (var i = 0; i <= secondString.Length; ++i)
+                opt[0, i] = i;
+            for (var i = 1; i <= firstString.Length; ++i)
+            {
+                for (var j = 1; j <= secondString.Length; ++j)
+                {
+                    if (firstString[i - 1] == secondString[j - 1])
+                        opt[i, j] = opt[i - 1, j - 1];
+                    else
+                        opt[i, j] = Math.Min(
+                            Math.Min(1 + opt[i - 1, j], 1 + opt[i, j - 1]),
+                            1 + opt[i - 1, j - 1]);
+                }
+            }
+            return opt[firstString.Length, secondString.Length];
         }
     }
 }

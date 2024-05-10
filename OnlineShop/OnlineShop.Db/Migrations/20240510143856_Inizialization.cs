@@ -98,7 +98,7 @@ namespace OnlineShop.Db.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RememberMe = table.Column<bool>(type: "bit", nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    RoleName = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -107,7 +107,8 @@ namespace OnlineShop.Db.Migrations
                         name: "FK_Users_Roles_RoleName",
                         column: x => x.RoleName,
                         principalTable: "Roles",
-                        principalColumn: "Name");
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

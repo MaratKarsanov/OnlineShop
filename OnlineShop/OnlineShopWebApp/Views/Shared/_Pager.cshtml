@@ -5,25 +5,60 @@
         @if (Model.CurrentPage > 1)
         {
             <li class="page-item">
-                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNumber="1">First</a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-pageNumber="1"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    First
+                </a>
             </li>
             <li class="page-item">
-                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage - 1)">Previous</a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-pageNumber="@(Model.CurrentPage - 1)"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    Previous
+                </a>
             </li>
         }
-        @for(var i = Model.StartPage; i <= Model.EndPage; i++)
+        @for (var i = Model.StartPage; i <= Model.EndPage; i++)
         {
             <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNumber="@i">@i</a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    @i
+                </a>
             </li>
         }
         @if (Model.CurrentPage < Model.PagesCount)
         {
             <li class="page-item">
-                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNumber="@(Model.CurrentPage + 1)">Next</a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-pageNumber="@(Model.CurrentPage + 1)"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    Next
+                </a>
             </li>
             <li class="page-item">
-                <a class="page-link" asp-controller="Home" asp-action="Index" asp-route-pageNumber="@Model.PagesCount">Last</a>
+                <a class="page-link"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   asp-route-pageNumber="@Model.PagesCount"
+                   asp-route-searchString="@ViewData["searchString"]">
+                    Last
+                </a>
             </li>
         }
     </ul>
