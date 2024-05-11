@@ -12,16 +12,19 @@ namespace OnlineShopWebApp.Controllers
         private IComparisonRepository comparisonRepository;
         private IFavouritesRepository favouritesRepository;
         private IProductRepository productRepository;
+        private ICartRepository cartRepository;
 
         public AutorizationController(IUserRepository userRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            ICartRepository cartRepository)
         {
             this.userRepository = userRepository;
             this.favouritesRepository = favouritesRepository;
             this.comparisonRepository = comparisonRepository;
             this.productRepository = productRepository;
+            this.cartRepository = cartRepository;
         }
 
         public IActionResult Index()
@@ -56,6 +59,9 @@ namespace OnlineShopWebApp.Controllers
             var comparison = comparisonRepository.TryGetByUserId(autorizationData.Login);
             if (comparison is null)
                 comparison = comparisonRepository.AddComparison(autorizationData.Login);
+            var cart = cartRepository.TryGetByLogin(autorizationData.Login);
+            if (cart is null)
+                cart = cartRepository.AddCart(autorizationData.Login);
             var favouriteProducts = favourites.Items.ToHashSet();
             var comparisonProducts = comparison.Items.ToHashSet();
             productRepository.UpdateInFavouritesCondition(favouriteProducts);

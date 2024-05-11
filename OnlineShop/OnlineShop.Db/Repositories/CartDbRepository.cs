@@ -77,18 +77,20 @@ namespace OnlineShop.Db.Repositories
             }
         }
 
-        public void AddCart(string userId)
+        public Cart AddCart(string login)
         {
-            if (TryGetByLogin(userId) is null)
+            var cart = TryGetByLogin(login);
+            if (cart is null)
             {
-                var newCart = new Cart()
+                cart = new Cart()
                 {
-                    UserId = userId,
+                    UserId = login,
                     Items = new List<CartItem>()
                 };
-                databaseContext.Carts.Add(newCart);
+                databaseContext.Carts.Add(cart);
                 databaseContext.SaveChanges();
             }
+            return cart;
         }
     }
 }
