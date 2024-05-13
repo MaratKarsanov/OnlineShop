@@ -18,9 +18,14 @@
                     @foreach (var role in Model)
                     {
                         <tr>
-                            <td>@role.Name</td>
+                            <td>@role</td>
                             <td>
-                                <a asp-action="Remove" asp-area="Administrator" asp-controller="Role" asp-route-roleId="@role.Id">Удалить</a>
+                                <a asp-action="Remove"
+                                   asp-area="Administrator"
+                                   asp-controller="Role"
+                                   asp-route-roleName="@role.Name">
+                                    Удалить
+                                </a>
                             </td>
                         </tr>
                     }

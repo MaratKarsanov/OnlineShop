@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Repositories.Interfaces;
 using System.Data;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
+    [Area(Constants.AdministratorRoleName)]
+    [Authorize(Roles = Constants.AdministratorRoleName)]
     public class RoleController : Controller
     {
         private IRoleRepository roleRepository;

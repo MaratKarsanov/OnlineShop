@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
@@ -7,6 +8,7 @@ using Serilog;
 
 namespace OnlineShopWebApp.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         private ICartRepository cartRepository;
@@ -35,8 +37,8 @@ namespace OnlineShopWebApp.Controllers
                     Role = roleRepository
                     .GetAll()
                     .FirstOrDefault(r => r.Name == "Administrator"),
-                    Login = Constants.Login,
-                    Password = "marmar",
+                    UserName = Request.Cookies["userLogin"],
+                    PasswordHash = "marmar".GetHashCode().ToString(),
                     Name = "Marat",
                     Surname = "Karsanov",
                     Address = "Vatutina 37",
@@ -55,17 +57,18 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
-            var cart = cartRepository.TryGetByLogin(Constants.Login);
+            var login = Request.Cookies["userLogin"];
+            var cart = cartRepository.TryGetByLogin(login);
             var deliveryData = Helpers.MappingHelper.ToDeliveryData(deliveryDataVm);
-            userRepository.AddDelivery(Constants.Login, deliveryData);
+            userRepository.AddDelivery(login, deliveryData);
             var newOrder = new Order()
             {
-                Login = Constants.Login,
+                Login = login,
                 Items = cart.Items,
                 DeliveryData = deliveryData
             };
             orderRepository.Add(newOrder);
-            cartRepository.Remove(Constants.Login);
+            cartRepository.Remove(login);
             return RedirectToAction(nameof(Index), "Home");
         }
     }

@@ -161,8 +161,8 @@ namespace OnlineShop.Db
             {
                 new User()
                 {
-                    Login = "karsanov@mail.ru",
-                    Password = "marmar",
+                    UserName = "karsanov@mail.ru",
+                    PasswordHash = "marmar".GetHashCode().ToString(),
                     Name = "Marat",
                     Surname = "Karsanov",
                     Address = "Vatutina 37",

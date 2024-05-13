@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
+    [Area(Constants.AdministratorRoleName)]
+    [Authorize(Roles = Constants.AdministratorRoleName)]
     public class OrderController : Controller
     {
         private ICartRepository cartRepository;

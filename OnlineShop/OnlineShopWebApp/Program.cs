@@ -3,6 +3,8 @@ using OnlineShop.Db;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShop.Db.Repositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,24 @@ builder.Host.UseSerilog((context, configuration) => configuration
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
+});
+
+builder.Services.AddDbContext<IdentityContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
+});
+
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+    options.LoginPath = "/Autorization/Login";
+    options.LogoutPath = "/Autorization/Logout";
+    options.Cookie = new CookieBuilder
+    {
+        IsEssential = true
+    };
 });
 
 builder.Services.AddControllersWithViews();
@@ -38,6 +58,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

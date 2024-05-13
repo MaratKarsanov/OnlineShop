@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories;
@@ -8,7 +11,8 @@ using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
-    [Area("Administrator")]
+    [Area(Constants.AdministratorRoleName)]
+    [Authorize(Roles = Constants.AdministratorRoleName)]
     public class UserController : Controller
     {
         private IUserRepository userRepository;
@@ -17,13 +21,17 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         private IComparisonRepository comparisonRepository;
         private IFavouritesRepository favouritesRepository;
         private IProductRepository productRepository;
+        private UserManager<User> userManager;
+        private RoleManager<IdentityRole> roleManager;
 
         public UserController(IUserRepository userRepository,
             IRoleRepository roleRepository,
             ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             this.userRepository = userRepository;
             this.roleRepository = roleRepository;
@@ -31,6 +39,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.cartRepository = cartRepository;
             this.favouritesRepository = favouritesRepository;
             this.productRepository = productRepository;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
             if (roleRepository.GetAll().FirstOrDefault(r => r.Name == "Administrator") is null)
             {
                 roleRepository.Add(new Role() { Name = "Administrator" });
@@ -40,7 +50,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.ToUserViewModels(userRepository.GetAll()));
+            return View(Helpers.MappingHelper.ToUserViewModels(userManager.Users));
         }
 
         [HttpGet]
@@ -52,38 +62,55 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult Add(RegistrationData registrationData)
         {
-            if (!ModelState.IsValid)
-                return View();
-            var user = new User()
+            //if (!ModelState.IsValid)
+            //    return View();
+            //var user = new User()
+            //{
+            //    Role = roleRepository
+            //        .GetAll()
+            //        .FirstOrDefault(r => r.Name == "User"),
+            //    UserName = registrationData.UserName,
+            //    PasswordHash = registrationData.Password.GetHashCode().ToString(),
+            //    Name = registrationData.Name,
+            //    Address = registrationData.Address,
+            //    PhoneNumber = registrationData.PhoneNumber,
+            //    Surname = registrationData.Surname,
+            //};
+            //userRepository.Add(user);
+            //return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
             {
-                Role = roleRepository
-                    .GetAll()
-                    .FirstOrDefault(r => r.Name == "User"),
-                Login = registrationData.Login,
-                Password = registrationData.Password,
-                Name = registrationData.Name,
-                Address = registrationData.Address,
-                PhoneNumber = registrationData.PhoneNumber,
-                Surname = registrationData.Surname,
-            };
-            userRepository.Add(user);
-            return RedirectToAction(nameof(Index));
+                User user = new User()
+                {
+                    Email = registrationData.UserName,
+                    UserName = registrationData.UserName,
+                    PhoneNumber = registrationData.PhoneNumber
+                };
+                var result = userManager.CreateAsync(user, registrationData.Password).Result;
+                if (result.Succeeded)
+                {
+                    userManager.AddToRoleAsync(user, Constants.UserRoleName).Wait();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View(registrationData);
         }
 
         public IActionResult Edit(string login)
         {
-            var user = userRepository.TryGetByLogin(login);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
+            var user = userManager.FindByNameAsync(login).Result;
             return View(Helpers.MappingHelper.ToUserViewModel(user));
         }
 
         [HttpGet]
         public IActionResult EditData(string login)
         {
-            var user = userRepository.TryGetByLogin(login);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
+            var user = userManager.FindByNameAsync(login).Result;
             var userData = new EditUserDataViewModel()
             {
                 Name = user.Name,
@@ -98,10 +125,19 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult EditData(string login, EditUserData newUserData)
         {
-            if (!ModelState.IsValid)
-                return View();
-            userRepository.EditData(login, newUserData);
-            return RedirectToAction(nameof(Edit), new { login });
+            //if (!ModelState.IsValid)
+            //    return View();
+            //userRepository.EditData(login, newUserData);
+            //return RedirectToAction(nameof(Edit), new { login });
+            if (ModelState.IsValid)
+            {
+                var user = userManager.FindByNameAsync(login).Result;
+                user.PhoneNumber = newUserData.PhoneNumber;
+                user.Name = newUserData.Name;
+                userManager.UpdateAsync(user).Wait();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(newUserData);
         }
 
         [HttpGet]
@@ -114,31 +150,39 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult ChangePassword(ChangeUserPasswordViewModel password, string login)
         {
+            //if (!ModelState.IsValid)
+            //    return View();
+            //userRepository.ChangePassword(login, password.NewPassword);
+            //return RedirectToAction(nameof(Edit), new { login });
             if (!ModelState.IsValid)
-                return View();
-            userRepository.ChangePassword(login, password.NewPassword);
-            return RedirectToAction(nameof(Edit), new { login });
+                return RedirectToAction(nameof(ChangePassword));
+            var user = userManager.FindByNameAsync(login).Result;
+            var newHashPassword = userManager.PasswordHasher.HashPassword(user, password.NewPassword);
+            user.PasswordHash = newHashPassword;
+            userManager.UpdateAsync(user).Wait();
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public IActionResult ChangeRole(string login)
         {
-            var user = userRepository.TryGetByLogin(login);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
-            ViewData["login"] = user.Login;
+            var user = userManager.FindByNameAsync(login).Result;
+            var userRoles = userManager.GetRolesAsync(user).Result;
+            var roles = roleManager.Roles.Select(r => r.Name).ToHashSet();
+            ViewData["login"] = user.UserName;
             ViewData["roleName"] = user.Role.Name;
-            return View(Helpers.MappingHelper.ToRoleViewModels(roleRepository
-                .GetAll()
-                .Where(r => r.Name != user.Role.Name)));
+            return View(Helpers.MappingHelper.ToRoleViewModels(roles
+                .Where(r => !userRoles.Contains(r))));
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(Role newRole, string login)
+        public IActionResult ChangeRole(RoleViewModel newRole, string login)
         {
             if (!ModelState.IsValid)
                 return View();
-            userRepository.ChangeRole(login, newRole.Name);
+            var user = userManager.FindByNameAsync(login).Result;
+            var role = roleManager.Roles.FirstOrDefault(r => r.Name == newRole.Name);
+            var userRoles = userManager.GetRolesAsync(user).Result;
             return RedirectToAction(nameof(Edit), new { login });
         }
 

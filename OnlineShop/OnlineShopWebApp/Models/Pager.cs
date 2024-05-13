@@ -1,4 +1,6 @@
-﻿namespace OnlineShopWebApp.Models
+﻿using OnlineShop.Db;
+
+namespace OnlineShopWebApp.Models
 {
     public class Pager
     {

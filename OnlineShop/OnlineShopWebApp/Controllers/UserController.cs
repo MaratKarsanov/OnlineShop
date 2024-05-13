@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories;
@@ -7,6 +8,7 @@ using OnlineShopWebApp.Areas.Administrator.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private IUserRepository userRepository;

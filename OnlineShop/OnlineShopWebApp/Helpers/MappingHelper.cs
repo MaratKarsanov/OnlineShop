@@ -184,5 +184,19 @@ namespace OnlineShopWebApp.Helpers
             return roles
                 .Select(ToRoleViewModel);
         }
+
+        public static RoleViewModel ToRoleViewModel(string roleName)
+        {
+            return new RoleViewModel()
+            {
+                Name = roleName
+            };
+        }
+
+        public static IEnumerable<RoleViewModel> ToRoleViewModels(IEnumerable<string> roleNames)
+        {
+            return roleNames
+                .Select(ToRoleViewModel);
+        }
     }
 }
