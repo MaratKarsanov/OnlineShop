@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -9,12 +11,15 @@ namespace OnlineShopWebApp.Controllers
     {
         private IProductRepository productRepository;
         private ICartRepository cartRepository;
+        private IMapper mapper;
 
         public CartController(IProductRepository productRepository,
-            ICartRepository cartRepository)
+            ICartRepository cartRepository,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
             this.cartRepository = cartRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
@@ -22,7 +27,7 @@ namespace OnlineShopWebApp.Controllers
             var cart = cartRepository.TryGetByLogin(User.Identity.Name);
             if (cart is null)
                 cart = cartRepository.AddCart(User.Identity.Name);
-            return View(Helpers.MappingHelper.ToCartViewModel(cart));
+            return View(mapper.Map<CartViewModel>(cart));
         }
 
         public IActionResult Add(Guid productId)

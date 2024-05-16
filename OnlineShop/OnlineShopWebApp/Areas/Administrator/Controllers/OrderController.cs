@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
@@ -12,24 +14,28 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     {
         private ICartRepository cartRepository;
         private IOrderRepository orderRepository;
+        private IMapper mapper;
 
         public OrderController(ICartRepository cartRepository,
-            IOrderRepository orderRepository)
+            IOrderRepository orderRepository,
+            IMapper mapper)
         {
             this.cartRepository = cartRepository;
+            this.mapper = mapper;
             this.orderRepository = orderRepository;
         }
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.ToOrderViewModels(orderRepository.GetAll()));
+            //return View(Helpers.MappingHelper.ToOrderViewModels(orderRepository.GetAll()));
+            return View(orderRepository.GetAll().Select(mapper.Map<OrderViewModel>));
         }
 
         [HttpGet]
         public IActionResult Edit(Guid orderId)
         {
             var order = orderRepository.TryGetOrderById(orderId);
-            return View(Helpers.MappingHelper.ToOrderViewModel(order));
+            return View(mapper.Map<OrderViewModel>(order));
         }
 
         [HttpPost]

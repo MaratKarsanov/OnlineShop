@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
@@ -11,15 +12,18 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     public class RoleController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
+        private IMapper mapper;
 
-        public RoleController(RoleManager<IdentityRole> roleManager)
+        public RoleController(RoleManager<IdentityRole> roleManager,
+            IMapper mapper)
         {
             this.roleManager = roleManager;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.ToRoleViewModels(roleManager.Roles));
+            return View(roleManager.Roles.Select(mapper.Map<RoleViewModel>));
         }
 
         public IActionResult Remove(string roleName)

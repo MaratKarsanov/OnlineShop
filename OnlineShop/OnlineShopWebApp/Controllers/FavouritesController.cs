@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -9,12 +11,15 @@ namespace OnlineShopWebApp.Controllers
     {
         private IProductRepository productRepository;
         private readonly IFavouritesRepository favouritesRepository;
+        private IMapper mapper;
 
         public FavouritesController(IProductRepository productRepository,
-            IFavouritesRepository favouritesRepository)
+            IFavouritesRepository favouritesRepository,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
@@ -22,7 +27,7 @@ namespace OnlineShopWebApp.Controllers
             var favourites = favouritesRepository.TryGetByUserName(User.Identity.Name);
             if (favourites is null)
                 favourites = favouritesRepository.AddFavourites(User.Identity.Name);
-            return View(Helpers.MappingHelper.ToProductViewModels(favourites.Items));
+            return View(favourites.Items.Select(mapper.Map<ProductViewModel>));
         }
 
         public IActionResult Add(Guid productId,

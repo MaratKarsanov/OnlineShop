@@ -1,9 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
-using System;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -12,14 +11,17 @@ namespace OnlineShopWebApp.Controllers
         private IProductRepository productRepository;
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
+        private IMapper mapper;
 
         public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
-            IComparisonRepository comparisonRepository)
+            IComparisonRepository comparisonRepository,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
             this.comparisonRepository = comparisonRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index(string searchString = "", int pageNumber = 1)
@@ -34,11 +36,11 @@ namespace OnlineShopWebApp.Controllers
                 var comparison = comparisonRepository.TryGetByUserId(userName);
                 if (comparison is null)
                     comparison = comparisonRepository.AddComparison(userName);
-                ViewBag.favouriteProducts = Helpers.MappingHelper
-                    .ToProductViewModels(favourites.Items)
+                ViewBag.favouriteProducts = favourites.Items
+                    .Select(mapper.Map<ProductViewModel>)
                     .ToHashSet();
-                ViewBag.comparisonProducts = Helpers.MappingHelper
-                    .ToProductViewModels(comparison.Items)
+                ViewBag.comparisonProducts = comparison.Items
+                    .Select(mapper.Map<ProductViewModel>)
                     .ToHashSet();
             }
             else
@@ -57,7 +59,7 @@ namespace OnlineShopWebApp.Controllers
                 .Take(Constants.PageSize)
                 .ToList();
             ViewBag.pageNumber = pageNumber;
-            return View(Helpers.MappingHelper.ToProductViewModels(showingProducts));
+            return View(showingProducts.Select(mapper.Map<ProductViewModel>));
         }
     }
 }

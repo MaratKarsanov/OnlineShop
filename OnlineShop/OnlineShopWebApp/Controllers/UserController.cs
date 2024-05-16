@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Areas.Administrator.Models;
+using OnlineShopWebApp.Models;
 using Serilog;
 
 namespace OnlineShopWebApp.Controllers
@@ -16,24 +18,27 @@ namespace OnlineShopWebApp.Controllers
         private IComparisonRepository comparisonRepository;
         private IFavouritesRepository favouritesRepository;
         private IProductRepository productRepository;
+        private IMapper mapper;
 
         public UserController(UserManager<User> userManager,
             ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IMapper mapper)
         {
             this.userManager = userManager;
             this.comparisonRepository = comparisonRepository;
             this.cartRepository = cartRepository;
             this.favouritesRepository = favouritesRepository;
             this.productRepository = productRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
             var user = userManager.FindByNameAsync(User.Identity.Name).Result;
-            return View(Helpers.MappingHelper.ToUserViewModel(user));
+            return View(mapper.Map<UserViewModel>(user));
         }
 
         [HttpGet]

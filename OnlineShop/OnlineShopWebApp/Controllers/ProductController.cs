@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
@@ -10,14 +11,17 @@ namespace OnlineShopWebApp.Controllers
         private IProductRepository productRepository;
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
+        private IMapper mapper;
 
         public ProductController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
-            IComparisonRepository comparisonRepository)
+            IComparisonRepository comparisonRepository,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
             this.comparisonRepository = comparisonRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index(Guid id)
@@ -32,11 +36,11 @@ namespace OnlineShopWebApp.Controllers
                 var comparison = comparisonRepository.TryGetByUserId(userName);
                 if (comparison is null)
                     comparison = comparisonRepository.AddComparison(userName);
-                ViewBag.favouriteProducts = Helpers.MappingHelper
-                    .ToProductViewModels(favourites.Items)
+                ViewBag.favouriteProducts = favourites.Items
+                    .Select(mapper.Map<ProductViewModel>)
                     .ToHashSet();
-                ViewBag.comparisonProducts = Helpers.MappingHelper
-                    .ToProductViewModels(comparison.Items)
+                ViewBag.comparisonProducts = comparison.Items
+                    .Select(mapper.Map<ProductViewModel>)
                     .ToHashSet();
             }
             else
@@ -46,7 +50,7 @@ namespace OnlineShopWebApp.Controllers
             }
             if (product is null)
                 throw new NullReferenceException("Товара с такиим id нет в репозитории!");
-            return View(Helpers.MappingHelper.ToProductViewModel(product));
+            return View(mapper.Map<ProductViewModel>(product));
         }
     }
 }

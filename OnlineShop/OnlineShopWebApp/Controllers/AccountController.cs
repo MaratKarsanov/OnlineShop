@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Repositories;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 
@@ -9,24 +8,12 @@ namespace OnlineShopWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private IComparisonRepository comparisonRepository;
-        private IFavouritesRepository favouritesRepository;
-        private IProductRepository productRepository;
-        private ICartRepository cartRepository;
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
 
-        public AccountController(IComparisonRepository comparisonRepository,
-            IFavouritesRepository favouritesRepository,
-            IProductRepository productRepository,
-            ICartRepository cartRepository,
-            UserManager<User> userManager, 
+        public AccountController(UserManager<User> userManager, 
             SignInManager<User> signInManager)
         {
-            this.favouritesRepository = favouritesRepository;
-            this.comparisonRepository = comparisonRepository;
-            this.productRepository = productRepository;
-            this.cartRepository = cartRepository;
             this.signInManager = signInManager;
             this.userManager = userManager;
         }

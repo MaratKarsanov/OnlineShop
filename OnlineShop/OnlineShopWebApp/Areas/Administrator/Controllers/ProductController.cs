@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
@@ -13,18 +14,18 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     public class ProductController : Controller
     {
         private IProductRepository productRepository;
+        private IMapper mapper;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.
-                ToProductViewModels(productRepository.
-                GetAll()).
-                OrderBy(p => p.Name));
+            return View(productRepository.GetAll().Select(mapper.Map<ProductViewModel>));
         }
 
         public IActionResult Remove(Guid productId)
@@ -54,7 +55,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Edit(Guid productId)
         {
             var product = productRepository.TryGetById(productId);
-            return View(Helpers.MappingHelper.ToProductViewModel(product));
+            return View(mapper.Map<ProductViewModel>(product));
         }
 
         [HttpPost]
@@ -62,7 +63,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             if (!ModelState.IsValid)
                 return View();
-            productRepository.EditProduct(Helpers.MappingHelper.ToProduct(newProduct));
+            productRepository.EditProduct(mapper.Map<Product>(newProduct));
             return RedirectToAction(nameof(Index));
         }
     }

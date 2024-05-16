@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
@@ -18,13 +19,15 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         private IProductRepository productRepository;
         private UserManager<User> userManager;
         private RoleManager<IdentityRole> roleManager;
+        private IMapper mapper;
 
         public UserController(ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
             IProductRepository productRepository,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IMapper mapper)
         {
             this.comparisonRepository = comparisonRepository;
             this.cartRepository = cartRepository;
@@ -32,11 +35,12 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.productRepository = productRepository;
             this.userManager = userManager;
             this.roleManager = roleManager;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.ToUserViewModels(userManager.Users));
+            return View(userManager.Users.Select(mapper.Map<UserViewModel>));
         }
 
         [HttpGet]
@@ -74,7 +78,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Edit(string login)
         {
             var user = userManager.FindByNameAsync(login).Result;
-            return View(Helpers.MappingHelper.ToUserViewModel(user));
+            return View(mapper.Map<UserViewModel>(user));
         }
 
         [HttpGet]
@@ -129,7 +133,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             var roles = roleManager.Roles;
             ViewData["login"] = user.UserName;
             ViewBag.userRoles = userRoles.ToHashSet();
-            return View(Helpers.MappingHelper.ToRoleViewModels(roles));
+            return View(roles.Select(mapper.Map<RoleViewModel>));
         }
 
         [HttpPost]
