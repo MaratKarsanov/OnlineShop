@@ -6,8 +6,7 @@ namespace OnlineShopWebApp.Views.Shared.Components.Autorization
     {
         public IViewComponentResult Invoke()
         {
-            var userLogin = HttpContext.Request.Cookies["userLogin"];
-            ViewData["userLogin"] = userLogin;
+            var userLogin = User.Identity.Name;
             return View("Autorization", userLogin);
         }
     }

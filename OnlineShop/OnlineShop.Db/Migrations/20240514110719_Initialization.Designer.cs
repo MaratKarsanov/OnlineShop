@@ -12,8 +12,8 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240510143936_AddFirstData")]
-    partial class AddFirstData
+    [Migration("20240514110719_Initialization")]
+    partial class Initialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,139 @@ namespace OnlineShop.Db.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", (string)null);
+                });
 
             modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>
                 {
@@ -110,12 +243,12 @@ namespace OnlineShop.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserLogin")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserLogin");
+                    b.HasIndex("UserId");
 
                     b.ToTable("DeliveryData");
                 });
@@ -203,7 +336,7 @@ namespace OnlineShop.Db.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8f94f1dc-887d-451f-a9fd-56a0d4e7e374"),
+                            Id = new Guid("13c00883-e3c7-4ee4-83c4-e43ab97e6f57"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaCeylonTea.png",
@@ -213,7 +346,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("022d0a79-f8cb-44a5-9709-124359512159"),
+                            Id = new Guid("f6d0a154-e167-4bab-8f1a-26055f2d5cfd"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaClassicGrey.png",
@@ -223,7 +356,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c1b61939-ca84-4a14-a698-0946540612a0"),
+                            Id = new Guid("1c99c083-39ab-4115-94ab-c89a49ba6382"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaClassikBlackTea.png",
@@ -233,7 +366,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d054d31e-5b33-4447-b7af-46dc26c74572"),
+                            Id = new Guid("2baee684-8e22-4cd1-8f17-60c81082716a"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaEnglishBreakfast.png",
@@ -243,7 +376,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("270684d3-4d4f-4652-b59b-f87fd58a8297"),
+                            Id = new Guid("13aca13d-22f7-41ff-ad29-77bc13da813a"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaLondonAfternoon.png",
@@ -253,7 +386,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f25f268a-b0e9-40cc-989d-4e186592a469"),
+                            Id = new Guid("ffa4fc54-34a2-47b8-8b5b-008a0247921b"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaPearStrudel.png",
@@ -263,7 +396,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a7b663b9-0132-45ff-96eb-bcab037c9190"),
+                            Id = new Guid("f30fdd14-d6e8-46cb-a5cd-8767f13449c2"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/ahmadTeaStrawberryMousse.png",
@@ -273,7 +406,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7795c6d9-9a8b-4c36-9c42-99f73d79871c"),
+                            Id = new Guid("8ee912ff-020b-415f-9e1a-38b66c651f3e"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/azer.png",
@@ -283,7 +416,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d579d880-9616-4e06-8249-62f6c482ad1d"),
+                            Id = new Guid("5e701a10-0638-434f-bcd0-dffe27988d7f"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/curtisIsabellaGrape.png",
@@ -293,7 +426,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("18b7172c-26f6-43c5-af1c-289615e4e82a"),
+                            Id = new Guid("74a7787d-6c06-40c0-8571-682c914f662b"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/curtisSummerBerries.png",
@@ -303,7 +436,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1c94fbd2-aa6e-40fe-955c-444f94d119a7"),
+                            Id = new Guid("e38dea82-a635-446c-bef7-f88891e7ad30"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/curtisSunnyLemon.png",
@@ -313,7 +446,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0e523662-9c79-4121-82e9-e5fcac260d9b"),
+                            Id = new Guid("c1dfc863-e553-4e3c-afaf-e83bf714affb"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/curtisWhiteBountea.png",
@@ -323,7 +456,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("d777d305-279e-4e99-8a5f-c0155019a08f"),
+                            Id = new Guid("6bdf217c-d72a-480c-bb97-1cde95028db4"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/tessBerryBar.png",
@@ -333,7 +466,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b8744ed8-31c0-40b0-b988-7f1578cbc4b3"),
+                            Id = new Guid("eda18f5f-3762-4dfc-aa8b-6e56600e5c0a"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/tessDark.png",
@@ -343,7 +476,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("13bb4596-526b-4e4b-a083-086fba4784bf"),
+                            Id = new Guid("8a6a5859-542a-4186-aea6-7f86cac19e54"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/tessFlirt.png",
@@ -353,7 +486,7 @@ namespace OnlineShop.Db.Migrations
                         },
                         new
                         {
-                            Id = new Guid("34a03e74-090b-4699-85d5-cc212e4597ca"),
+                            Id = new Guid("4ebd2235-6413-4ce3-a8fe-11e1c27e607e"),
                             Cost = 500m,
                             Description = "Очень вкусный и ароматный чай",
                             ImageLink = "/images/teas/tessForestDream.png",
@@ -363,76 +496,120 @@ namespace OnlineShop.Db.Migrations
                         });
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Role", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Name = "Administrator"
-                        },
-                        new
-                        {
-                            Name = "User"
-                        });
-                });
-
             modelBuilder.Entity("OnlineShop.Db.User", b =>
                 {
-                    b.Property<string>("Login")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("RememberMe")
+                    b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
+                    b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Login");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
-                    b.HasIndex("RoleName");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.ToTable("Users");
+                    b.HasKey("Id");
 
-                    b.HasData(
-                        new
-                        {
-                            Login = "karsanov@mail.ru",
-                            Address = "Vatutina 37",
-                            Name = "Marat",
-                            Password = "marmar",
-                            PhoneNumber = "89187080533",
-                            RememberMe = false,
-                            RoleName = "Administrator",
-                            Surname = "Karsanov"
-                        });
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("OnlineShop.Db.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("OnlineShop.Db.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineShop.Db.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("OnlineShop.Db.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("OnlineShop.Db.Models.CartItem", b =>
@@ -458,7 +635,7 @@ namespace OnlineShop.Db.Migrations
                 {
                     b.HasOne("OnlineShop.Db.User", null)
                         .WithMany("DeliveryDatas")
-                        .HasForeignKey("UserLogin");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("OnlineShop.Db.Models.Order", b =>
@@ -481,17 +658,6 @@ namespace OnlineShop.Db.Migrations
                     b.HasOne("OnlineShop.Db.Models.Favourites", null)
                         .WithMany("Items")
                         .HasForeignKey("FavouritesId");
-                });
-
-            modelBuilder.Entity("OnlineShop.Db.User", b =>
-                {
-                    b.HasOne("OnlineShop.Db.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("OnlineShop.Db.Models.Cart", b =>

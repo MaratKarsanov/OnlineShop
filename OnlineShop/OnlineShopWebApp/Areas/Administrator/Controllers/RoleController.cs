@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Repositories.Interfaces;
-using System.Data;
+using OnlineShopWebApp.Areas.Administrator.Models;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
@@ -10,21 +10,23 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Authorize(Roles = Constants.AdministratorRoleName)]
     public class RoleController : Controller
     {
-        private IRoleRepository roleRepository;
+        private RoleManager<IdentityRole> roleManager;
 
-        public RoleController(IRoleRepository roleRepository)
+        public RoleController(RoleManager<IdentityRole> roleManager)
         {
-            this.roleRepository = roleRepository;
+            this.roleManager = roleManager;
         }
 
         public IActionResult Index()
         {
-            return View(Helpers.MappingHelper.ToRoleViewModels(roleRepository.GetAll()));
+            return View(Helpers.MappingHelper.ToRoleViewModels(roleManager.Roles));
         }
 
         public IActionResult Remove(string roleName)
         {
-            roleRepository.Remove(roleName);
+            var role = roleManager.FindByNameAsync(roleName).Result;
+            if (role is not null)
+                roleManager.DeleteAsync(role).Wait();
             return RedirectToAction(nameof(Index));
         }
 
@@ -35,17 +37,17 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Role newRole)
+        public IActionResult Add(RoleViewModel newRole)
         {
-            if (roleRepository.GetAll().Where(r => r.Name == newRole.Name).Count() > 0)
+            var result = roleManager.CreateAsync(new IdentityRole() { Name = newRole.Name}).Result;
+            if (result.Succeeded)
+                return RedirectToAction(nameof(Index));
+            else
             {
-                ModelState.AddModelError("", "Такая роль уже существует");
-                return View();
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(string.Empty, error.Description);
             }
-            if (!ModelState.IsValid)
-                return View();
-            roleRepository.Add(newRole);
-            return RedirectToAction(nameof(Index));
+            return View(newRole);
         }
     }
 }

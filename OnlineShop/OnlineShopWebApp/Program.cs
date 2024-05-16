@@ -3,7 +3,6 @@ using OnlineShop.Db;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShop.Db.Repositories;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,18 +16,13 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
 });
 
-builder.Services.AddDbContext<IdentityContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
-});
-
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DatabaseContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.ExpireTimeSpan = TimeSpan.FromDays(30);
-    options.LoginPath = "/Autorization/Login";
-    options.LogoutPath = "/Autorization/Logout";
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
     options.Cookie = new CookieBuilder
     {
         IsEssential = true
@@ -42,8 +36,6 @@ builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderDbRepository>();
-builder.Services.AddTransient<IRoleRepository, RoleDbRepository>();
-builder.Services.AddTransient<IUserRepository, UserDbRepository>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();
@@ -60,6 +52,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<User>>();
+    var rolesManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    IdentityInitializer.Initialize(userManager, rolesManager);
+}
 
 app.MapControllerRoute(
     name: "MyArea",

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 
 namespace OnlineShopWebApp.Controllers
@@ -20,9 +19,9 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index()
         {
-            var comparison = comparisonRepository.TryGetByUserId(Request.Cookies["userLogin"]);
+            var comparison = comparisonRepository.TryGetByUserId(User.Identity.Name);
             if (comparison is null)
-                return View(null);
+                comparison = comparisonRepository.AddComparison(User.Identity.Name);
             return View(Helpers.MappingHelper.ToComparisonViewModel(comparison));
         }
 
@@ -31,7 +30,7 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            var userLogin = Request.Cookies["userLogin"];
+            var userLogin = User.Identity.Name;
             if (userLogin is null || userLogin == string.Empty)
                 return RedirectToAction(nameof(Index));
             comparisonRepository.AddProduct(product, userLogin);
@@ -43,7 +42,7 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            var userLogin = Request.Cookies["userLogin"];
+            var userLogin = User.Identity.Name;
             if (userLogin is null || userLogin == string.Empty)
                 return RedirectToAction(nameof(Index));
             comparisonRepository.RemoveProduct(product, userLogin);

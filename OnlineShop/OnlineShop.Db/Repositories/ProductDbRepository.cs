@@ -51,19 +51,5 @@ namespace OnlineShop.Db.Repositories
             return databaseContext.Products
                 .FirstOrDefault(p => p.Id == id);
         }
-
-        public void UpdateInComparisonCondition(HashSet<Product> products)
-        {
-            foreach (var product in databaseContext.Products)
-                product.IsInComparison = products.Contains(product);
-            databaseContext.SaveChanges();
-        }
-
-        public void UpdateInFavouritesCondition(HashSet<Product> products)
-        {
-            foreach (var product in databaseContext.Products)
-                product.IsInFavourites = products.Contains(product);
-            databaseContext.SaveChanges();
-        }
     }
 }

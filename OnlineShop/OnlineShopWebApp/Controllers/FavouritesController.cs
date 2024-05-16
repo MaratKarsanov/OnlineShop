@@ -19,9 +19,9 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index()
         {
-            var favourites = favouritesRepository.TryGetByUserId(Request.Cookies["userLogin"]);
+            var favourites = favouritesRepository.TryGetByUserName(User.Identity.Name);
             if (favourites is null)
-                return View(null);
+                favourites = favouritesRepository.AddFavourites(User.Identity.Name);
             return View(Helpers.MappingHelper.ToProductViewModels(favourites.Items));
         }
 
@@ -30,10 +30,7 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            var userLogin = Request.Cookies["userLogin"];
-            if (userLogin is null || userLogin == string.Empty)
-                return RedirectToAction(nameof(Index));
-            favouritesRepository.AddProduct(product, userLogin);
+            favouritesRepository.AddProduct(product, User.Identity.Name);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
 
@@ -42,10 +39,7 @@ namespace OnlineShopWebApp.Controllers
             int pageNumber = 1)
         {
             var product = productRepository.TryGetById(productId);
-            var userLogin = Request.Cookies["userLogin"];
-            if (userLogin is null || userLogin == string.Empty)
-                return RedirectToAction(nameof(Index));
-            favouritesRepository.RemoveProduct(product, userLogin);
+            favouritesRepository.RemoveProduct(product, User.Identity.Name);
             return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId});
         }
     }

@@ -1,109 +1,92 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShop.Db.Repositories;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Areas.Administrator.Models;
+using Serilog;
 
 namespace OnlineShopWebApp.Controllers
 {
     [Authorize]
     public class UserController : Controller
     {
-        private IUserRepository userRepository;
+        private UserManager<User> userManager;
         private ICartRepository cartRepository;
         private IComparisonRepository comparisonRepository;
         private IFavouritesRepository favouritesRepository;
         private IProductRepository productRepository;
 
-        public UserController(IUserRepository userRepository,
-            IRoleRepository roleRepository,
+        public UserController(UserManager<User> userManager,
             ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
             IProductRepository productRepository)
         {
-            this.userRepository = userRepository;
+            this.userManager = userManager;
             this.comparisonRepository = comparisonRepository;
             this.cartRepository = cartRepository;
             this.favouritesRepository = favouritesRepository;
             this.productRepository = productRepository;
-            if (roleRepository.GetAll().FirstOrDefault(r => r.Name == "Administrator") is null)
-            {
-                roleRepository.Add(new Role() { Name = "Administrator" });
-                roleRepository.Add(new Role() { Name = "User" });
-            }
         }
 
         public IActionResult Index()
         {
-            var userLogin = Request.Cookies["userLogin"];
-            var user = userRepository.TryGetByLogin(userLogin);
-            if (user is null)
-                return View(null);
+            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
             return View(Helpers.MappingHelper.ToUserViewModel(user));
         }
 
         [HttpGet]
         public IActionResult EditData()
         {
-            var login = Request.Cookies["userLogin"];
-            var user = userRepository.TryGetByLogin(login);
-            if (user is null)
-                throw new NullReferenceException("В репозитории нет пользователя с таким id");
+            var name = User.Identity.Name;
+            var user = userManager.FindByNameAsync(name).Result;
             var userData = new EditUserDataViewModel()
             {
-                Name = user.Name,
-                Surname = user.Surname,
-                Address = user.Address,
+                UserName = user.UserName,
                 PhoneNumber = user.PhoneNumber
             };
-            ViewData["login"] = login;
             return View(userData);
         }
 
         [HttpPost]
-        public IActionResult EditData(EditUserData newUserData)
+        public IActionResult EditData(EditUserDataViewModel newUserData)
         {
-            var login = Request.Cookies["userLogin"];
             if (!ModelState.IsValid)
-                return View();
-            userRepository.EditData(login, newUserData);
+                return View(newUserData);
+            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            user.PhoneNumber = newUserData.PhoneNumber;
+            user.UserName = newUserData.UserName;
+            userManager.UpdateAsync(user).Wait();
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
         public IActionResult ChangePassword()
         {
-            ViewData["login"] = Request.Cookies["userLogin"]; 
             return View();
         }
 
         [HttpPost]
         public IActionResult ChangePassword(ChangeUserPasswordViewModel password)
         {
-            var login = Request.Cookies["userLogin"];
             if (!ModelState.IsValid)
-                return View();
-            userRepository.ChangePassword(login, password.NewPassword);
+                return RedirectToAction(nameof(ChangePassword));
+            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            var newHashPassword = userManager.PasswordHasher.HashPassword(user, password.NewPassword);
+            user.PasswordHash = newHashPassword;
+            userManager.UpdateAsync(user).Wait();
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete()
         {
-            var login = Request.Cookies["userLogin"];
-            userRepository.Remove(login);
-            cartRepository.Remove(login);
-            comparisonRepository.RemoveComparison(login);
-            favouritesRepository.RemoveFavourites(login);
-            productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
-            productRepository.UpdateInComparisonCondition(new HashSet<Product>());
-            var cookieOptions = new CookieOptions()
-            {
-                Expires = DateTime.Now.AddMonths(-1)
-            };
-            Response.Cookies.Append("userLogin", string.Empty, cookieOptions);
+            var name = User.Identity.Name;
+            var user = userManager.FindByNameAsync(name).Result;
+            userManager.DeleteAsync(user).Wait();
+            cartRepository.Remove(name);
+            favouritesRepository.RemoveFavourites(name);
+            comparisonRepository.RemoveComparison(name);
             return RedirectToAction(nameof(Index));
         }
     }

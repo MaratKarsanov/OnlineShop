@@ -17,19 +17,10 @@ namespace OnlineShopWebApp.Models
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         public string RepeatedPassword { get; set; }
 
-        [Required(ErrorMessage = "Введите имя")]
-        public string Name { get; set; }
-
-        [Required(ErrorMessage = "Введите фамилию")]
-        public string Surname { get; set; }
-
-        [Required(ErrorMessage = "Введите адрес")]
-        public string Address { get; set; }
-
         [Required(ErrorMessage = "Введите номер телефона")]
         [Phone(ErrorMessage = "Неверный формат номера")]
         public string PhoneNumber { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; } = "/Home";
     }
 }

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Win32;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
-using OnlineShop.Db.Repositories;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
@@ -15,8 +12,6 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Authorize(Roles = Constants.AdministratorRoleName)]
     public class UserController : Controller
     {
-        private IUserRepository userRepository;
-        private IRoleRepository roleRepository;
         private ICartRepository cartRepository;
         private IComparisonRepository comparisonRepository;
         private IFavouritesRepository favouritesRepository;
@@ -24,28 +19,19 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         private UserManager<User> userManager;
         private RoleManager<IdentityRole> roleManager;
 
-        public UserController(IUserRepository userRepository,
-            IRoleRepository roleRepository,
-            ICartRepository cartRepository,
+        public UserController(ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
             IProductRepository productRepository,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
-            this.userRepository = userRepository;
-            this.roleRepository = roleRepository;
             this.comparisonRepository = comparisonRepository;
             this.cartRepository = cartRepository;
             this.favouritesRepository = favouritesRepository;
             this.productRepository = productRepository;
             this.userManager = userManager;
             this.roleManager = roleManager;
-            if (roleRepository.GetAll().FirstOrDefault(r => r.Name == "Administrator") is null)
-            {
-                roleRepository.Add(new Role() { Name = "Administrator" });
-                roleRepository.Add(new Role() { Name = "User" });
-            }
         }
 
         public IActionResult Index()
@@ -62,22 +48,6 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult Add(RegistrationData registrationData)
         {
-            //if (!ModelState.IsValid)
-            //    return View();
-            //var user = new User()
-            //{
-            //    Role = roleRepository
-            //        .GetAll()
-            //        .FirstOrDefault(r => r.Name == "User"),
-            //    UserName = registrationData.UserName,
-            //    PasswordHash = registrationData.Password.GetHashCode().ToString(),
-            //    Name = registrationData.Name,
-            //    Address = registrationData.Address,
-            //    PhoneNumber = registrationData.PhoneNumber,
-            //    Surname = registrationData.Surname,
-            //};
-            //userRepository.Add(user);
-            //return RedirectToAction(nameof(Index));
             if (ModelState.IsValid)
             {
                 User user = new User()
@@ -113,9 +83,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             var user = userManager.FindByNameAsync(login).Result;
             var userData = new EditUserDataViewModel()
             {
-                Name = user.Name,
-                Surname = user.Surname,
-                Address = user.Address,
+                UserName = user.UserName,
                 PhoneNumber = user.PhoneNumber
             };
             ViewData["login"] = login;
@@ -123,21 +91,15 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditData(string login, EditUserData newUserData)
+        public IActionResult EditData(string login, EditUserDataViewModel newUserData)
         {
-            //if (!ModelState.IsValid)
-            //    return View();
-            //userRepository.EditData(login, newUserData);
-            //return RedirectToAction(nameof(Edit), new { login });
-            if (ModelState.IsValid)
-            {
-                var user = userManager.FindByNameAsync(login).Result;
-                user.PhoneNumber = newUserData.PhoneNumber;
-                user.Name = newUserData.Name;
-                userManager.UpdateAsync(user).Wait();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(newUserData);
+            if (!ModelState.IsValid)
+                return View(newUserData);
+            var user = userManager.FindByNameAsync(login).Result;
+            user.PhoneNumber = newUserData.PhoneNumber;
+            user.UserName = newUserData.UserName;
+            userManager.UpdateAsync(user).Wait();
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -150,10 +112,6 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public IActionResult ChangePassword(ChangeUserPasswordViewModel password, string login)
         {
-            //if (!ModelState.IsValid)
-            //    return View();
-            //userRepository.ChangePassword(login, password.NewPassword);
-            //return RedirectToAction(nameof(Edit), new { login });
             if (!ModelState.IsValid)
                 return RedirectToAction(nameof(ChangePassword));
             var user = userManager.FindByNameAsync(login).Result;
@@ -168,41 +126,34 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             var user = userManager.FindByNameAsync(login).Result;
             var userRoles = userManager.GetRolesAsync(user).Result;
-            var roles = roleManager.Roles.Select(r => r.Name).ToHashSet();
+            var roles = roleManager.Roles;
             ViewData["login"] = user.UserName;
-            ViewData["roleName"] = user.Role.Name;
-            return View(Helpers.MappingHelper.ToRoleViewModels(roles
-                .Where(r => !userRoles.Contains(r))));
+            ViewBag.userRoles = userRoles.ToHashSet();
+            return View(Helpers.MappingHelper.ToRoleViewModels(roles));
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(RoleViewModel newRole, string login)
+        public IActionResult ChangeRole(Dictionary<string, bool> userRolesViewModels, string login)
         {
             if (!ModelState.IsValid)
                 return View();
+            var selectedRoles = userRolesViewModels.Select(x => x.Key);
             var user = userManager.FindByNameAsync(login).Result;
-            var role = roleManager.Roles.FirstOrDefault(r => r.Name == newRole.Name);
             var userRoles = userManager.GetRolesAsync(user).Result;
+            userManager.RemoveFromRolesAsync(user, userRoles).Wait();
+            userManager.AddToRolesAsync(user, selectedRoles).Wait();
+            if (login == User.Identity.Name && !userRolesViewModels.ContainsKey("Administrator"))
+                return RedirectToAction("Index", "Home", new { area = "" });
             return RedirectToAction(nameof(Edit), new { login });
         }
 
         public IActionResult Delete(string login)
         {
-            userRepository.Remove(login);
+            var user = userManager.FindByNameAsync(login).Result;
+            userManager.DeleteAsync(user).Wait();
             cartRepository.Remove(login);
-            comparisonRepository.RemoveComparison(login);
             favouritesRepository.RemoveFavourites(login);
-            if (login == Request.Cookies["userLogin"])
-            {
-                productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
-                productRepository.UpdateInComparisonCondition(new HashSet<Product>());
-                var cookieOptions = new CookieOptions()
-                {
-                    Expires = DateTime.Now.AddMonths(-1)
-                };
-                Response.Cookies.Append("userLogin", string.Empty, cookieOptions);
-                return RedirectToAction("Index", "Home", new { area = "" });
-            }
+            comparisonRepository.RemoveComparison(login);
             return RedirectToAction(nameof(Index));
         }
     }

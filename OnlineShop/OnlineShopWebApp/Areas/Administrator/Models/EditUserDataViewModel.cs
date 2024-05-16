@@ -6,13 +6,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Models
     {
 
         [Required(ErrorMessage = "Введите имя")]
-        public string Name { get; set; }
-
-        [Required(ErrorMessage = "Введите фамилию")]
-        public string Surname { get; set; }
-
-        [Required(ErrorMessage = "Введите адрес")]
-        public string Address { get; set; }
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Введите номер телефона")]
         [Phone(ErrorMessage = "Неверный формат номера")]
@@ -20,7 +14,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Models
 
         public EditUserDataViewModel()
         {
-            Name = Surname = Address = PhoneNumber = "";
+            UserName = PhoneNumber = "";
         }
     }
 }

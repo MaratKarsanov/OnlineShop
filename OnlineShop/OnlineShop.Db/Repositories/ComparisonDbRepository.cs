@@ -45,7 +45,6 @@ namespace OnlineShop.Db.Repositories
             {
                 comparison.Items.Add(product);
             }
-            product.IsInComparison = true;
             databaseContext.SaveChanges();
         }
 
@@ -65,7 +64,6 @@ namespace OnlineShop.Db.Repositories
             comparison.Items = comparison.Items
                 .Where(p => p.Id != product.Id)
                 .ToList();
-            product.IsInComparison = false;
             databaseContext.SaveChanges();
         }
 

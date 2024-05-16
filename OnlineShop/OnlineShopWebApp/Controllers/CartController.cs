@@ -19,17 +19,15 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult Index()
         {
-            var cart = cartRepository.TryGetByLogin(Request.Cookies["userLogin"]);
+            var cart = cartRepository.TryGetByLogin(User.Identity.Name);
             if (cart is null)
-                return View(null);
+                cart = cartRepository.AddCart(User.Identity.Name);
             return View(Helpers.MappingHelper.ToCartViewModel(cart));
         }
 
         public IActionResult Add(Guid productId)
         {
-            var userLogin = Request.Cookies["userLogin"];
-            if (userLogin is null || userLogin == string.Empty)
-                return RedirectToAction(nameof(Index));
+            var userLogin = User.Identity.Name;
             var product = productRepository.TryGetById(productId);
             cartRepository.AddProduct(product, userLogin);
             return RedirectToAction(nameof(Index));
@@ -37,9 +35,7 @@ namespace OnlineShopWebApp.Controllers
 
         public IActionResult DecreaseAmount(Guid productId)
         {
-            var userLogin = Request.Cookies["userLogin"];
-            if (userLogin is null || userLogin == string.Empty)
-                return RedirectToAction(nameof(Index));
+            var userLogin = User.Identity.Name;
             cartRepository.DecreaseAmount(productId, userLogin);
             return RedirectToAction(nameof(Index));
         }

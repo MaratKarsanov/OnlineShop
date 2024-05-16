@@ -4,16 +4,7 @@
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-6">
         <div>
-            <p>Логин: @Model.Login</p>
-        </div>
-        <div>
-            <p>Имя: @Model.Name</p>
-        </div>
-        <div>
-            <p>Фамилия: @Model.Surname</p>
-        </div>
-        <div>
-            <p>Адрес: @Model.Address</p>
+            <p>Имя пользоваетля: @Model.UserName</p>
         </div>
         <div>
             <p>Телефон: @Model.PhoneNumber</p>
@@ -28,16 +19,16 @@
             Действия
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangePassword" asp-route-login="@Model.Login">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangePassword" asp-route-login="@Model.UserName">
                 Смена пароля
             </a>
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="EditData" asp-route-login="@Model.Login">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="EditData" asp-route-login="@Model.UserName">
                 Редактирование данных
             </a>
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangeRole" asp-route-login="@Model.Login">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="ChangeRole" asp-route-login="@Model.UserName">
                 Смена роли
             </a>
-            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="Delete" asp-route-login="@Model.Login">
+            <a class="dropdown-item" asp-area="Administrator" asp-controller="User" asp-action="Delete" asp-route-login="@Model.UserName">
                 Удалить
             </a>
         </div>

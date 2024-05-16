@@ -14,7 +14,7 @@ namespace OnlineShop.Db.Repositories
 
         public Favourites AddFavourites(string userId)
         {
-            var favourites = TryGetByUserId(userId);
+            var favourites = TryGetByUserName(userId);
             if (favourites is null)
             {
                 favourites = new Favourites()
@@ -29,7 +29,7 @@ namespace OnlineShop.Db.Repositories
 
         public void AddProduct(Product product, string userId)
         {
-            var favourites = TryGetByUserId(userId);
+            var favourites = TryGetByUserName(userId);
             if (favourites is null)
             {
                 databaseContext.Favourites.Add(new Favourites()
@@ -43,13 +43,12 @@ namespace OnlineShop.Db.Repositories
             }
             else
                 favourites.Items.Add(product);
-            product.IsInFavourites = true;
             databaseContext.SaveChanges();
         }
 
         public void Clear(string userId)
         {
-            var favourites = TryGetByUserId(userId);
+            var favourites = TryGetByUserName(userId);
             if (favourites is null)
                 return;
             favourites.Items = new List<Product>();
@@ -58,7 +57,7 @@ namespace OnlineShop.Db.Repositories
 
         public void RemoveFavourites(string userId)
         {
-            var favourites = TryGetByUserId(userId);
+            var favourites = TryGetByUserName(userId);
             if (favourites is not null)
             {
                 databaseContext.Favourites.Remove(favourites);
@@ -68,19 +67,18 @@ namespace OnlineShop.Db.Repositories
 
         public void RemoveProduct(Product product, string userId)
         {
-            var favourites = TryGetByUserId(userId);
+            var favourites = TryGetByUserName(userId);
             if (favourites is null)
                 return;
             favourites.Items.Remove(product);
-            product.IsInFavourites = false;
             databaseContext.SaveChanges();
         }
 
-        public Favourites TryGetByUserId(string userId)
+        public Favourites TryGetByUserName(string userName)
         {
             return databaseContext.Favourites
                 .Include(f => f.Items)
-                .FirstOrDefault(f => f.UserId == userId);
+                .FirstOrDefault(f => f.UserId == userName);
         }
     }
 }

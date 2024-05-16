@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace OnlineShopWebApp.Models
+﻿namespace OnlineShopWebApp.Models
 {
     public class FavouritesViewModel
     {

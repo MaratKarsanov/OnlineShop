@@ -9,7 +9,5 @@ namespace OnlineShop.Db.Repositories.Interfaces
         void Add(Product product);
         void Remove(Guid id);
         void EditProduct(Product newProduct);
-        void UpdateInFavouritesCondition(HashSet<Product> products);
-        void UpdateInComparisonCondition(HashSet<Product> products);
     }
 }

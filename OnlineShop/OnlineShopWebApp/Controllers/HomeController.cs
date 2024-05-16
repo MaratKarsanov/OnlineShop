@@ -3,6 +3,7 @@ using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
+using System;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -24,24 +25,26 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Index(string searchString = "", int pageNumber = 1)
         {
             ViewData["searchString"] = searchString;
-            var login = Request.Cookies["userLogin"];
-            if (login is not null && login != string.Empty)
+            var userName = User.Identity.Name;
+            if (userName is not null && userName != string.Empty)
             {
-                var favourites = favouritesRepository.TryGetByUserId(login);
+                var favourites = favouritesRepository.TryGetByUserName(userName);
                 if (favourites is null)
-                    favourites = favouritesRepository.AddFavourites(login);
-                var comparison = comparisonRepository.TryGetByUserId(login);
+                    favourites = favouritesRepository.AddFavourites(userName);
+                var comparison = comparisonRepository.TryGetByUserId(userName);
                 if (comparison is null)
-                    comparison = comparisonRepository.AddComparison(login);
-                var favouriteProducts = favourites.Items.ToHashSet();
-                var comparisonProducts = comparison.Items.ToHashSet();
-                productRepository.UpdateInFavouritesCondition(favouriteProducts);
-                productRepository.UpdateInComparisonCondition(comparisonProducts);
+                    comparison = comparisonRepository.AddComparison(userName);
+                ViewBag.favouriteProducts = Helpers.MappingHelper
+                    .ToProductViewModels(favourites.Items)
+                    .ToHashSet();
+                ViewBag.comparisonProducts = Helpers.MappingHelper
+                    .ToProductViewModels(comparison.Items)
+                    .ToHashSet();
             }
             else
             {
-                productRepository.UpdateInFavouritesCondition(new HashSet<Product>());
-                productRepository.UpdateInComparisonCondition(new HashSet<Product>());
+                ViewBag.favouriteProducts = new HashSet<ProductViewModel>();
+                ViewBag.comparisonProducts = new HashSet<ProductViewModel>();
             }
             var searchStringLower = searchString.ToLower();
             var foundedProducts = productRepository

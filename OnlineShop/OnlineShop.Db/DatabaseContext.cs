@@ -1,17 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Db.Models;
 
 namespace OnlineShop.Db
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : IdentityDbContext<User, IdentityRole, string>
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Favourites> Favourites { get; set; }
         public DbSet<Comparison> Comparisons { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options)
             : base(options)
@@ -21,6 +21,8 @@ namespace OnlineShop.Db
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             var basicProducts = new List<Product>()
             {
                 new Product()
@@ -152,27 +154,7 @@ namespace OnlineShop.Db
                     ImageLink = "/images/teas/tessForestDream.png"
                 }
             };
-            var basicRoles = new List<Role>()
-            {
-                new Role(){ Name = "Administrator" },
-                new Role(){ Name = "User" }
-            };
-            var basicUsers = new List<User>()
-            {
-                new User()
-                {
-                    UserName = "karsanov@mail.ru",
-                    PasswordHash = "marmar".GetHashCode().ToString(),
-                    Name = "Marat",
-                    Surname = "Karsanov",
-                    Address = "Vatutina 37",
-                    PhoneNumber = "89187080533",
-                    RoleName = "Administrator"
-                }
-            };
             modelBuilder.Entity<Product>().HasData(basicProducts);
-            modelBuilder.Entity<Role>().HasData(basicRoles);
-            modelBuilder.Entity<User>().HasData(basicUsers);
         }
     }
 }

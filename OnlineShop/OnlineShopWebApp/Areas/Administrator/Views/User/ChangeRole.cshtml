@@ -3,27 +3,59 @@
 <div class="row">
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-6">
+        @* <form method="post">
+        <h4 style="margin-bottom:20px">Смена роли для пользователя @ViewData["login"]</h4>
+        <div>
+        <select class="form-select-sm" name="newRole.Name">
+        <option selected>@ViewData["roleName"]</option>
+        @foreach (var role in Model)
+        {
+        <option value="@role.Name">@role.Name</option>
+        }
+        </select>
+        </div>
+        <button
+        style="margin-top:10px"
+        type="submit"
+        class="btn btn-dark"
+        asp-area="Administrator"
+        asp-controller="User"
+        asp-action="ChangeRole"
+        asp-route-login="@ViewData["login"]">
+        Сохранить
+        </button>
+        </form> *@
         <form method="post">
-            <h4 style="margin-bottom:20px">Смена роли для пользователя @ViewData["login"]</h4>
             <div>
-                <select class="form-select-sm" name="newRole.Name">
-                    <option selected>@ViewData["roleName"]</option>
-                    @foreach (var role in Model)
-                    {
-                        <option value="@role.Name">@role.Name</option>
-                    }
-                </select>
+                <h3>Смена ролей для пользователя @ViewData["login"]</h3>
             </div>
-            <button 
-                style="margin-top:10px"
-                type="submit" 
-                class="btn btn-dark" 
-                asp-area="Administrator" 
-                asp-controller="User" 
-                asp-action="ChangeRole" 
-                asp-route-login="@ViewData["login"]">
-                Сохранить
-            </button>
+            @foreach (var role in Model)
+            {
+                <div>
+                    @if (ViewBag.userRoles.Contains(role.Name))
+                    {
+                        <input class="form-check-input" name="userRolesViewModels[@role.Name]" type="checkbox" value="true" checked />
+                        <label class="form-check-label" for="flexCheckDefault"> @role.Name </label>
+                    }
+                    else
+                    {
+                        <input class="form-check-input" name="userRolesViewModels[@role.Name]" type="checkbox" value="true" />
+                        <label class="form-check-label" for="flexCheckChecked"> @role.Name </label>
+                    }
+                </div>
+            }
+
+            <div>
+                <button class="btn btn-primary"
+                        type="submit"
+                        asp-area="Administrator"
+                        asp-controller="User"
+                        asp-action="ChangeRole"
+                        asp-route-login="@ViewData["login"]">
+                    Сменить
+                </button>
+            </div>
+
         </form>
     </div>
 </div>

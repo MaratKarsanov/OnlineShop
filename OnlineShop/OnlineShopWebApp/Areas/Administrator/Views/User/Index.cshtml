@@ -10,11 +10,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Логин</th>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
+                        <th>Имя пользователя</th>
                         <th>Телефон</th>
-                        <th>Роль</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,14 +19,11 @@
                     {
                         <tr>
                             <td>
-                                <a asp-area="Administrator" asp-action="Edit" asp-controller="User" asp-route-login="@user.Login">
-                                    @user.Login
+                                <a asp-area="Administrator" asp-action="Edit" asp-controller="User" asp-route-login="@user.UserName">
+                                    @user.UserName
                                 </a>
                             </td>
-                            <td>@user.Name</td>
-                            <td>@user.Surname</td>
                             <td>@user.PhoneNumber</td>
-                            <td>@user.Role.Name</td>
                         </tr>
                     }
                 </tbody>

@@ -5,8 +5,8 @@
     <p>Вы не авторизованы</p>
     <a class="btn btn-light"
        asp-area=""
-       asp-controller="Autorization"
-       asp-action="Index"
+       asp-controller="Account"
+       asp-action="Login"
        role="button">
         Авторизоваться
     </a>
@@ -15,16 +15,7 @@
 <div class="row">
     <div class="col-6">
         <div>
-            <p>Логин: @Model.Login</p>
-        </div>
-        <div>
-            <p>Имя: @Model.Name</p>
-        </div>
-        <div>
-            <p>Фамилия: @Model.Surname</p>
-        </div>
-        <div>
-            <p>Адрес: @Model.Address</p>
+            <p>Имя пользователя: @Model.UserName</p>
         </div>
         <div>
             <p>Телефон: @Model.PhoneNumber</p>

@@ -7,8 +7,6 @@
         public decimal Cost { get; set; }
         public string Description { get; set; }
         public string? ImageLink { get; set; } 
-        public bool IsInFavourites { get; set; }
-        public bool IsInComparison { get; set; }
 
         public Product()
         {

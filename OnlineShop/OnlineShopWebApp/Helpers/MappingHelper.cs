@@ -1,8 +1,8 @@
-﻿using OnlineShop.Db;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
-using System.Numerics;
 
 namespace OnlineShopWebApp.Helpers
 {
@@ -17,8 +17,6 @@ namespace OnlineShopWebApp.Helpers
                 Cost = productViewModel.Cost,
                 Description = productViewModel.Description,
                 ImageLink = productViewModel.ImageLink,
-                IsInComparison = productViewModel.IsInComparison,
-                IsInFavourites = productViewModel.IsInFavourites
             };
         }
         public static IEnumerable<ProductViewModel> ToProductViewModels(IEnumerable<Product> products)
@@ -36,8 +34,6 @@ namespace OnlineShopWebApp.Helpers
                 Cost = dbProduct.Cost,
                 Description = dbProduct.Description,
                 ImageLink = dbProduct.ImageLink,
-                IsInFavourites = dbProduct.IsInFavourites,
-                IsInComparison = dbProduct.IsInComparison
             };
         }
 
@@ -90,11 +86,8 @@ namespace OnlineShopWebApp.Helpers
         {
             return new ComparisonViewModel()
             {
-                Id = comparison.Id,
                 UserId = comparison.UserId,
-                Items = comparison.Items
-                    .Select(ToProductViewModel)
-                    .ToList()
+                Items = comparison.Items.Select(ToProductViewModel).ToList()
             };
         }
 
@@ -113,8 +106,7 @@ namespace OnlineShopWebApp.Helpers
 
         public static IEnumerable<DeliveryDataViewModel> ToDeliveryDataViewModels(IEnumerable<DeliveryData> deliveryDatas)
         {
-            return deliveryDatas
-                .Select(ToDeliveryDataViewModel);
+            return deliveryDatas.Select(ToDeliveryDataViewModel);
         }
 
         public static DeliveryData ToDeliveryData(DeliveryDataViewModel deliveryDataVm)
@@ -145,44 +137,24 @@ namespace OnlineShopWebApp.Helpers
 
         public static IEnumerable<OrderViewModel> ToOrderViewModels(IEnumerable<Order> orders)
         {
-            return orders
-                .Select(ToOrderViewModel);
+            return orders.Select(ToOrderViewModel);
         }
 
         public static UserViewModel ToUserViewModel(User user)
         {
             return new UserViewModel()
             {
-                Login = user.Login,
-                Password = user.Password,
-                Name = user.Name,
-                Surname = user.Surname,
-                Address = user.Address,
+                Password = user.PasswordHash,
+                UserName = user.UserName,
                 PhoneNumber = user.PhoneNumber,
-                Role = ToRoleViewModel(user.Role),
-                RememberMe = user.RememberMe,
+                LockoutEnabled = user.LockoutEnabled,
                 DeliveryDatas = ToDeliveryDataViewModels(user.DeliveryDatas).ToList()
             };
         }
 
         public static IEnumerable<UserViewModel> ToUserViewModels(IEnumerable<User> users)
         {
-            return users
-                .Select(ToUserViewModel);
-        }
-
-        public static RoleViewModel ToRoleViewModel(Role role)
-        {
-            return new RoleViewModel()
-            {
-                Name = role.Name
-            };
-        }
-
-        public static IEnumerable<RoleViewModel> ToRoleViewModels(IEnumerable<Role> roles)
-        {
-            return roles
-                .Select(ToRoleViewModel);
+            return users.Select(ToUserViewModel);
         }
 
         public static RoleViewModel ToRoleViewModel(string roleName)
@@ -195,8 +167,20 @@ namespace OnlineShopWebApp.Helpers
 
         public static IEnumerable<RoleViewModel> ToRoleViewModels(IEnumerable<string> roleNames)
         {
-            return roleNames
-                .Select(ToRoleViewModel);
+            return roleNames.Select(ToRoleViewModel);
+        }
+
+        public static RoleViewModel ToRoleViewModel(IdentityRole role)
+        {
+            return new RoleViewModel()
+            {
+                Name = role.Name
+            };
+        }
+
+        public static IEnumerable<RoleViewModel> ToRoleViewModels(IEnumerable<IdentityRole> roles)
+        {
+            return roles.Select(ToRoleViewModel);
         }
     }
 }

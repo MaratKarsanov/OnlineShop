@@ -14,12 +14,12 @@ namespace OnlineShopWebApp.Models
         [Required(ErrorMessage = "Не указан пароль")]
         [StringLength(int.MaxValue, MinimumLength = 4, ErrorMessage = "Пароль должен быть длиннее 4 символов!")]
         public string? Password { get; set; }
-        public bool RememberMe { get; set; }
-        public string? ReturnUrl { get; set; }
+        public bool LockoutEnabled { get; set; }
+        public string? ReturnUrl { get; set; } = "/Home";
 
         public override string ToString()
         {
-            return $"Логин: {UserName} Пароль: {Password} Запомнить? {RememberMe}";
+            return $"Логин: {UserName} Пароль: {Password} Запомнить? {LockoutEnabled}";
         }
     }
 }
