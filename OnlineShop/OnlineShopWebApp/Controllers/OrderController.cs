@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
@@ -15,14 +16,17 @@ namespace OnlineShopWebApp.Controllers
         private ICartRepository cartRepository;
         private IOrderRepository orderRepository;
         private UserManager<User> userManager;
+        private IMapper mapper;
 
         public OrderController(ICartRepository cartRepository,
             IOrderRepository orderRepository,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IMapper mapper)
         {
             this.cartRepository = cartRepository;
             this.orderRepository = orderRepository;
             this.userManager = userManager;
+            this.mapper = mapper;
         }
 
         public IActionResult Index()
@@ -37,7 +41,7 @@ namespace OnlineShopWebApp.Controllers
                 return View(nameof(Index));
             var login = User.Identity.Name;
             var cart = cartRepository.TryGetByLogin(login);
-            var deliveryData = Helpers.MappingHelper.ToDeliveryData(deliveryDataVm);
+            var deliveryData = mapper.Map<DeliveryData>(deliveryDataVm);
             var user = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             user.DeliveryDatas.Add(deliveryData);
             userManager.UpdateAsync(user).Wait();
