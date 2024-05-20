@@ -40,7 +40,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(userManager.Users.Select(mapper.Map<UserViewModel>));
+            return View(mapper.Map<List<UserViewModel>>(userManager.Users));
         }
 
         [HttpGet]
@@ -133,7 +133,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             var roles = roleManager.Roles;
             ViewData["login"] = user.UserName;
             ViewBag.userRoles = userRoles.ToHashSet();
-            return View(roles.Select(mapper.Map<RoleViewModel>));
+            return View(mapper.Map<List<RoleViewModel>>(roles));
         }
 
         [HttpPost]

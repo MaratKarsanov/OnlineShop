@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
+using OnlineShop.Db.Repositories;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 using System.Data;
@@ -25,7 +26,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(productRepository.GetAll().Select(mapper.Map<ProductViewModel>));
+            return View(mapper.Map<List<ProductViewModel>>(productRepository.GetAll()));
         }
 
         public IActionResult Remove(Guid productId)

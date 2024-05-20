@@ -27,7 +27,7 @@ namespace OnlineShopWebApp.Controllers
             var favourites = favouritesRepository.TryGetByUserName(User.Identity.Name);
             if (favourites is null)
                 favourites = favouritesRepository.AddFavourites(User.Identity.Name);
-            return View(favourites.Items.Select(mapper.Map<ProductViewModel>));
+            return View(mapper.Map<List<ProductViewModel>>(favourites.Items));
         }
 
         public IActionResult Add(Guid productId,

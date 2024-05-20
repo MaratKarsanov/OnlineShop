@@ -28,7 +28,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Index()
         {
             //return View(Helpers.MappingHelper.ToOrderViewModels(orderRepository.GetAll()));
-            return View(orderRepository.GetAll().Select(mapper.Map<OrderViewModel>));
+            return View(mapper.Map<List<OrderViewModel>>(orderRepository.GetAll()));
         }
 
         [HttpGet]

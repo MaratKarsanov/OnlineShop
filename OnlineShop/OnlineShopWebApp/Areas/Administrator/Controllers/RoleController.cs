@@ -23,7 +23,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
 
         public IActionResult Index()
         {
-            return View(roleManager.Roles.Select(mapper.Map<RoleViewModel>));
+            return View(mapper.Map<List<RoleViewModel>>(roleManager.Roles));
         }
 
         public IActionResult Remove(string roleName)

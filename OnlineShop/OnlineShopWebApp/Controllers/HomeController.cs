@@ -59,7 +59,7 @@ namespace OnlineShopWebApp.Controllers
                 .Take(Constants.PageSize)
                 .ToList();
             ViewBag.pageNumber = pageNumber;
-            return View(showingProducts.Select(mapper.Map<ProductViewModel>));
+            return View(mapper.Map<List<ProductViewModel>>(showingProducts));
         }
     }
 }
