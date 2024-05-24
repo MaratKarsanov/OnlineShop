@@ -6,13 +6,6 @@
         public string Name { get; set; }
         public decimal Cost { get; set; }
         public string Description { get; set; }
-        public string? ImageLink { get; set; }
         public List<Image> Images { get; set; }
-
-        public Product()
-        {
-            Id = Guid.NewGuid();
-            ImageLink = "/images/DefaultImg.jpg";
-        }
     }
 }

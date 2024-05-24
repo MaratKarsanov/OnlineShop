@@ -14,23 +14,9 @@ namespace OnlineShopWebApp.Models
 
         [Required(ErrorMessage = "Нет описания")]
         public string Description { get; set; }
-        public string ImageLink { get; set; }
-
-        public ProductViewModel()
-        {
-            Id = Guid.NewGuid();
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is not ProductViewModel)
-                return false;
-            return ((ProductViewModel)obj).Id == Id;
-        }
+        public string[] ImagesPaths { get; set; }
+        public string ImagePath => ImagesPaths == null || ImagesPaths.Length == 0
+                           ? "/images/DefaultImg.jpg"
+                           : ImagesPaths[0];
     }
 }

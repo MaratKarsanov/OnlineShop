@@ -1,33 +1,63 @@
-﻿@model ProductViewModel
+﻿@model EditProductViewModel
 
-<form method="post" target="_self">
+<form method="post" target="_self" enctype="multipart/form-data">
     <div class="row">
         @await Html.PartialAsync("AdministratorPanel")
         <div class="col-6">
             <div class="validation" asp-validation-summary="All"></div>
-            <div>
+            <div class="form-group">
                 <label asp-for="Name">Название:</label>
                 <input type="text" asp-for="Name" placeholder="New name" value="@Model.Name">
                 <span asp-validation-for="Name"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="Cost">Цена:</label>
                 <input type="number" asp-for="Cost" placeholder="New cost" value="@Model.Cost.ToString().Replace(",", ".")">
                 <span asp-validation-for="Cost"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="Description">Описание:</label>
                 <input type="text" asp-for="Description" placeholder="New description" value="@Model.Description">
                 <span asp-validation-for="Description"></span>
             </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="@Model.ImagesPaths" value="@Model.ImagesPaths" />
+                <label>Изображения</label><br />
+                <div class="d-flex align-items-center">
+                    @foreach (var imagePath in Model.ImagesPaths)
+                    {
+                        <div style="margin-right: 20px;">
+                            <div>
+                                <img src="@imagePath" width="100" height="100" />
+                            </div>
+                            <div>
+                                <p>@imagePath</p>
+                            </div>
+                            <div>
+                                <a class="btn btn-danger btn-group"
+                                   asp-area="Administrator"
+                                   asp-controller="Product"
+                                   asp-action="DeleteImage"
+                                   asp-route-productId="@Model.Id"
+                                   asp-route-imageUrl="@imagePath">
+                                    Удалить
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Загрузить новые изображения</label>
+                <input type="file" name="UploadedFiles" multiple accept="image/*" class="form-control" />
+            </div>
             <div>
-                <button type="submit" 
+                <button type="submit"
                         style="margin-top:10px"
-                        asp-action="Edit" 
-                        asp-area="Administrator" 
-                        asp-controller="Product" 
-                        asp-route-Id="@Model.Id"
-                        asp-route-ImageLink="@Constants.ImageLink">
+                        asp-action="Edit"
+                        asp-area="Administrator"
+                        asp-controller="Product"
+                        asp-route-Id="@Model.Id">
                     Внести изменения
                 </button>
             </div>

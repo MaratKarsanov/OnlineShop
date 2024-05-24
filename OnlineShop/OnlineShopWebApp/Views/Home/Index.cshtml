@@ -31,8 +31,8 @@
     {
         <div class="col-3 card shadow">
             <img class="card-img-top"
-                 src="@product.ImageLink"
-                 style="width:200px;height:200px"/>
+                 src="@product.ImagePath"
+                 style="width:200px;height:200px" />
             <div class="card-body">
                 <a style="color: black" href="/product/index/@product.Id">
                     <h5>@product.Name</h5>
@@ -40,7 +40,7 @@
                 <h5>@product.Cost</h5>
                 @if (!ViewBag.comparisonProducts.Contains(product))
                 {
-                    <a class="btn btn-light"
+                    <a class="btn btn-dark myCardButton"
                        asp-controller="Comparison"
                        asp-action="Add"
                        asp-route-productId="@product.Id"
@@ -51,7 +51,7 @@
                 }
                 else
                 {
-                    <a class="btn btn-light"
+                    <a class="btn btn-danger myCardButton"
                        asp-controller="Comparison"
                        asp-action="Remove"
                        asp-route-productId="@product.Id"
@@ -62,7 +62,7 @@
                 }
                 @if (!ViewBag.favouriteProducts.Contains(product))
                 {
-                    <a class="btn btn-light"
+                    <a class="btn btn-dark myCardButton"
                        asp-controller="Favourites"
                        asp-action="Add"
                        asp-route-productId="@product.Id"
@@ -73,9 +73,22 @@
                 }
                 else
                 {
-                    <a class="btn btn-light" href="/favourites/remove?productId=@product.Id" role="button">Удалить из избранного</a>
+                    <a class="btn btn-danger myCardButton"
+                       asp-controller="Favourites"
+                       asp-action="Remove"
+                       asp-route-productId="@product.Id"
+                       asp-route-pageNumber="@ViewBag.pageNumber"
+                       role="button">
+                        Удалить из избранного
+                    </a>
                 }
-                <a class="btn btn-light" href="/cart/add?productId=@product.Id" role="button">Добавить в корзину</a>
+                <a class="btn btn-dark myCardButton"
+                   asp-controller="Cart"
+                   asp-action="Add"
+                   asp-route-productId="@product.Id"
+                   role="button">
+                    Добавить в корзину
+                </a>
             </div>
         </div>
     }

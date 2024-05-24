@@ -5,6 +5,7 @@ using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShop.Db.Repositories;
 using Microsoft.AspNetCore.Identity;
 using OnlineShopWebApp;
+using OnlineShopWebApp.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderDbRepository>();
+builder.Services.AddTransient<ImagesProvider>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();

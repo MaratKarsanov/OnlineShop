@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -59,7 +60,7 @@ namespace OnlineShopWebApp.Controllers
                 .Take(Constants.PageSize)
                 .ToList();
             ViewBag.pageNumber = pageNumber;
-            return View(mapper.Map<List<ProductViewModel>>(showingProducts));
+            return View(showingProducts.ToProductViewModels());
         }
     }
 }

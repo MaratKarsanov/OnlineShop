@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Controllers
@@ -50,7 +51,7 @@ namespace OnlineShopWebApp.Controllers
             }
             if (product is null)
                 throw new NullReferenceException("Товара с такиим id нет в репозитории!");
-            return View(mapper.Map<ProductViewModel>(product));
+            return View(product.ToProductViewModel());
         }
     }
 }

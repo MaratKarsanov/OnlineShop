@@ -9,5 +9,6 @@ namespace OnlineShop.Db.Repositories.Interfaces
         void Add(Product product);
         void Remove(Guid id);
         void EditProduct(Product newProduct);
+        void RemoveImage(Guid id, string imageUrl);
     }
 }

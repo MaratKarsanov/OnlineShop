@@ -52,97 +52,97 @@ namespace OnlineShop.Db
                 new Image()
                 {
                     Id = Guid.Parse("8df0a3ec-b6b3-48b2-84bf-795f38580dab"),
-                    Url = "/images/Products/SD father.jpg",
+                    Url = "/images/Products/ahmadTeaCeylonTea.png",
                     ProductId = product1Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("cd178c04-fefa-43b7-9729-e8c40a32aeff"),
-                    Url = "/images/Products/SD angel.jpg",
+                    Url = "/images/Products/ahmadTeaClassicGrey.png",
                     ProductId = product2Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("d83231a6-d222-4ad7-a585-fd4dc6cc4e3e"),
-                    Url = "/images/Products/SD king.jpg",
+                    Url = "/images/Products/ahmadTeaClassikBlackTea.png",
                     ProductId = product3Id
                 },
                  new Image()
                 {
                     Id = Guid.Parse("b54b3a14-3fbc-4469-89b4-382e2c88c00d"),
-                    Url = "/images/Products/SD evil.jpg",
+                    Url = "/images/Products/ahmadTeaEnglishBreakfast.png",
                     ProductId = product4Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("8c32a5fb-6709-40a4-8079-3bd8dc3e9c46"),
-                    Url = "/images/Products/SD father.jpg",
+                    Url = "/images/Products/ahmadTeaLondonAfternoon.png",
                     ProductId = product5Id
                 },
                  new Image()
                 {
                     Id = Guid.Parse("e976453b-3db1-4cd3-a13e-e0ea36240fb3"),
-                    Url = "/images/Products/SD angel.jpg",
+                    Url = "/images/Products/ahmadTeaPearStrudel.png",
                     ProductId = product6Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("b9dfb257-e642-44d8-8e8b-9bc0bad15163"),
-                    Url = "/images/Products/SD king.jpg",
+                    Url = "/images/Products/ahmadTeaStrawberryMousse.png",
                     ProductId = product7Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("95d8bb84-adb9-45da-8944-46b9a4c1295b"),
-                    Url = "/images/Products/SD evil.jpg",
+                    Url = "/images/Products/azer.png",
                     ProductId = product8Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("c82d2c9a-409d-47e1-a7a3-b606e66dc312"),
-                    Url = "/images/Products/SD father.jpg",
+                    Url = "/images/Products/curtisIsabellaGrape.png",
                     ProductId = product9Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("8768b0ee-6439-4dd6-ac5a-a0796430543b"),
-                    Url = "/images/Products/SD angel.jpg",
+                    Url = "/images/Products/curtisSummerBerries.png",
                     ProductId = product10Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("044e37de-2943-4def-abbb-eb92c1425c17"),
-                    Url = "/images/Products/SD king.jpg",
+                    Url = "/images/Products/curtisSunnyLemon.png",
                     ProductId = product11Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("23b9f8c5-3643-437e-b0b4-fd77662fba29"),
-                    Url = "/images/Products/SD evil.jpg",
+                    Url = "/images/Products/curtisWhiteBountea.png",
                     ProductId = product12Id
                 },
                  new Image()
                 {
                     Id = Guid.Parse("1dd2fc09-5594-42a1-adb9-d808db86b166"),
-                    Url = "/images/Products/SD father.jpg",
+                    Url = "/images/Products/tessBerryBar.png",
                     ProductId = product13Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("82d69078-d813-4471-a595-8b946e0bcf07"),
-                    Url = "/images/Products/SD angel.jpg",
+                    Url = "/images/Products/tessDark.png",
                     ProductId = product14Id
                 },
                  new Image()
                 {
                     Id = Guid.Parse("e1a4238b-e9a8-4921-aa22-2571b70cca47"),
-                    Url = "/images/Products/SD king.jpg",
+                    Url = "/images/Products/tessFlirt.png",
                     ProductId = product15Id
                 },
                 new Image()
                 {
                     Id = Guid.Parse("055179ce-228b-44e1-84e7-830ecfe1c2c3"),
-                    Url = "/images/Products/SD evil.jpg",
+                    Url = "/images/Products/tessForestDream.png",
                     ProductId = product16Id
                 }
             };
@@ -152,131 +152,115 @@ namespace OnlineShop.Db
             {
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product1Id,
                     Name = $"Ahmad Tea Ceylon",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaCeylonTea.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product2Id,
                     Name = $"Ahmad Tea Classic Grey",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaClassicGrey.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product3Id,
                     Name = $"Ahmad Tea Classic Black",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaClassikBlackTea.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product4Id,
                     Name = $"Ahmad Tea English Breakfast",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaEnglishBreakfast.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product5Id,
                     Name = $"Ahmad Tea London Afternoon",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaLondonAfternoon.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product6Id,
                     Name = $"Ahmad Tea Pear Strudel",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaPearStrudel.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product7Id,
                     Name = $"Ahmad Tea Strawberry Mousse",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/ahmadTeaStrawberryMousse.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product8Id,
                     Name = $"Azer Tea",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/azer.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product9Id,
                     Name = $"Curtis Isabella Grape",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/curtisIsabellaGrape.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product10Id,
                     Name = $"Curtis Summer Berries",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/curtisSummerBerries.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product11Id,
                     Name = $"Curtis Sunny Lemon",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/curtisSunnyLemon.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product12Id,
                     Name = $"Curtis White Bountea",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/curtisWhiteBountea.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product13Id,
                     Name = $"Tess Berry Bar",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/tessBerryBar.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product14Id,
                     Name = $"Tess Dark",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/tessDark.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product15Id,
                     Name = $"Tess Flirt",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/tessFlirt.png"
+                    Description = "Очень вкусный и ароматный чай"
                 },
                 new Product()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = product16Id,
                     Name = $"Tess Forest Dream",
                     Cost = 500,
-                    Description = "Очень вкусный и ароматный чай",
-                    ImageLink = "/images/teas/tessForestDream.png"
+                    Description = "Очень вкусный и ароматный чай"
                 }
             };
             modelBuilder.Entity<Product>().HasData(basicProducts);

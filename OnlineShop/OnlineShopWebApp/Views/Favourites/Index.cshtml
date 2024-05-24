@@ -18,9 +18,9 @@
         @foreach (var product in Model)
         {
             <tr>
-                <td>
+                @* <td>
                     <img style="width: 60px; height: 40px;" src="@product.ImageLink" />
-                </td>
+                </td> *@
                 <td>
                     <a style="color: black" href="/product/index/@product.Id">
                         @product.Name

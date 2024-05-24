@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.myCardButton{
+    margin-bottom:5px;
+    width:100%;
+}
