@@ -1,19 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Db;
 
 namespace OnlineShopWebApp.Views.Shared.Components.UserProfile
 {
     public class UserViewComponent : ViewComponent
     {
-        //private readonly IUserRepository userRepository;
+        private readonly UserManager<User> userManager;
 
-        //public UserViewComponent(IUserRepository userRepository)
-        //{
-        //    this.userRepository = userRepository;
-        //}
+        public UserViewComponent(UserManager<User> userManager)
+        {
+            this.userManager = userManager;
+        }
 
         public IViewComponentResult Invoke()
         {
-            return View("User");
+            try
+            {
+                var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+                return View("User", user.ProfileImagePath);
+            }
+            catch
+            {
+                return View("User", "");
+            }
         }
     }
 }

@@ -1,6 +1,11 @@
-﻿<a class="nav-link text-dark"
-    asp-area=""
-    asp-controller="User"
-    asp-action="Index">
-    User profile
-</a>
+﻿@model string
+
+@if (Model is not null && Model != "")
+{
+    <a class="nav-link text-dark"
+       asp-area=""
+       asp-controller="User"
+       asp-action="Index">
+        <img class="" src="@Model" style="width: 50px; height: 50px;" />
+    </a>
+}
