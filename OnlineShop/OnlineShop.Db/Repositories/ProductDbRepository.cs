@@ -27,10 +27,10 @@ namespace OnlineShop.Db.Repositories
             product.Name = newProduct.Name;
             product.Cost = newProduct.Cost;
             product.Description = newProduct.Description;
-            foreach (var image in newProduct.Images)
+            foreach (var image in newProduct.ProductImages)
             {
                 image.ProductId = product.Id;
-                product.Images.Add(image);
+                product.ProductImages.Add(image);
                 databaseContext.Images.Add(image);
             }
             databaseContext.SaveChanges();
@@ -39,7 +39,7 @@ namespace OnlineShop.Db.Repositories
         public List<Product> GetAll()
         {
             return databaseContext.Products
-                .Include(p => p.Images)
+                .Include(p => p.ProductImages)
                 .ToList();
         }
 
@@ -60,7 +60,7 @@ namespace OnlineShop.Db.Repositories
             var image = databaseContext.Images.FirstOrDefault(i => i.Url == imageUrl);
             if (image is null)
                 return;
-            product.Images.Remove(image);
+            product.ProductImages.Remove(image);
             databaseContext.Images.Remove(image);
             databaseContext.SaveChanges();
         }
@@ -68,7 +68,7 @@ namespace OnlineShop.Db.Repositories
         public Product TryGetById(Guid id)
         {
             return databaseContext.Products
-                .Include(p => p.Images)
+                .Include(p => p.ProductImages)
                 .FirstOrDefault(p => p.Id == id);
         }
     }

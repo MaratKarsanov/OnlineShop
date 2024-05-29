@@ -4,18 +4,32 @@
     @await Html.PartialAsync("AdministratorPanel")
     <div class="col-6">
         <div>
+            <img class="" src="@Model.ImagePath" style="width: 300px; height: 300px;" />
+        </div>
+        @if (Model.HasProfileImage)
+        {
+            <div>
+                <a class="btn btn-danger btn-group"
+                   asp-area="Administrator"
+                   asp-controller="User"
+                   asp-action="DeleteProfileImage"
+                   asp-route-login="@Model.UserName">
+                    Удалить
+                </a>
+            </div>
+        }
+        <div style="margin-top:10px">
             <p>Имя пользоваетля: @Model.UserName</p>
         </div>
         <div>
             <p>Телефон: @Model.PhoneNumber</p>
         </div>
-        <button 
-            class="btn btn-dark dropdown-toggle" 
-            type="button"
-            id="dropdownMenuButton" 
-            data-bs-toggle="dropdown" 
-            aria-haspopup="true" 
-            aria-expanded="false">
+        <button class="btn btn-dark dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
             Действия
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

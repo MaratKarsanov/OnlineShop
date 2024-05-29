@@ -25,9 +25,9 @@ namespace OnlineShop.Db
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Image>()
-                .HasOne(p => p.Product)
-                .WithMany(p => p.Images)
-                .HasForeignKey(p => p.ProductId)
+                .HasOne(i => i.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey(i => i.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             var product1Id = Guid.Parse("31f5ca54-1493-4d25-bfa8-8365da02fe2a");

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Areas.Administrator.Models;
+using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
@@ -20,6 +21,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         private UserManager<User> userManager;
         private RoleManager<IdentityRole> roleManager;
         private IMapper mapper;
+        private ImagesProvider imagesProvider;
 
         public UserController(ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
@@ -27,7 +29,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             IProductRepository productRepository,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
-            IMapper mapper)
+            IMapper mapper,
+            ImagesProvider imagesProvider)
         {
             this.comparisonRepository = comparisonRepository;
             this.cartRepository = cartRepository;
@@ -36,11 +39,12 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.mapper = mapper;
+            this.imagesProvider = imagesProvider;
         }
 
         public IActionResult Index()
         {
-            return View(mapper.Map<List<UserViewModel>>(userManager.Users));
+            return View(userManager.Users.Select(Helpers.Mapping.ToUserViewModel));
         }
 
         [HttpGet]
@@ -78,7 +82,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public IActionResult Edit(string login)
         {
             var user = userManager.FindByNameAsync(login).Result;
-            return View(mapper.Map<UserViewModel>(user));
+            return View(user.ToUserViewModel());
         }
 
         [HttpGet]
@@ -102,8 +106,14 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             var user = userManager.FindByNameAsync(login).Result;
             user.PhoneNumber = newUserData.PhoneNumber;
             user.UserName = newUserData.UserName;
+            if (newUserData.UploadedFile is not null
+                && newUserData.UploadedFile.Length > 0)
+            {
+                user.ProfileImagePath = imagesProvider
+                    .SaveFile(newUserData.UploadedFile, ImageFolders.Profiles);
+            }
             userManager.UpdateAsync(user).Wait();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Edit), new { login });
         }
 
         [HttpGet]
@@ -148,6 +158,14 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             userManager.AddToRolesAsync(user, selectedRoles).Wait();
             if (login == User.Identity.Name && !userRolesViewModels.ContainsKey("Administrator"))
                 return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction(nameof(Edit), new { login });
+        }
+
+        public IActionResult DeleteProfileImage(string login)
+        {
+            var user = userManager.FindByNameAsync(login).Result;
+            user.ProfileImagePath = "/images/Profiles/defaultAvatar.jpg";
+            userManager.UpdateAsync(user).Wait();
             return RedirectToAction(nameof(Edit), new { login });
         }
 

@@ -18,5 +18,7 @@ namespace OnlineShopWebApp.Models
         public string PhoneNumber { get; set; }
         public bool LockoutEnabled { get; set; }
         public List<DeliveryDataViewModel> DeliveryDatas { get; set; }
+        public string? ImagePath { get; set; } = "/images/Profiles/defaultAvatar.jpg";
+        public bool HasProfileImage => ImagePath != "/images/Profiles/defaultAvatar.jpg";
     }
 }

@@ -14,6 +14,20 @@
 }
 <div class="row">
     <div class="col-6">
+        <img class="" src="@Model.ImagePath" style="width: 300px; height: 300px;" />
+        @if (Model.HasProfileImage)
+        {
+            <div>
+                <a class="btn btn-danger btn-group"
+                   asp-area=""
+                   asp-controller="User"
+                   asp-action="DeleteProfileImage">
+                    Удалить
+                </a>
+            </div>
+        }
+    </div>
+    <div class="col-6">
         <div>
             <p>Имя пользователя: @Model.UserName</p>
         </div>
@@ -42,8 +56,8 @@
                 Редактирование данных
             </a>
             <a class="dropdown-item"
-               asp-area="" 
-               asp-controller="User" 
+               asp-area=""
+               asp-controller="User"
                asp-action="Delete">
                 Удалить
             </a>

@@ -11,6 +11,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Models
         [Required(ErrorMessage = "Введите номер телефона")]
         [Phone(ErrorMessage = "Неверный формат номера")]
         public string PhoneNumber { get; set; }
+        public IFormFile? UploadedFile { get; set; }
 
         public EditUserDataViewModel()
         {

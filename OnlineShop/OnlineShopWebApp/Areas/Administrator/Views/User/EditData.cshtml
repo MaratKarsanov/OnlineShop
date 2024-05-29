@@ -1,6 +1,6 @@
 ﻿@model EditUserDataViewModel
 
-<form method="post" target="_self">
+<form method="post" target="_self" enctype="multipart/form-data">
     <div class="row">
         @await Html.PartialAsync("AdministratorPanel")
         <div class="col-6">
@@ -14,6 +14,10 @@
                 <label asp-for="PhoneNumber">Телефон:</label>
                 <input type="text" asp-for="PhoneNumber" placeholder="Phone Number" value="@Model.PhoneNumber">
                 <span asp-validation-for="PhoneNumber"></span>
+            </div>
+            <div>
+                <label>Загрузить новый аватар</label>
+                <input type="file" name="UploadedFile" accept="image/*" class="form-control" />
             </div>
             <div>
                 <button type="submit"

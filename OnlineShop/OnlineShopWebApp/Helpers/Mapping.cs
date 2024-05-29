@@ -1,4 +1,6 @@
-﻿using OnlineShop.Db.Models;
+﻿using AutoMapper;
+using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Models;
 
@@ -19,7 +21,7 @@ namespace OnlineShopWebApp.Helpers
                 Name = product.Name,
                 Cost = product.Cost,
                 Description = product.Description,
-                ImagesPaths = product.Images.Select(x => x.Url).ToArray()
+                ImagesPaths = product.ProductImages.Select(x => x.Url).ToArray()
             };
         }
 
@@ -30,7 +32,7 @@ namespace OnlineShopWebApp.Helpers
                 Name = addProductViewModel.Name,
                 Cost = addProductViewModel.Cost,
                 Description = addProductViewModel.Description,
-                Images = ToImages(imagesPaths)
+                ProductImages = ToImages(imagesPaths)
             };
         }
 
@@ -53,7 +55,7 @@ namespace OnlineShopWebApp.Helpers
                 Name = product.Name,
                 Cost = product.Cost,
                 Description = product.Description,
-                ImagesPaths = product.Images.ToPaths()
+                ImagesPaths = product.ProductImages.ToPaths()
             };
         }
 
@@ -65,7 +67,33 @@ namespace OnlineShopWebApp.Helpers
                 Name = editProduct.Name,
                 Cost = editProduct.Cost,
                 Description = editProduct.Description,
-                Images = editProduct.ImagesPaths.ToImages()
+                ProductImages = editProduct.ImagesPaths.ToImages()
+            };
+        }
+
+        public static DeliveryDataViewModel ToDeliveryDataViewModel(DeliveryData deliveryData)
+        {
+            return new DeliveryDataViewModel()
+            {
+                Id = deliveryData.Id,
+                Name = deliveryData.Name,
+                Surname = deliveryData.Surname,
+                Address = deliveryData.Address,
+                EMail = deliveryData.EMail,
+                PhoneNumber = deliveryData.PhoneNumber
+            };
+        }
+
+        public static UserViewModel ToUserViewModel(this User user)
+        {
+            return new UserViewModel
+            {
+                UserName = user.UserName,
+                Password = user.PasswordHash,
+                PhoneNumber = user.PhoneNumber,
+                LockoutEnabled = user.LockoutEnabled,
+                DeliveryDatas = user.DeliveryDatas.Select(ToDeliveryDataViewModel).ToList(),
+                ImagePath = user.ProfileImagePath
             };
         }
     }
