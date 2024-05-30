@@ -29,26 +29,6 @@ namespace OnlineShopWebApp.Controllers
         {
             ViewData["searchString"] = searchString;
             var userName = User.Identity.Name;
-            if (userName is not null && userName != string.Empty)
-            {
-                var favourites = favouritesRepository.TryGetByUserName(userName);
-                if (favourites is null)
-                    favourites = favouritesRepository.AddFavourites(userName);
-                var comparison = comparisonRepository.TryGetByUserId(userName);
-                if (comparison is null)
-                    comparison = comparisonRepository.AddComparison(userName);
-                ViewBag.favouriteProducts = favourites.Items
-                    .Select(mapper.Map<ProductViewModel>)
-                    .ToHashSet();
-                ViewBag.comparisonProducts = comparison.Items
-                    .Select(mapper.Map<ProductViewModel>)
-                    .ToHashSet();
-            }
-            else
-            {
-                ViewBag.favouriteProducts = new HashSet<ProductViewModel>();
-                ViewBag.comparisonProducts = new HashSet<ProductViewModel>();
-            }
             var searchStringLower = searchString.ToLower();
             var foundedProducts = productRepository
                 .GetAll()
@@ -58,9 +38,26 @@ namespace OnlineShopWebApp.Controllers
             var showingProducts = foundedProducts
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
-                .ToList();
+                .ToList()
+                .ToProductViewModels();
             ViewBag.pageNumber = pageNumber;
-            return View(showingProducts.ToProductViewModels());
+            if (userName is not null && userName != string.Empty)
+            {
+                var favourites = favouritesRepository.TryGetByUserName(userName);
+                if (favourites is null)
+                    favourites = favouritesRepository.AddFavourites(userName);
+                var comparison = comparisonRepository.TryGetByUserId(userName);
+                if (comparison is null)
+                    comparison = comparisonRepository.AddComparison(userName);
+                var favouriteProducts = favourites.Items.ToProductViewModels();
+                var comparisonProducts = comparison.Items.ToProductViewModels();
+                foreach (var p in showingProducts)
+                {
+                    p.IsInFavourites = favouriteProducts.Contains(p);
+                    p.IsInComparison = comparisonProducts.Contains(p);
+                }
+            }
+            return View(showingProducts);
         }
     }
 }

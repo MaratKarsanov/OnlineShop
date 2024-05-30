@@ -28,6 +28,7 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Index(Guid id)
         {
             var product = productRepository.TryGetById(id);
+            var showingProduct = product.ToProductViewModel();
             var userName = User.Identity.Name;
             if (userName is not null && userName != string.Empty)
             {
@@ -37,21 +38,12 @@ namespace OnlineShopWebApp.Controllers
                 var comparison = comparisonRepository.TryGetByUserId(userName);
                 if (comparison is null)
                     comparison = comparisonRepository.AddComparison(userName);
-                ViewBag.favouriteProducts = favourites.Items
-                    .Select(mapper.Map<ProductViewModel>)
-                    .ToHashSet();
-                ViewBag.comparisonProducts = comparison.Items
-                    .Select(mapper.Map<ProductViewModel>)
-                    .ToHashSet();
+                var favouriteProducts = favourites.Items.ToProductViewModels();
+                var comparisonProducts = comparison.Items.ToProductViewModels();
+                showingProduct.IsInFavourites = favouriteProducts.Contains(showingProduct);
+                showingProduct.IsInComparison = comparisonProducts.Contains(showingProduct);
             }
-            else
-            {
-                ViewBag.favouriteProducts = new HashSet<ProductViewModel>();
-                ViewBag.comparisonProducts = new HashSet<ProductViewModel>();
-            }
-            if (product is null)
-                throw new NullReferenceException("Товара с такиим id нет в репозитории!");
-            return View(product.ToProductViewModel());
+            return View(showingProduct);
         }
     }
 }

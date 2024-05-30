@@ -38,7 +38,7 @@
                     <h5>@product.Name</h5>
                 </a>
                 <h5>@product.Cost</h5>
-                @if (!ViewBag.comparisonProducts.Contains(product))
+                @if (!product.IsInComparison)
                 {
                     <a class="btn btn-dark myCardButton"
                        asp-controller="Comparison"
@@ -60,7 +60,7 @@
                         Убрать из сравнения
                     </a>
                 }
-                @if (!ViewBag.favouriteProducts.Contains(product))
+                @if (!product.IsInFavourites)
                 {
                     <a class="btn btn-dark myCardButton"
                        asp-controller="Favourites"
