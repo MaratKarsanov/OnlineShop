@@ -12,8 +12,8 @@ using OnlineShop.Db;
 namespace OnlineShop.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240530123427_Intialization")]
-    partial class Intialization
+    [Migration("20240531115752_Initialization")]
+    partial class Initialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,12 +243,7 @@ namespace OnlineShop.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("DeliveryData");
                 });
@@ -398,11 +393,12 @@ namespace OnlineShop.Db.Migrations
                     b.Property<Guid>("DeliveryDataId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -696,13 +692,6 @@ namespace OnlineShop.Db.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OnlineShop.Db.Models.DeliveryData", b =>
-                {
-                    b.HasOne("OnlineShop.Db.User", null)
-                        .WithMany("DeliveryDatas")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("OnlineShop.Db.Models.Image", b =>
                 {
                     b.HasOne("OnlineShop.Db.Models.Product", "Product")
@@ -759,11 +748,6 @@ namespace OnlineShop.Db.Migrations
             modelBuilder.Entity("OnlineShop.Db.Models.Product", b =>
                 {
                     b.Navigation("ProductImages");
-                });
-
-            modelBuilder.Entity("OnlineShop.Db.User", b =>
-                {
-                    b.Navigation("DeliveryDatas");
                 });
 #pragma warning restore 612, 618
         }

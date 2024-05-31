@@ -27,17 +27,6 @@ namespace OnlineShop.Db.Repositories
             databaseContext.SaveChanges();
         }
 
-        public void Add(string login, List<CartItem> items, DeliveryData deliveryData)
-        {
-            Add(new Order()
-            {
-                Login = login,
-                Items = items,
-                DeliveryData = deliveryData
-            });
-            databaseContext.SaveChanges();
-        }
-
         public void UpdateStatus(OrderStatus newStatus, Guid orderId)
         {
             var order = databaseContext.Orders

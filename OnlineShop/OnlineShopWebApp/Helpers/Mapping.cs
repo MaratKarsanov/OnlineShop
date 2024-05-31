@@ -92,9 +92,39 @@ namespace OnlineShopWebApp.Helpers
                 Password = user.PasswordHash,
                 PhoneNumber = user.PhoneNumber,
                 LockoutEnabled = user.LockoutEnabled,
-                DeliveryDatas = user.DeliveryDatas.Select(ToDeliveryDataViewModel).ToList(),
+                //Orders = user.Orders.Select(ToOrderViewModel).ToList(),
                 ImagePath = user.ProfileImagePath
             };
+        }
+
+        public static OrderViewModel ToOrderViewModel(this Order order)
+        {
+            return new OrderViewModel()
+            {
+                Id = order.Id,
+                CreationTime = order.CreationTime,
+                DeliveryData = ToDeliveryDataViewModel(order.DeliveryData),
+                Status = order.Status,
+                Items = ToCartItemViewModels(order.Items),
+                //UserId = order.UserId
+            };
+        }
+
+        public static CartItemViewModel ToCartItemViewModel(this CartItem cartItem)
+        {
+            return new CartItemViewModel()
+            {
+                Id = cartItem.Id,
+                Amount = cartItem.Amount,
+                Product = ToProductViewModel(cartItem.Product)
+            };
+        }
+
+        public static List<CartItemViewModel> ToCartItemViewModels(this List<CartItem> cartItems)
+        {
+            return cartItems
+                .Select(ToCartItemViewModel)
+                .ToList();
         }
     }
 }

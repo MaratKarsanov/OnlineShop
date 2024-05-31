@@ -71,7 +71,7 @@
             Информация о предыдущих заказах
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-            @if (Model.DeliveryDatas.Count == 0)
+            @if (ViewBag.Orders.Count == 0)
             {
                 <a class="dropdown-item">
                     Заказов дæм нæй
@@ -79,13 +79,14 @@
             }
             else
             {
-                @foreach (var deliveryData in Model.DeliveryDatas)
+                @foreach (var order in ViewBag.Orders)
                 {
                     <a class="dropdown-item">
-                        @deliveryData.Name;
-                        @deliveryData.Surname;
-                        @deliveryData.Address;
-                        @deliveryData.PhoneNumber
+                        @order.DeliveryData.Name;
+                        @order.DeliveryData.Surname;
+                        @order.DeliveryData.Address;
+                        @order.DeliveryData.PhoneNumber
+                        @EnumHelper.GetDisplayName(order.Status)
                     </a>
                 }
             }

@@ -19,6 +19,7 @@ namespace OnlineShopWebApp.Controllers
         private IComparisonRepository comparisonRepository;
         private IFavouritesRepository favouritesRepository;
         private IProductRepository productRepository;
+        private IOrderRepository orderRepository;
         private IMapper mapper;
         private ImagesProvider imagesProvider;
 
@@ -28,7 +29,8 @@ namespace OnlineShopWebApp.Controllers
             IFavouritesRepository favouritesRepository,
             IProductRepository productRepository,
             IMapper mapper,
-            ImagesProvider imagesProvider)
+            ImagesProvider imagesProvider,
+            IOrderRepository orderRepository)
         {
             this.userManager = userManager;
             this.comparisonRepository = comparisonRepository;
@@ -37,11 +39,15 @@ namespace OnlineShopWebApp.Controllers
             this.productRepository = productRepository;
             this.mapper = mapper;
             this.imagesProvider = imagesProvider;
+            this.orderRepository = orderRepository;
         }
 
         public IActionResult Index()
         {
-            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            var userName = User.Identity.Name;
+            var user = userManager.FindByNameAsync(userName).Result;
+            var userOrders = orderRepository.GetAll().Where(o => o.UserName == userName).ToList();
+            ViewBag.Orders = userOrders;
             return View(user.ToUserViewModel());
         }
 

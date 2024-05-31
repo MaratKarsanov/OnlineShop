@@ -14,8 +14,8 @@ namespace OnlineShopWebApp.Views.Shared.Components
 
         public IViewComponentResult Invoke()
         {
-            var userLogin = Request.Cookies["userLogin"];
-            var cart = cartRepository.TryGetByLogin(userLogin);
+            var userName = User.Identity.Name;
+            var cart = cartRepository.TryGetByLogin(userName);
             var productsCount = cart?.Amount ?? 0;
             return View("Cart", productsCount);
         }

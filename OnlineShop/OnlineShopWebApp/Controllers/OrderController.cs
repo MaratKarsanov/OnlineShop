@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Models;
-using OnlineShop.Db.Repositories;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 
@@ -39,20 +38,17 @@ namespace OnlineShopWebApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
-            var login = User.Identity.Name;
-            var cart = cartRepository.TryGetByLogin(login);
+            var userName = User.Identity.Name;
+            var cart = cartRepository.TryGetByLogin(userName);
             var deliveryData = mapper.Map<DeliveryData>(deliveryDataVm);
-            var user = userManager.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            user.DeliveryDatas.Add(deliveryData);
-            userManager.UpdateAsync(user).Wait();
             var newOrder = new Order()
             {
-                Login = login,
+                UserName = userName,
                 Items = cart.Items,
                 DeliveryData = deliveryData
             };
             orderRepository.Add(newOrder);
-            cartRepository.Remove(login);
+            cartRepository.Remove(userName);
             return RedirectToAction(nameof(Index), "Home");
         }
     }
