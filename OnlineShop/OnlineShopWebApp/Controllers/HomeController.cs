@@ -25,13 +25,13 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index(string searchString = "", int pageNumber = 1)
+        public async Task<IActionResult> Index(string searchString = "", int pageNumber = 1)
         {
             ViewData["searchString"] = searchString;
             var userName = User.Identity.Name;
             var searchStringLower = searchString.ToLower();
-            var foundedProducts = productRepository
-                .GetAll()
+            var products = await productRepository.GetAllAsync();
+            var foundedProducts = products
                 .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower));
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
@@ -43,12 +43,12 @@ namespace OnlineShopWebApp.Controllers
             ViewBag.pageNumber = pageNumber;
             if (userName is not null && userName != string.Empty)
             {
-                var favourites = favouritesRepository.TryGetByUserName(userName);
+                var favourites = await favouritesRepository.TryGetByUserNameAsync(userName);
                 if (favourites is null)
-                    favourites = favouritesRepository.AddFavourites(userName);
-                var comparison = comparisonRepository.TryGetByUserId(userName);
+                    favourites = await favouritesRepository.AddFavouritesAsync(userName);
+                var comparison = await comparisonRepository.TryGetByUserIdAsync(userName);
                 if (comparison is null)
-                    comparison = comparisonRepository.AddComparison(userName);
+                    comparison = await comparisonRepository.AddComparisonAsync(userName);
                 var favouriteProducts = favourites.Items.ToProductViewModels();
                 var comparisonProducts = comparison.Items.ToProductViewModels();
                 foreach (var p in showingProducts)

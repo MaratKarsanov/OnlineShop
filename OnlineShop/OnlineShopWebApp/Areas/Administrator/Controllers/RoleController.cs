@@ -21,29 +21,29 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View(mapper.Map<List<RoleViewModel>>(roleManager.Roles));
         }
 
-        public IActionResult Remove(string roleName)
+        public async Task<IActionResult> Remove(string roleName)
         {
-            var role = roleManager.FindByNameAsync(roleName).Result;
+            var role = await roleManager.FindByNameAsync(roleName);
             if (role is not null)
-                roleManager.DeleteAsync(role).Wait();
+                await roleManager.DeleteAsync(role);
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(RoleViewModel newRole)
+        public async Task<IActionResult> Add(RoleViewModel newRole)
         {
-            var result = roleManager.CreateAsync(new IdentityRole() { Name = newRole.Name}).Result;
+            var result = await roleManager.CreateAsync(new IdentityRole() { Name = newRole.Name});
             if (result.Succeeded)
                 return RedirectToAction(nameof(Index));
             else

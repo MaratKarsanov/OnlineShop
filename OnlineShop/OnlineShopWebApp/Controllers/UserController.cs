@@ -42,20 +42,20 @@ namespace OnlineShopWebApp.Controllers
             this.orderRepository = orderRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userName = User.Identity.Name;
             var user = userManager.FindByNameAsync(userName).Result;
-            var userOrders = orderRepository.GetAll().Where(o => o.UserName == userName).ToList();
+            var userOrders = (await orderRepository.GetAllAsync()).Where(o => o.UserName == userName).ToList();
             ViewBag.Orders = userOrders;
             return View(user.ToUserViewModel());
         }
 
         [HttpGet]
-        public IActionResult EditData()
+        public async Task<IActionResult> EditData()
         {
             var name = User.Identity.Name;
-            var user = userManager.FindByNameAsync(name).Result;
+            var user = await userManager.FindByNameAsync(name);
             var userData = new EditUserDataViewModel()
             {
                 UserName = user.UserName,
@@ -65,11 +65,11 @@ namespace OnlineShopWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditData(EditUserDataViewModel newUserData)
+        public async Task<IActionResult> EditData(EditUserDataViewModel newUserData)
         {
             if (!ModelState.IsValid)
                 return View(newUserData);
-            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
             user.PhoneNumber = newUserData.PhoneNumber;
             user.UserName = newUserData.UserName;
             if (newUserData.UploadedFile is not null
@@ -78,44 +78,44 @@ namespace OnlineShopWebApp.Controllers
                 user.ProfileImagePath = imagesProvider
                     .SaveFile(newUserData.UploadedFile, ImageFolders.Profiles);
             }
-            userManager.UpdateAsync(user).Wait();
+            await userManager.UpdateAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult ChangePassword()
+        public async Task<IActionResult> ChangePassword()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangeUserPasswordViewModel password)
+        public async Task<IActionResult> ChangePassword(ChangeUserPasswordViewModel password)
         {
             if (!ModelState.IsValid)
                 return RedirectToAction(nameof(ChangePassword));
-            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
             var newHashPassword = userManager.PasswordHasher.HashPassword(user, password.NewPassword);
             user.PasswordHash = newHashPassword;
-            userManager.UpdateAsync(user).Wait();
+            await userManager.UpdateAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DeleteProfileImage()
+        public async Task<IActionResult> DeleteProfileImage()
         {
-            var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+            var user = await userManager.FindByNameAsync(User.Identity.Name);
             user.ProfileImagePath = "/images/Profiles/defaultAvatar.jpg";
-            userManager.UpdateAsync(user).Wait();
+            await userManager.UpdateAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete()
+        public async Task<IActionResult> Delete()
         {
             var name = User.Identity.Name;
-            var user = userManager.FindByNameAsync(name).Result;
-            userManager.DeleteAsync(user).Wait();
-            cartRepository.Remove(name);
-            favouritesRepository.RemoveFavourites(name);
-            comparisonRepository.RemoveComparison(name);
+            var user = await userManager.FindByNameAsync(name);
+            await userManager.DeleteAsync(user);
+            await cartRepository.RemoveAsync(name);
+            await favouritesRepository.RemoveFavouritesAsync(name);
+            await comparisonRepository.RemoveComparisonAsync(name);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -12,38 +12,38 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public List<Order> GetAll()
+        public async Task<List<Order>> GetAllAsync()
         {
-            return databaseContext.Orders
+            return await databaseContext.Orders
                 .Include(o => o.DeliveryData)
                 .Include(o => o.Items)
                 .ThenInclude(ci => ci.Product)
-                .ToList();
+                .ToListAsync();
         }
 
-        public void Add(Order order)
+        public async Task AddAsync(Order order)
         {
-            databaseContext.Orders.Add(order);
-            databaseContext.SaveChanges();
+            await databaseContext.Orders.AddAsync(order);
+            await databaseContext.SaveChangesAsync();
         }
 
-        public void UpdateStatus(OrderStatus newStatus, Guid orderId)
+        public async Task UpdateStatusAsync(OrderStatus newStatus, Guid orderId)
         {
-            var order = databaseContext.Orders
-                .FirstOrDefault(o => o.Id == orderId);
+            var order = await databaseContext.Orders
+                .FirstOrDefaultAsync(o => o.Id == orderId);
             if (order is null)
                 throw new NullReferenceException("Заказа с таким id нет в базе данных");
             order.Status = newStatus;
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public Order TryGetOrderById(Guid orderId)
+        public async Task<Order> TryGetOrderByIdAsync(Guid orderId)
         {
-            return databaseContext.Orders
+            return await databaseContext.Orders
                 .Include(o => o.DeliveryData)
                 .Include(o => o.Items)
                 .ThenInclude(ci => ci.Product)
-                .FirstOrDefault(o => o.Id == orderId);
+                .FirstOrDefaultAsync(o => o.Id == orderId);
         }
     }
 }

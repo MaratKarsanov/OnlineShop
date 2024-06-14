@@ -4,11 +4,11 @@ namespace OnlineShop.Db.Repositories.Interfaces
 {
     public interface IFavouritesRepository
     {
-        void AddProduct(Product product, string userId);
-        Favourites AddFavourites(string userId);
-        void Clear(string userId);
-        void RemoveProduct(Product product, string userId);
-        void RemoveFavourites(string userId);
-        Favourites TryGetByUserName(string userId);
+        Task AddProductAsync(Product product, string userId);
+        Task<Favourites> AddFavouritesAsync(string userId);
+        Task ClearAsync(string userId);
+        Task RemoveProductAsync(Product product, string userId);
+        Task RemoveFavouritesAsync(string userId);
+        Task<Favourites> TryGetByUserNameAsync(string userId);
     }
 }

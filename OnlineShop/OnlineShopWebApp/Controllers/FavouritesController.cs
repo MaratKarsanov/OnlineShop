@@ -22,29 +22,29 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var favourites = favouritesRepository.TryGetByUserName(User.Identity.Name);
+            var favourites = await favouritesRepository.TryGetByUserNameAsync(User.Identity.Name);
             if (favourites is null)
-                favourites = favouritesRepository.AddFavourites(User.Identity.Name);
+                favourites = await favouritesRepository.AddFavouritesAsync(User.Identity.Name);
             return View(mapper.Map<List<ProductViewModel>>(favourites.Items));
         }
 
-        public IActionResult Add(Guid productId,
+        public async Task<IActionResult> Add(Guid productId,
             string controllerName = "Home", 
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetById(productId);
-            favouritesRepository.AddProduct(product, User.Identity.Name);
+            var product = await productRepository.TryGetByIdAsync(productId);
+            await favouritesRepository.AddProductAsync(product, User.Identity.Name);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
 
-        public IActionResult Remove(Guid productId,
+        public async Task<IActionResult> Remove(Guid productId,
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetById(productId);
-            favouritesRepository.RemoveProduct(product, User.Identity.Name);
+            var product = await productRepository.TryGetByIdAsync(productId);
+            await favouritesRepository.RemoveProductAsync(product, User.Identity.Name);
             return RedirectToAction(nameof(Index), controllerName, new {pageNumber, id = productId});
         }
     }

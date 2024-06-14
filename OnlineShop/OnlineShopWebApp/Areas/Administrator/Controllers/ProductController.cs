@@ -25,43 +25,43 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.imagesProvider = imagesProvider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(productRepository.GetAll().ToProductViewModels());
+            return View((await productRepository.GetAllAsync()).ToProductViewModels());
         }
 
-        public IActionResult Remove(Guid productId)
+        public async Task<IActionResult> Remove(Guid productId)
         {
-            productRepository.Remove(productId);
+            await productRepository.RemoveAsync(productId);
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(AddProductViewModel productViewModel)
+        public async Task<IActionResult> Add(AddProductViewModel productViewModel)
         {
             if (!ModelState.IsValid)
                 return View();
             var imagesPaths = imagesProvider
                 .SaveFiles(productViewModel.UploadedFiles, ImageFolders.Products);
-            productRepository.Add(productViewModel.ToProduct(imagesPaths));
+            await productRepository.AddAsync(productViewModel.ToProduct(imagesPaths));
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid productId)
+        public async Task<IActionResult> Edit(Guid productId)
         {
-            var product = productRepository.TryGetById(productId);
+            var product = await productRepository.TryGetByIdAsync(productId);
             return View(product.ToEditProductViewModel());
         }
 
         [HttpPost]
-        public IActionResult Edit(EditProductViewModel productViewModel)
+        public async Task<IActionResult> Edit(EditProductViewModel productViewModel)
         {
             if (!ModelState.IsValid)
                 return View();
@@ -76,13 +76,13 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             {
                 productViewModel.ImagesPaths = new List<string>();
             }
-            productRepository.EditProduct(productViewModel.ToProduct());
+            await productRepository.EditProductAsync(productViewModel.ToProduct());
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DeleteImage(Guid productId, string imageUrl)
+        public async Task<IActionResult> DeleteImage(Guid productId, string imageUrl)
         {
-            productRepository.RemoveImage(productId, imageUrl);
+            await productRepository.RemoveImageAsync(productId, imageUrl);
             var imageFileName = imageUrl.Split('/').Last();
             imagesProvider.DeleteFile(imageFileName, ImageFolders.Products);
             return RedirectToAction(nameof(Edit), new { productId });

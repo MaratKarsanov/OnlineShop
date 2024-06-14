@@ -25,19 +25,19 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index(Guid id)
+        public async Task<IActionResult> Index(Guid id)
         {
-            var product = productRepository.TryGetById(id);
+            var product = await productRepository.TryGetByIdAsync(id);
             var showingProduct = product.ToProductViewModel();
             var userName = User.Identity.Name;
             if (userName is not null && userName != string.Empty)
             {
-                var favourites = favouritesRepository.TryGetByUserName(userName);
+                var favourites = await favouritesRepository.TryGetByUserNameAsync(userName);
                 if (favourites is null)
-                    favourites = favouritesRepository.AddFavourites(userName);
-                var comparison = comparisonRepository.TryGetByUserId(userName);
+                    favourites = await favouritesRepository.AddFavouritesAsync(userName);
+                var comparison = await comparisonRepository.TryGetByUserIdAsync(userName);
                 if (comparison is null)
-                    comparison = comparisonRepository.AddComparison(userName);
+                    comparison = await comparisonRepository.AddComparisonAsync(userName);
                 var favouriteProducts = favourites.Items.ToProductViewModels();
                 var comparisonProducts = comparison.Items.ToProductViewModels();
                 showingProduct.IsInFavourites = favouriteProducts.Contains(showingProduct);

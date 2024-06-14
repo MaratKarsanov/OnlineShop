@@ -22,26 +22,26 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartRepository.TryGetByLogin(User.Identity.Name);
+            var cart = await cartRepository.TryGetByLoginAsync(User.Identity.Name);
             if (cart is null)
-                cart = cartRepository.AddCart(User.Identity.Name);
+                cart = await cartRepository.AddCartAsync(User.Identity.Name);
             return View(mapper.Map<CartViewModel>(cart));
         }
 
-        public IActionResult Add(Guid productId)
+        public async Task<IActionResult> Add(Guid productId)
         {
             var userLogin = User.Identity.Name;
-            var product = productRepository.TryGetById(productId);
-            cartRepository.AddProduct(product, userLogin);
+            var product = await productRepository.TryGetByIdAsync(productId);
+            await cartRepository.AddProductAsync(product, userLogin);
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DecreaseAmount(Guid productId)
+        public async Task<IActionResult> DecreaseAmount(Guid productId)
         {
             var userLogin = User.Identity.Name;
-            cartRepository.DecreaseAmount(productId, userLogin);
+            await cartRepository.DecreaseAmountAsync(productId, userLogin);
             return RedirectToAction(nameof(Index));
         }
     }

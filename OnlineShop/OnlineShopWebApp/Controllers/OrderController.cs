@@ -28,18 +28,18 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(DeliveryDataViewModel deliveryDataVm)
+        public async Task<IActionResult> Add(DeliveryDataViewModel deliveryDataVm)
         {
             if (!ModelState.IsValid)
                 return View(nameof(Index));
             var userName = User.Identity.Name;
-            var cart = cartRepository.TryGetByLogin(userName);
+            var cart = await cartRepository.TryGetByLoginAsync(userName);
             var deliveryData = mapper.Map<DeliveryData>(deliveryDataVm);
             var newOrder = new Order()
             {
@@ -47,8 +47,8 @@ namespace OnlineShopWebApp.Controllers
                 Items = cart.Items,
                 DeliveryData = deliveryData
             };
-            orderRepository.Add(newOrder);
-            cartRepository.Remove(userName);
+            await orderRepository.AddAsync(newOrder);
+            await cartRepository.RemoveAsync(userName);
             return RedirectToAction(nameof(Index), "Home");
         }
     }

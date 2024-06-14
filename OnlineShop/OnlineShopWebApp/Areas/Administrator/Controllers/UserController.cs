@@ -42,32 +42,32 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.imagesProvider = imagesProvider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(userManager.Users.Select(Helpers.Mapping.ToUserViewModel));
+            return View(userManager.Users.Select(Mapping.ToUserViewModel));
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Add(RegistrationData registrationData)
+        public async Task<IActionResult> Add(RegistrationData registrationData)
         {
             if (ModelState.IsValid)
             {
-                User user = new User()
+                var user = new User()
                 {
                     Email = registrationData.UserName,
                     UserName = registrationData.UserName,
                     PhoneNumber = registrationData.PhoneNumber
                 };
-                var result = userManager.CreateAsync(user, registrationData.Password).Result;
+                var result = await userManager.CreateAsync(user, registrationData.Password);
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, Constants.UserRoleName).Wait();
+                    await userManager.AddToRoleAsync(user, Constants.UserRoleName);
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -79,16 +79,16 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             return View(registrationData);
         }
 
-        public IActionResult Edit(string login)
+        public async Task<IActionResult> Edit(string login)
         {
-            var user = userManager.FindByNameAsync(login).Result;
+            var user = await userManager.FindByNameAsync(login);
             return View(user.ToUserViewModel());
         }
 
         [HttpGet]
-        public IActionResult EditData(string login)
+        public async Task<IActionResult> EditData(string login)
         {
-            var user = userManager.FindByNameAsync(login).Result;
+            var user = await userManager.FindByNameAsync(login);
             var userData = new EditUserDataViewModel()
             {
                 UserName = user.UserName,
@@ -99,11 +99,11 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditData(string login, EditUserDataViewModel newUserData)
+        public async Task<IActionResult> EditData(string login, EditUserDataViewModel newUserData)
         {
             if (!ModelState.IsValid)
                 return View(newUserData);
-            var user = userManager.FindByNameAsync(login).Result;
+            var user = await userManager.FindByNameAsync(login);
             user.PhoneNumber = newUserData.PhoneNumber;
             user.UserName = newUserData.UserName;
             if (newUserData.UploadedFile is not null
@@ -112,34 +112,34 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
                 user.ProfileImagePath = imagesProvider
                     .SaveFile(newUserData.UploadedFile, ImageFolders.Profiles);
             }
-            userManager.UpdateAsync(user).Wait();
+            await userManager.UpdateAsync(user);
             return RedirectToAction(nameof(Edit), new { login });
         }
 
         [HttpGet]
-        public IActionResult ChangePassword(string login)
+        public async Task<IActionResult> ChangePassword(string login)
         {
             ViewData["login"] = login;
             return View();
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangeUserPasswordViewModel password, string login)
+        public async Task<IActionResult> ChangePassword(ChangeUserPasswordViewModel password, string login)
         {
             if (!ModelState.IsValid)
                 return RedirectToAction(nameof(ChangePassword));
-            var user = userManager.FindByNameAsync(login).Result;
+            var user = await userManager.FindByNameAsync(login);
             var newHashPassword = userManager.PasswordHasher.HashPassword(user, password.NewPassword);
             user.PasswordHash = newHashPassword;
-            userManager.UpdateAsync(user).Wait();
+            await userManager.UpdateAsync(user);
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public IActionResult ChangeRole(string login)
+        public async Task<IActionResult> ChangeRole(string login)
         {
-            var user = userManager.FindByNameAsync(login).Result;
-            var userRoles = userManager.GetRolesAsync(user).Result;
+            var user = await userManager.FindByNameAsync(login);
+            var userRoles = await userManager.GetRolesAsync(user);
             var roles = roleManager.Roles;
             ViewData["login"] = user.UserName;
             ViewBag.userRoles = userRoles.ToHashSet();
@@ -147,35 +147,35 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(Dictionary<string, bool> userRolesViewModels, string login)
+        public async Task<IActionResult> ChangeRole(Dictionary<string, bool> userRolesViewModels, string login)
         {
             if (!ModelState.IsValid)
                 return View();
             var selectedRoles = userRolesViewModels.Select(x => x.Key);
-            var user = userManager.FindByNameAsync(login).Result;
-            var userRoles = userManager.GetRolesAsync(user).Result;
-            userManager.RemoveFromRolesAsync(user, userRoles).Wait();
-            userManager.AddToRolesAsync(user, selectedRoles).Wait();
+            var user = await userManager.FindByNameAsync(login);
+            var userRoles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, userRoles);
+            await userManager.AddToRolesAsync(user, selectedRoles);
             if (login == User.Identity.Name && !userRolesViewModels.ContainsKey("Administrator"))
                 return RedirectToAction("Index", "Home", new { area = "" });
             return RedirectToAction(nameof(Edit), new { login });
         }
 
-        public IActionResult DeleteProfileImage(string login)
+        public async Task<IActionResult> DeleteProfileImage(string login)
         {
-            var user = userManager.FindByNameAsync(login).Result;
+            var user = await userManager.FindByNameAsync(login);
             user.ProfileImagePath = "/images/Profiles/defaultAvatar.jpg";
-            userManager.UpdateAsync(user).Wait();
+            await userManager.UpdateAsync(user);
             return RedirectToAction(nameof(Edit), new { login });
         }
 
-        public IActionResult Delete(string login)
+        public async Task<IActionResult> Delete(string login)
         {
-            var user = userManager.FindByNameAsync(login).Result;
-            userManager.DeleteAsync(user).Wait();
-            cartRepository.Remove(login);
-            favouritesRepository.RemoveFavourites(login);
-            comparisonRepository.RemoveComparison(login);
+            var user = await userManager.FindByNameAsync(login);
+            await userManager.DeleteAsync(user);
+            await cartRepository.RemoveAsync(login);
+            await favouritesRepository.RemoveFavouritesAsync(login);
+            await comparisonRepository.RemoveComparisonAsync(login);
             return RedirectToAction(nameof(Index));
         }
     }

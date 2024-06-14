@@ -22,35 +22,35 @@ namespace OnlineShopWebApp.Controllers
             this.mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var comparison = comparisonRepository.TryGetByUserId(User.Identity.Name);
+            var comparison = await comparisonRepository.TryGetByUserIdAsync(User.Identity.Name);
             if (comparison is null)
-                comparison = comparisonRepository.AddComparison(User.Identity.Name);
+                comparison = await comparisonRepository.AddComparisonAsync(User.Identity.Name);
             return View(mapper.Map<ComparisonViewModel>(comparison));
         }
 
-        public IActionResult Add(Guid productId,
+        public async Task<IActionResult> Add(Guid productId,
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetById(productId);
+            var product = await productRepository.TryGetByIdAsync(productId);
             var userLogin = User.Identity.Name;
             if (userLogin is null || userLogin == string.Empty)
                 return RedirectToAction(nameof(Index));
-            comparisonRepository.AddProduct(product, userLogin);
+            await comparisonRepository.AddProductAsync(product, userLogin);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
 
-        public IActionResult Remove(Guid productId,
+        public async Task<IActionResult> Remove(Guid productId,
             string controllerName = "Home",
             int pageNumber = 1)
         {
-            var product = productRepository.TryGetById(productId);
+            var product = await productRepository.TryGetByIdAsync(productId);
             var userLogin = User.Identity.Name;
             if (userLogin is null || userLogin == string.Empty)
                 return RedirectToAction(nameof(Index));
-            comparisonRepository.RemoveProduct(product, userLogin);
+            await comparisonRepository.RemoveProductAsync(product, userLogin);
             return RedirectToAction(nameof(Index), controllerName, new { pageNumber, id = productId });
         }
     }

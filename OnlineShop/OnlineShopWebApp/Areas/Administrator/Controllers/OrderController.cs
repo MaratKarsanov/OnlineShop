@@ -25,23 +25,22 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             this.orderRepository = orderRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //return View(Helpers.MappingHelper.ToOrderViewModels(orderRepository.GetAll()));
-            return View(mapper.Map<List<OrderViewModel>>(orderRepository.GetAll()));
+            return View(mapper.Map<List<OrderViewModel>>(await orderRepository.GetAllAsync()));
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid orderId)
+        public async Task<IActionResult> Edit(Guid orderId)
         {
-            var order = orderRepository.TryGetOrderById(orderId);
+            var order = await orderRepository.TryGetOrderByIdAsync(orderId);
             return View(mapper.Map<OrderViewModel>(order));
         }
 
         [HttpPost]
-        public IActionResult UpdateStatus(Guid orderId, OrderStatus status)
+        public async Task<IActionResult> UpdateStatus(Guid orderId, OrderStatus status)
         {
-            orderRepository.UpdateStatus(status, orderId);
+            await orderRepository.UpdateStatusAsync(status, orderId);
             return RedirectToAction(nameof(Index));
         }
     }

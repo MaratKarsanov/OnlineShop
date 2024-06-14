@@ -13,15 +13,15 @@ namespace OnlineShop.Db.Repositories
             this.databaseContext = databaseContext;
         }
 
-        public void Add(Product product)
+        public async Task AddAsync(Product product)
         {
-            databaseContext.Products.Add(product);
-            databaseContext.SaveChanges();
+            await databaseContext.Products.AddAsync(product);
+            await databaseContext.SaveChangesAsync();
         }
 
-        public void EditProduct(Product newProduct)
+        public async Task EditProductAsync(Product newProduct)
         {
-            var product = TryGetById(newProduct.Id);
+            var product = await TryGetByIdAsync(newProduct.Id);
             if (product is null)
                 return;
             product.Name = newProduct.Name;
@@ -33,43 +33,43 @@ namespace OnlineShop.Db.Repositories
                 product.ProductImages.Add(image);
                 databaseContext.Images.Add(image);
             }
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public List<Product> GetAll()
+        public async Task<List<Product>> GetAllAsync()
         {
-            return databaseContext.Products
+            return await databaseContext.Products
                 .Include(p => p.ProductImages)
-                .ToList();
+                .ToListAsync();
         }
 
-        public void Remove(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
-            var product = TryGetById(id);
+            var product = await TryGetByIdAsync(id);
             if (product is null)
                 return;
             databaseContext.Products.Remove(product);
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public void RemoveImage(Guid id, string imageUrl)
+        public async Task RemoveImageAsync(Guid id, string imageUrl)
         {
-            var product = TryGetById(id);
+            var product = await TryGetByIdAsync(id);
             if (product is null)
                 return;
-            var image = databaseContext.Images.FirstOrDefault(i => i.Url == imageUrl);
+            var image = await databaseContext.Images.FirstOrDefaultAsync(i => i.Url == imageUrl);
             if (image is null)
                 return;
             product.ProductImages.Remove(image);
             databaseContext.Images.Remove(image);
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public Product TryGetById(Guid id)
+        public async Task<Product> TryGetByIdAsync(Guid id)
         {
-            return databaseContext.Products
+            return await databaseContext.Products
                 .Include(p => p.ProductImages)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
     }
 }
