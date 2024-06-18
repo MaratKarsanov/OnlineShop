@@ -12,10 +12,10 @@ namespace OnlineShopWebApp.Views.Shared.Components.Comparison
             this.comparisonRepository = comparisonRepository;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var userLogin = User.Identity.Name;
-            var comparison = comparisonRepository.TryGetByUserIdAsync(userLogin);
+            var comparison = await comparisonRepository.TryGetByUserIdAsync(userLogin);
             var productsCount = comparison?.Items.Count ?? 0;
             return View("Comparison", productsCount);
         }

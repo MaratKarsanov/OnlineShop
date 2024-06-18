@@ -12,10 +12,10 @@ namespace OnlineShopWebApp.Views.Shared.Components
             this.cartRepository = cartRepository;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var userName = User.Identity.Name;
-            var cart = cartRepository.TryGetByLogin(userName);
+            var cart = await cartRepository.TryGetByLoginAsync(userName);
             var productsCount = cart?.Amount ?? 0;
             return View("Cart", productsCount);
         }

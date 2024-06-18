@@ -12,10 +12,10 @@ namespace OnlineShopWebApp.Views.Shared.Components.Favourites
             this.favouritesRepository = favouritesRepository;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var userName = User.Identity.Name;
-            var favourities = favouritesRepository.TryGetByUserNameAsync(userName);
+            var favourities = await favouritesRepository.TryGetByUserNameAsync(userName);
             return View("Favourites", favourities?.Count ?? 0);
         }
     }

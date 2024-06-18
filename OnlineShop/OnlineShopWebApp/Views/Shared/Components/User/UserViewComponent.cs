@@ -13,11 +13,11 @@ namespace OnlineShopWebApp.Views.Shared.Components.UserProfile
             this.userManager = userManager;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             try
             {
-                var user = userManager.FindByNameAsync(User.Identity.Name).Result;
+                var user = await userManager.FindByNameAsync(User.Identity.Name);
                 return View("User", user.ProfileImagePath);
             }
             catch

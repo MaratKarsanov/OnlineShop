@@ -4,7 +4,7 @@ namespace OnlineShopWebApp.Views.Shared.Components.Autorization
 {
     public class AutorizationViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             var userLogin = User.Identity.Name;
             return View("Autorization", userLogin);

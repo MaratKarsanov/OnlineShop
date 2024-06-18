@@ -4,7 +4,7 @@ namespace OnlineShopWebApp.Views.Shared.Components.Administrator
 {
     public class AdministratorViewComponent : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             return View("Administrator", User.IsInRole("Administrator"));
         }
