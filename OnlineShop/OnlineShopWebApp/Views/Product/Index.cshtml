@@ -15,49 +15,142 @@
 <a class="btn btn-light" style="margin:10px" href="/cart/add?productId=@Model.Id" role="button">Добавить в корзину</a>
 @if (!Model.IsInFavourites)
 {
-    <a class="btn btn-light" 
-        asp-action="Add" 
-        asp-controller="Favourites" 
-        asp-route-productId="@Model.Id" 
-        asp-route-controllerName="Product" 
-        role="button">
+    <a class="btn btn-light"
+       asp-action="Add"
+       asp-controller="Favourites"
+       asp-route-productId="@Model.Id"
+       asp-route-controllerName="Product"
+       role="button">
         Добавить в избранное
     </a>
 }
 else
 {
-    <a class="btn btn-light" 
-        asp-action="Remove" 
-        asp-controller="Favourites" 
-        asp-route-productId="@Model.Id" 
-        asp-route-controllerName="Product" 
-        role="button">
+    <a class="btn btn-light"
+       asp-action="Remove"
+       asp-controller="Favourites"
+       asp-route-productId="@Model.Id"
+       asp-route-controllerName="Product"
+       role="button">
         Удалить из избранного
     </a>
 }
 @if (!Model.IsInComparison)
 {
-    <a 
-        class="btn btn-light" 
-        asp-controller="Comparison"
-        asp-action="Add" 
-        asp-route-productId="@Model.Id" 
-        asp-route-pageNumber="@ViewBag.pageNumber" 
-        asp-route-controllerName="Product" 
-        role="button">
+    <a class="btn btn-light"
+       asp-controller="Comparison"
+       asp-action="Add"
+       asp-route-productId="@Model.Id"
+       asp-route-pageNumber="@ViewBag.pageNumber"
+       asp-route-controllerName="Product"
+       role="button">
         Сравнить
     </a>
 }
 else
 {
-    <a 
-        class="btn btn-light" 
-        asp-controller="Comparison"
-        asp-action="Remove" 
-        asp-route-productId="@Model.Id" 
-        asp-route-pageNumber="@ViewBag.pageNumber" 
-        asp-route-controllerName="Product" 
-        role="button">
+    <a class="btn btn-light"
+       asp-controller="Comparison"
+       asp-action="Remove"
+       asp-route-productId="@Model.Id"
+       asp-route-pageNumber="@ViewBag.pageNumber"
+       asp-route-controllerName="Product"
+       role="button">
         Убрать из сравнения
     </a>
 }
+
+
+
+
+
+
+
+
+
+
+
+@if (Model.Reviews.Count != 0)
+{
+    <div class="product-rating">
+        <div class="rating-stars">
+            @for (int i = 0; i < 5; i++)
+            {
+                if (i < Model.AverageGrade)
+                {
+                    <span class="filled">★</span>
+                }
+                else
+                {
+                    <span>★</span>
+                }
+            }
+        </div>
+        <h4>Рейтинг: @Model.AverageGrade из 5</h4>
+    </div>
+}
+else
+{
+    <h4>Будьте первым, кто оценит данный продукт!</h4>
+}
+
+<form asp-controller="Product" asp-action="AddReview" method="post" class="mx-auto my-4 p-3 border rounded" style="max-width: 500px;">
+    <input type="hidden" name="productId" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="textAreaReview">Ваш отзыв</label>
+        <textarea class="form-control" name="text" id="textAreaReview" required rows="5" placeholder="Введите ваш отзыв..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="selectGrade">Оцените продукт</label>
+        <select class="form-control" name="grade" id="selectGrade" required>
+            <option value="">Выберите оценку</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Отправить отзыв</button>
+</form>
+
+@* @if (Model.Reviews != null && Model.Reviews.Any())
+{
+    <div class="product-reviews">
+        <h4>Отзывы</h4>
+        @foreach (var review in Model.Reviews)
+        {
+            var user = await UserManager.FindByIdAsync(review.UserId.ToString());
+
+            <div class="review-container">
+                <p><strong>@user.UserName</strong> (@review.CreationDate.ToString("dd.MM.yyyy")):</p>
+                <div class="rating-stars-small-custom">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        if (i < review.Grade)
+                        {
+                            <span class="filled">★</span>
+                        }
+                        else
+                        {
+                            <span>★</span>
+                        }
+                    }
+                </div>
+
+                <p>@review.Text</p>
+                @if (User.Identity.IsAuthenticated && (review.UserId.ToString() == UserManager.GetUserId(User) || User.IsInRole(Constants.AdminRoleName)))
+                {
+                    <form asp-controller="Products" asp-action="DeleteReview" method="post">
+                        <input type="hidden" name="reviewId" value="@review.Id" />
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить отзыв</button>
+                    </form>
+                }
+            </div>
+        }
+    </div>
+} *@
