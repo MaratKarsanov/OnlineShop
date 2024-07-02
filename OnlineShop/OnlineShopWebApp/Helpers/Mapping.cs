@@ -10,7 +10,7 @@ namespace OnlineShopWebApp.Helpers
     {
         public static List<ProductViewModel> ToProductViewModels(this List<Product> products)
         {
-            return products.Select(ToProductViewModel).ToList();
+            return products.Select(p => p.ToProductViewModel()).ToList();
         }
 
         public static ProductViewModel ToProductViewModel(this Product product)

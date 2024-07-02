@@ -1,4 +1,5 @@
 ﻿@model ProductViewModel
+@inject UserManager<User> UserManager
 
 <div class="row">
     <div class="col-6">
@@ -95,7 +96,7 @@ else
 }
 
 <form asp-controller="Product" asp-action="AddReview" method="post" class="mx-auto my-4 p-3 border rounded" style="max-width: 500px;">
-    <input type="hidden" name="productId" value="@Model.Id" />
+    <input type="hidden" name="ProductId" value="@Model.Id" />
 
     <div class="form-group">
         <label for="textAreaReview">Ваш отзыв</label>
@@ -117,7 +118,7 @@ else
     <button type="submit" class="btn btn-primary">Отправить отзыв</button>
 </form>
 
-@* @if (Model.Reviews != null && Model.Reviews.Any())
+@if (Model.Reviews != null && Model.Reviews.Any())
 {
     <div class="product-reviews">
         <h4>Отзывы</h4>
@@ -142,9 +143,9 @@ else
                 </div>
 
                 <p>@review.Text</p>
-                @if (User.Identity.IsAuthenticated && (review.UserId.ToString() == UserManager.GetUserId(User) || User.IsInRole(Constants.AdminRoleName)))
+                @if (User.Identity.IsAuthenticated && (review.UserId.ToString() == UserManager.GetUserId(User) || User.IsInRole(Constants.AdministratorRoleName)))
                 {
-                    <form asp-controller="Products" asp-action="DeleteReview" method="post">
+                    <form asp-controller="Product" asp-action="DeleteReview" method="post">
                         <input type="hidden" name="reviewId" value="@review.Id" />
                         <input type="hidden" name="productId" value="@Model.Id" />
                         <button type="submit" class="btn btn-danger btn-sm">Удалить отзыв</button>
@@ -153,4 +154,4 @@ else
             </div>
         }
     </div>
-} *@
+}

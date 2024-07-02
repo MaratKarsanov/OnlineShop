@@ -34,13 +34,11 @@ namespace OnlineShopWebApp.ApiClients
         public async Task<ReviewApiModel> AddAsync(AddReviewApiModel addReviewApiModel)
         {
             var response = await _httpClient.PostAsJsonAsync("Review/AddReview", addReviewApiModel);
-
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 string content = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(content);
             }
-
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<ReviewApiModel>();
         }
