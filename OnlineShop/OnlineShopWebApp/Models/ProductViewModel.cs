@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Identity.Client;
+using OnlineShopWebApp.ApiModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShopWebApp.Models
 {
@@ -20,6 +22,9 @@ namespace OnlineShopWebApp.Models
         public string ImagePath => ImagesPaths == null || ImagesPaths.Length == 0
                            ? "/images/DefaultImg.jpg"
                            : ImagesPaths[0];
+        public List<ReviewApiModel>? Reviews { get; set; } = new List<ReviewApiModel>();
+        public decimal AverageGrade => Reviews.Sum(r => r.Grade) / Reviews.Count;
+
         public override int GetHashCode()
         {
             return Id.GetHashCode();

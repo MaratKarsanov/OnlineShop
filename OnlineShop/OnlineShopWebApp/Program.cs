@@ -6,6 +6,7 @@ using OnlineShop.Db.Repositories;
 using Microsoft.AspNetCore.Identity;
 using OnlineShopWebApp;
 using OnlineShopWebApp.Helpers;
+using OnlineShopWebApp.ApiClients;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient("ReviewApi", httpClient =>
+{
+    httpClient.BaseAddress = new Uri("https://localhost:7274/");
+});
+
+builder.Services.AddTransient<ReviewsApiClient>();
 builder.Services.AddTransient<IProductRepository, ProductDbRepository>();
 builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
