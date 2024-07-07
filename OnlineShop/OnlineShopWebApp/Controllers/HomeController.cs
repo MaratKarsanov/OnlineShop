@@ -1,9 +1,12 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
+using OnlineShopWebApp.Redis;
+using System.Text.Json;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -13,16 +16,19 @@ namespace OnlineShopWebApp.Controllers
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
         private IMapper mapper;
+        private readonly RedisCacheService redisCacheService;
 
         public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
-            IMapper mapper)
+            IMapper mapper,
+            RedisCacheService redisCacheService)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
             this.comparisonRepository = comparisonRepository;
             this.mapper = mapper;
+            this.redisCacheService = redisCacheService;
         }
 
         public async Task<IActionResult> Index(string searchString = "", int pageNumber = 1)
@@ -30,7 +36,17 @@ namespace OnlineShopWebApp.Controllers
             ViewData["searchString"] = searchString;
             var userName = User.Identity.Name;
             var searchStringLower = searchString.ToLower();
-            var products = await productRepository.GetAllAsync();
+            var products = new List<ProductViewModel>();
+            var cachedProducts = await redisCacheService.TryGetAsync(Constants.ProductsRedisKey);
+            if (!string.IsNullOrEmpty(cachedProducts))
+            {
+                products = JsonSerializer.Deserialize<List<ProductViewModel>>(cachedProducts);
+            }
+            else
+            {
+                products = (await productRepository.GetAllAsync()).ToProductViewModels();
+                await redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
+            }
             var foundedProducts = products
                 .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower));
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
@@ -38,8 +54,7 @@ namespace OnlineShopWebApp.Controllers
             var showingProducts = foundedProducts
                 .Skip(skippedProductsCount)
                 .Take(Constants.PageSize)
-                .ToList()
-                .ToProductViewModels();
+                .ToList();
             ViewBag.pageNumber = pageNumber;
             if (userName is not null && userName != string.Empty)
             {
@@ -49,8 +64,10 @@ namespace OnlineShopWebApp.Controllers
                 var comparison = await comparisonRepository.TryGetByUserIdAsync(userName);
                 if (comparison is null)
                     comparison = await comparisonRepository.AddComparisonAsync(userName);
-                var favouriteProducts = favourites.Items.ToProductViewModels();
-                var comparisonProducts = comparison.Items.ToProductViewModels();
+                //var favouriteProducts = favourites.Items.ToProductViewModels();
+                //var comparisonProducts = comparison.Items.ToProductViewModels();
+                var favouriteProducts = mapper.Map<List<ProductViewModel>>(favourites.Items);
+                var comparisonProducts = mapper.Map<List<ProductViewModel>>(comparison.Items);
                 foreach (var p in showingProducts)
                 {
                     p.IsInFavourites = favouriteProducts.Contains(p);

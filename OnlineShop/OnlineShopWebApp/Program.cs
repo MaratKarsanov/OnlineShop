@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using OnlineShopWebApp;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.ApiClients;
+using OnlineShopWebApp.Redis;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,19 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
 });
+
+var redisConfiguration = ConfigurationOptions.Parse(builder.Configuration.GetSection("Redis:ConnectionString").Value);
+redisConfiguration.AbortOnConnectFail = false;
+redisConfiguration.ConnectTimeout = 10000;
+redisConfiguration.SyncTimeout = 10000;
+redisConfiguration.ReconnectRetryPolicy = new LinearRetry(10000);
+
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    return ConnectionMultiplexer.Connect(redisConfiguration);
+});
+
+builder.Services.AddSingleton<RedisCacheService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

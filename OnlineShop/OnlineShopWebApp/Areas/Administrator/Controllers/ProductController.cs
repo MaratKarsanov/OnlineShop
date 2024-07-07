@@ -2,9 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Repositories;
 using OnlineShop.Db.Repositories.Interfaces;
+using OnlineShopWebApp.ApiClients;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Helpers;
+using OnlineShopWebApp.Models;
+using OnlineShopWebApp.Redis;
+using Serilog;
+using System.Text.Json;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
@@ -15,14 +21,20 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         private IProductRepository productRepository;
         private IMapper mapper;
         private ImagesProvider imagesProvider;
+        private RedisCacheService redisCacheService;
+        private ReviewsApiClient reviewsApiClient;
 
         public ProductController(IProductRepository productRepository,
             IMapper mapper,
-            ImagesProvider imagesProvider)
+            ImagesProvider imagesProvider,
+            RedisCacheService redisCacheService,
+            ReviewsApiClient reviewsApiClient)
         {
             this.productRepository = productRepository;
             this.mapper = mapper;
             this.imagesProvider = imagesProvider;
+            this.redisCacheService = redisCacheService;
+            this.reviewsApiClient = reviewsApiClient;
         }
 
         public async Task<IActionResult> Index()
@@ -33,6 +45,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         public async Task<IActionResult> Remove(Guid productId)
         {
             await productRepository.RemoveAsync(productId);
+            await RemoveCacheAsync();
+            await UpdateCacheAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -50,6 +64,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             var imagesPaths = imagesProvider
                 .SaveFiles(productViewModel.UploadedFiles, ImageFolders.Products);
             await productRepository.AddAsync(productViewModel.ToProduct(imagesPaths));
+            await RemoveCacheAsync();
+            await UpdateCacheAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -77,6 +93,8 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
                 productViewModel.ImagesPaths = new List<string>();
             }
             await productRepository.EditProductAsync(productViewModel.ToProduct());
+            await RemoveCacheAsync();
+            await UpdateCacheAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -85,7 +103,44 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             await productRepository.RemoveImageAsync(productId, imageUrl);
             var imageFileName = imageUrl.Split('/').Last();
             imagesProvider.DeleteFile(imageFileName, ImageFolders.Products);
+            await RemoveCacheAsync();
+            await UpdateCacheAsync();
             return RedirectToAction(nameof(Edit), new { productId });
+        }
+
+        private async Task UpdateCacheAsync()
+        {
+            try
+            {
+                var products = await productRepository.GetAllAsync();
+                var productViewModels = new List<ProductViewModel>();
+
+                foreach (var product in products)
+                {
+                    var reviews = await reviewsApiClient.GetByProductIdAsync(product.Id);
+                    var productViewModel = product.ToProductViewModel();
+                    productViewModel.Reviews = reviews;
+                    productViewModels.Add(productViewModel);
+                }
+                var productsJson = JsonSerializer.Serialize(productViewModels);
+                await redisCacheService.SetAsync(Constants.ProductsRedisKey, productsJson);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Ошибка обновления кеша Redis");
+            }
+        }
+
+        private async Task RemoveCacheAsync()
+        {
+            try
+            {
+                await redisCacheService.RemoveAsync(Constants.ProductsRedisKey);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Ошибка удаления кеша Redis");
+            }
         }
     }
 }

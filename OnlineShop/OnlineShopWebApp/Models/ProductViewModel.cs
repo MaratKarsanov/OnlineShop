@@ -23,7 +23,15 @@ namespace OnlineShopWebApp.Models
                            ? "/images/DefaultImg.jpg"
                            : ImagesPaths[0];
         public List<ReviewApiModel>? Reviews { get; set; } = new List<ReviewApiModel>();
-        public decimal AverageGrade => Reviews.Sum(r => r.Grade) / Reviews.Count;
+        public decimal AverageGrade
+        {
+            get
+            {
+                if (Reviews.Count != 0)
+                    return Reviews.Sum(r => r.Grade) / Reviews.Count;
+                return 0;
+            }
+        }
 
         public override int GetHashCode()
         {

@@ -8,5 +8,6 @@
         public static string ImageLink => "/images/DefaultImg.jpg";
         public const string AdministratorRoleName = "Administrator";
         public const string UserRoleName = "User";
+        public const string ProductsRedisKey = "products";
     }
 }
