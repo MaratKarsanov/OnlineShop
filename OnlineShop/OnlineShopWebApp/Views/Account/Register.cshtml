@@ -1,37 +1,40 @@
 ﻿@model RegistrationData
 
-<form method="post" target="_self">
-    <h2>Регистрация</h2>
-    <div class="validation" asp-validation-summary="All"></div>
-    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
-    <fieldset>
-        <div>
-            <label asp-for="UserName">Имя пользователя:</label>
-            <input type="text" asp-for="UserName" placeholder="Login">
-            <span asp-validation-for="UserName"></span>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center mb-4">Регистрация пользователя</h2>
+            <form method="post" target="_self">
+                <div class="validation" asp-validation-summary="All"></div>
+                <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label">Имя пользователя:</label>
+                    <input type="text" asp-for="UserName" class="form-control">
+                    <span asp-validation-for="UserName"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Пароль:</label>
+                    <input type="password" asp-for="Password" class="form-control">
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="RepeatedPassword" class="form-label">Повторите пароль:</label>
+                    <input type="password" asp-for="RepeatedPassword" class="form-control">
+                    <span asp-validation-for="RepeatedPassword"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label">Телефон:</label>
+                    <input type="text" asp-for="PhoneNumber" class="form-control">
+                    <span asp-validation-for="PhoneNumber"></span>
+                </div>
+                <button type="submit"
+                        class="btn btn-primary w-100"
+                        asp-area=""
+                        asp-action="Register"
+                        asp-controller="Account">
+                    Зарегистрироваться
+                </button>
+            </form>
         </div>
-        <div>
-            <label asp-for="Password">Пароль:</label>
-            <input type="password" asp-for="Password" placeholder="Password">
-            <span asp-validation-for="Password"></span>
-        </div>
-        <div>
-            <label asp-for="RepeatedPassword">Повторите пароль:</label>
-            <input type="password" asp-for="RepeatedPassword" placeholder="Repeat password">
-            <span asp-validation-for="RepeatedPassword"></span>
-        </div>
-        <div>
-            <label asp-for="PhoneNumber">Телефон:</label>
-            <input type="text" asp-for="PhoneNumber" placeholder="Phone Number">
-            <span asp-validation-for="PhoneNumber"></span>
-        </div>
-    </fieldset>
-    <div>
-        <button type="submit"
-                asp-area=""
-                asp-action="Register"
-                asp-controller="Account">
-            Зарегистрироваться
-        </button>
     </div>
-</form>
+</div>

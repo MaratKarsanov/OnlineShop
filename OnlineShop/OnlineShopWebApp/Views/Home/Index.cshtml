@@ -3,26 +3,28 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
-    <div class="col-md-6">
-        <form class="d-flex" asp-area="" asp-action="Index" asp-controller="Home" method="get">
-            <input name="searchString"
-                   class="form-control me-1"
-                   type="search"
-                   placeholder="Поиск по названию и описанию"
-                   aria-label="Search"
-                   value="@ViewData["searchString"]">
-            <button class="btn btn-dark" type="submit">Поиск</button>
-        </form>
-    </div>
-    <div class="col-md-6">
-        <a class="text-dark"
-           asp-area=""
-           asp-controller="Home"
-           asp-action="Index"
-           asp-route-searchString="">
-            Вернуться к полному списку
-        </a>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="d-flex" asp-area="" asp-action="Index" asp-controller="Home" method="get">
+                <input name="searchString"
+                       class="form-control me-1 mb-3"
+                       type="search"
+                       placeholder="Поиск продуктов"
+                       aria-label="Search"
+                       value="@ViewData["searchString"]">
+                <button class="btn btn-dark" type="submit">Поиск</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <a class="text-dark mb-3"
+               asp-area=""
+               asp-controller="Home"
+               asp-action="Index"
+               asp-route-searchString="">
+                Вернуться к полному списку
+            </a>
+        </div>
     </div>
 </div>
 
