@@ -32,7 +32,7 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     return ConnectionMultiplexer.Connect(redisConfiguration);
 });
 
-builder.Services.AddSingleton<RedisCacheService>();
+builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -56,7 +56,7 @@ builder.Services.AddHttpClient("ReviewApi", httpClient =>
     httpClient.BaseAddress = new Uri("https://localhost:7274/");
 });
 
-builder.Services.AddTransient<ReviewsApiClient>();
+builder.Services.AddTransient<IReviewsApiClient, ReviewsApiClient>();
 builder.Services.AddTransient<IProductRepository, ProductDbRepository>();
 builder.Services.AddTransient<IComparisonRepository, ComparisonDbRepository>();
 builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();

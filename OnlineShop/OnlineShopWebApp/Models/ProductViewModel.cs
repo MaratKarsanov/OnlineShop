@@ -15,7 +15,7 @@ namespace OnlineShopWebApp.Models
         public decimal Cost { get; set; }
 
         [Required(ErrorMessage = "Нет описания")]
-        public string Description { get; set; }
+        public string Description { get; set; } = "";
         public bool IsInFavourites { get; set; }
         public bool IsInComparison { get; set; }
         public string[] ImagesPaths { get; set; }

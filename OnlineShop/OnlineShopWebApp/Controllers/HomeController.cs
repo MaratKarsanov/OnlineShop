@@ -16,13 +16,13 @@ namespace OnlineShopWebApp.Controllers
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
         private IMapper mapper;
-        private readonly RedisCacheService redisCacheService;
+        private readonly IRedisCacheService redisCacheService;
 
         public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
-            RedisCacheService redisCacheService)
+            IRedisCacheService redisCacheService)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
@@ -44,11 +44,15 @@ namespace OnlineShopWebApp.Controllers
             }
             else
             {
-                products = (await productRepository.GetAllAsync()).ToProductViewModels();
+                products = mapper.Map<List<ProductViewModel>>(await productRepository.GetAllAsync());
+                //products = (await productRepository.GetAllAsync()).ToProductViewModels();
+                if (products is null)
+                    return View(new List<ProductViewModel>());
                 await redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
             }
             var foundedProducts = products
-                .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower));
+                .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower))
+                .ToList();
             ViewBag.Pager = new Pager(foundedProducts.Count(), pageNumber);
             var skippedProductsCount = (pageNumber - 1) * Constants.PageSize;
             var showingProducts = foundedProducts

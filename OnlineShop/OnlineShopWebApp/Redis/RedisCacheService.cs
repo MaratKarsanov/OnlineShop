@@ -3,7 +3,7 @@ using StackExchange.Redis;
 
 namespace OnlineShopWebApp.Redis
 {
-    public class RedisCacheService
+    public class RedisCacheService : IRedisCacheService
     {
         private readonly IConnectionMultiplexer redis;
         private readonly SemaphoreSlim mutex = new SemaphoreSlim(1, 1);

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.ApiClients;
 using OnlineShopWebApp.ApiModels;
@@ -18,14 +17,14 @@ namespace OnlineShopWebApp.Controllers
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
         private IMapper mapper;
-        private ReviewsApiClient reviewsApiClient;
+        private IReviewsApiClient reviewsApiClient;
         private UserManager<User> userManager;
 
         public ProductController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
-            ReviewsApiClient reviewsApiClient,
+            IReviewsApiClient reviewsApiClient,
             UserManager<User> userManager)
         {
             this.productRepository = productRepository;
@@ -39,7 +38,8 @@ namespace OnlineShopWebApp.Controllers
         public async Task<IActionResult> Index(Guid id)
         {
             var product = await productRepository.TryGetByIdAsync(id);
-            var showingProduct = product.ToProductViewModel();
+            //var showingProduct = product.ToProductViewModel();
+            var showingProduct = mapper.Map<ProductViewModel>(product);
             var userName = User.Identity.Name;
             if (userName is not null && userName != string.Empty)
             {

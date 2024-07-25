@@ -2,7 +2,7 @@
 
 namespace OnlineShopWebApp.ApiClients
 {
-    public class ReviewsApiClient
+    public class ReviewsApiClient : IReviewsApiClient
     {
         private readonly HttpClient _httpClient;
 
