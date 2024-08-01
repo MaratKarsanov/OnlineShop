@@ -24,6 +24,24 @@ namespace OnlineShop.Db
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Cart)
+                .WithMany(t => t.Items)
+                .HasForeignKey(ci => ci.CartId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany(p => p.CartItems)
+                .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Order)
+                .WithMany(o => o.Items)
+                .HasForeignKey(ci => ci.OrderId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Image>()
                 .HasOne(i => i.Product)
                 .WithMany(p => p.ProductImages)

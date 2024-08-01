@@ -13,7 +13,7 @@
         public Order() // без этого конструктора не передаются данные из представления, не трогать!!!
         {
             Items = new List<CartItem>();
-            CreationTime = DateTime.Now;
+            CreationTime = DateTime.Now.ToUniversalTime();
             Status = OrderStatus.Created;
         }
     }
