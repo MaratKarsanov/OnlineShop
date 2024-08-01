@@ -9,6 +9,7 @@ using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.ApiClients;
 using OnlineShopWebApp.Redis;
 using StackExchange.Redis;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +17,14 @@ builder.Host.UseSerilog((context, configuration) => configuration
 .ReadFrom.Configuration(context.Configuration)
 .Enrich.WithProperty("ApplicationName", "Online Shop"));
 
+//builder.Services.AddDbContext<DatabaseContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
+//});
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("online_shop_karsanov"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("online_shop_karsanov"));
 });
 
 var redisConfiguration = ConfigurationOptions.Parse(builder.Configuration.GetSection("Redis:ConnectionString").Value);
