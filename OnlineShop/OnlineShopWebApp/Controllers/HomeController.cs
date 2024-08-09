@@ -17,18 +17,21 @@ namespace OnlineShopWebApp.Controllers
         private IComparisonRepository comparisonRepository;
         private IMapper mapper;
         private readonly IRedisCacheService redisCacheService;
+        private IImagesRepository imagesRepository;
 
         public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
-            IRedisCacheService redisCacheService)
+            IRedisCacheService redisCacheService,
+            IImagesRepository imagesRepository)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
             this.comparisonRepository = comparisonRepository;
             this.mapper = mapper;
             this.redisCacheService = redisCacheService;
+            this.imagesRepository = imagesRepository;
         }
 
         public async Task<IActionResult> Index(string searchString = "", int pageNumber = 1)
@@ -44,8 +47,19 @@ namespace OnlineShopWebApp.Controllers
             }
             else
             {
-                products = mapper.Map<List<ProductViewModel>>(await productRepository.GetAllAsync());
-                //products = (await productRepository.GetAllAsync()).ToProductViewModels();
+                //products = mapper.Map<List<ProductViewModel>>(await productRepository.GetAllAsync());
+                var dbProducts = await productRepository.GetAllAsync();
+                if (dbProducts.First().ProductImages is null || dbProducts.First().ProductImages.Count == 0)
+                {
+                    foreach (var p in dbProducts)
+                    {
+                        var imageUrl = (await imagesRepository.TryGetImagesByProductIdAsync(p.Id))
+                            .First()
+                            .Url;
+                        productRepository.AddExistingImageAsync(p.Id, imageUrl);
+                    }
+                }
+                products = dbProducts.ToProductViewModels();
                 if (products is null)
                     return View(new List<ProductViewModel>());
                 await redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));

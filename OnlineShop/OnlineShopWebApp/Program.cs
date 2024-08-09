@@ -27,7 +27,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("online_shop_karsanov"));
 });
 
-var redisConfiguration = ConfigurationOptions.Parse(builder.Configuration.GetSection("Redis:ConnectionString").Value);
+var redisConfiguration = ConfigurationOptions
+    .Parse(builder.Configuration.GetSection("Redis:ConnectionString").Value);
 redisConfiguration.AbortOnConnectFail = false;
 redisConfiguration.ConnectTimeout = 10000;
 redisConfiguration.SyncTimeout = 10000;
@@ -42,7 +43,9 @@ builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DatabaseContext>();
+builder.Services
+    .AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<DatabaseContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -59,7 +62,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient("ReviewApi", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("https://localhost:7274/");
+    httpClient.BaseAddress = new Uri("http://reviews_api:80/");
 });
 
 builder.Services.AddTransient<IReviewsApiClient, ReviewsApiClient>();
@@ -69,6 +72,7 @@ builder.Services.AddTransient<IFavouritesRepository, FavouritesDbRepository>();
 builder.Services.AddTransient<ICartRepository, CartDbRepository>();
 builder.Services.AddTransient<IOrderRepository, OrderDbRepository>();
 builder.Services.AddTransient<ImagesProvider>();
+builder.Services.AddTransient<IImagesRepository, ImagesDbRepository>();
 
 var app = builder.Build();
 app.UseSerilogRequestLogging();

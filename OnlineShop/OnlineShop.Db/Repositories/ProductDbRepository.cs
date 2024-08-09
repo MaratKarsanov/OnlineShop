@@ -52,6 +52,18 @@ namespace OnlineShop.Db.Repositories
             await databaseContext.SaveChangesAsync();
         }
 
+        public async Task AddExistingImageAsync(Guid id, string imageUrl)
+        {
+            var product = await TryGetByIdAsync(id);
+            if (product is null)
+                return;
+            var image = await databaseContext.Images.FirstOrDefaultAsync(i => i.Url == imageUrl);
+            if (image is null)
+                return;
+            product.ProductImages.Add(image);
+            await databaseContext.SaveChangesAsync();
+        }
+
         public async Task RemoveImageAsync(Guid id, string imageUrl)
         {
             var product = await TryGetByIdAsync(id);

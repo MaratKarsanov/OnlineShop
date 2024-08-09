@@ -17,6 +17,7 @@ namespace OnlineShopWebApp.XUnitTests
         private Mock<IProductRepository> mockProductsRepository;
         private Mock<IFavouritesRepository> mockFavouritesRepository;
         private Mock<IComparisonRepository> mockComparisonRepository;
+        private Mock<IImagesRepository> mockImagesRepository;
         private Mock<IMapper> mockMapper;
         private Mock<IRedisCacheService> mockRedisCacheService;
         private HomeController homeController;
@@ -28,12 +29,14 @@ namespace OnlineShopWebApp.XUnitTests
             mockRedisCacheService = new Mock<IRedisCacheService>();
             mockFavouritesRepository = new Mock<IFavouritesRepository>();
             mockComparisonRepository = new Mock<IComparisonRepository>();
+            mockImagesRepository = new Mock<IImagesRepository>();
             homeController = new HomeController(
                 mockProductsRepository.Object,
                 mockFavouritesRepository.Object,
                 mockComparisonRepository.Object,
                 mockMapper.Object,
-                mockRedisCacheService.Object
+                mockRedisCacheService.Object,
+                mockImagesRepository.Object
             );
             var context = new DefaultHttpContext();
             context.User = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Name, "testuser@example.com")]));
@@ -52,7 +55,8 @@ namespace OnlineShopWebApp.XUnitTests
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Ahmad Tea Ceylon"
+                    Name = "Ahmad Tea Ceylon", 
+                    ProductImages = new List<Image>()
                 }
             };
             var productViewModels = new List<ProductViewModel>()
@@ -86,23 +90,27 @@ namespace OnlineShopWebApp.XUnitTests
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Ahmad Tea Ceylon"
+                    Name = "Ahmad Tea Ceylon", 
+                    ProductImages = new List<Image>()
                 },
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Ahmad Tea Pear Strudel"
+                    Name = "Ahmad Tea Pear Strudel",
+                    ProductImages = new List<Image>()
                 },
                 new Product
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Curtis Sunny Lemon"
+                    Name = "Curtis Sunny Lemon", 
+                    ProductImages = new List<Image>()
                 },
                 new Product
                 {
                     Id = Guid.NewGuid(),
                     Name = "Azer Tea",
-                    Description = "AhMaD"
+                    Description = "AhMaD", 
+                    ProductImages = new List<Image>()
                 }
             };
             var foundedProductsShould = products
@@ -135,7 +143,7 @@ namespace OnlineShopWebApp.XUnitTests
             for (var i = 0; i < 100; i++)
             {
                 var id = Guid.NewGuid();
-                products.Add(new Product() { Id = id, Name = (i + 1).ToString() });
+                products.Add(new Product() { Id = id, Name = (i + 1).ToString(), ProductImages = new List<Image>() });
                 productViewModels.Add(new ProductViewModel() { Id = id, Name = (i + 1).ToString() });
             }
 
@@ -153,6 +161,13 @@ namespace OnlineShopWebApp.XUnitTests
 
         private void MoqSetup(List<Product> products)
         {
+            mockImagesRepository
+                .Setup(ir => ir.TryGetImagesByProductIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(new List<Image>() { new Image() 
+                {
+                    Product = new Product(),
+                    Url = "/images/DefaultImg.jpg" 
+                } });
             mockRedisCacheService
                 .Setup(r => r.TryGetAsync(It.IsAny<string>()))
                 .ReturnsAsync(string.Empty);

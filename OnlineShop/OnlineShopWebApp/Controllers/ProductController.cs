@@ -38,8 +38,8 @@ namespace OnlineShopWebApp.Controllers
         public async Task<IActionResult> Index(Guid id)
         {
             var product = await productRepository.TryGetByIdAsync(id);
-            //var showingProduct = product.ToProductViewModel();
-            var showingProduct = mapper.Map<ProductViewModel>(product);
+            var showingProduct = product.ToProductViewModel();
+            //var showingProduct = mapper.Map<ProductViewModel>(product);
             var userName = User.Identity.Name;
             if (userName is not null && userName != string.Empty)
             {

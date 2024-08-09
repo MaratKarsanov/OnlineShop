@@ -10,5 +10,6 @@ namespace OnlineShop.Db.Repositories.Interfaces
         Task RemoveAsync(Guid id);
         Task EditProductAsync(Product newProduct);
         Task RemoveImageAsync(Guid id, string imageUrl);
+        Task AddExistingImageAsync(Guid id, string imageUrl);
     }
 }
