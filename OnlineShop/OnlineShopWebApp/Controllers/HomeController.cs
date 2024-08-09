@@ -1,12 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
-using OnlineShopWebApp.Redis;
-using System.Text.Json;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -16,21 +13,18 @@ namespace OnlineShopWebApp.Controllers
         private IFavouritesRepository favouritesRepository;
         private IComparisonRepository comparisonRepository;
         private IMapper mapper;
-        private readonly IRedisCacheService redisCacheService;
         private IImagesRepository imagesRepository;
 
         public HomeController(IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
-            IRedisCacheService redisCacheService,
             IImagesRepository imagesRepository)
         {
             this.productRepository = productRepository;
             this.favouritesRepository = favouritesRepository;
             this.comparisonRepository = comparisonRepository;
             this.mapper = mapper;
-            this.redisCacheService = redisCacheService;
             this.imagesRepository = imagesRepository;
         }
 
@@ -40,30 +34,21 @@ namespace OnlineShopWebApp.Controllers
             var userName = User.Identity.Name;
             var searchStringLower = searchString.ToLower();
             var products = new List<ProductViewModel>();
-            var cachedProducts = await redisCacheService.TryGetAsync(Constants.ProductsRedisKey);
-            if (!string.IsNullOrEmpty(cachedProducts))
+            //products = mapper.Map<List<ProductViewModel>>(await productRepository.GetAllAsync());
+            var dbProducts = await productRepository.GetAllAsync();
+            if (dbProducts.First().ProductImages is null || dbProducts.First().ProductImages.Count == 0)
             {
-                products = JsonSerializer.Deserialize<List<ProductViewModel>>(cachedProducts);
-            }
-            else
-            {
-                //products = mapper.Map<List<ProductViewModel>>(await productRepository.GetAllAsync());
-                var dbProducts = await productRepository.GetAllAsync();
-                if (dbProducts.First().ProductImages is null || dbProducts.First().ProductImages.Count == 0)
+                foreach (var p in dbProducts)
                 {
-                    foreach (var p in dbProducts)
-                    {
-                        var imageUrl = (await imagesRepository.TryGetImagesByProductIdAsync(p.Id))
-                            .First()
-                            .Url;
-                        productRepository.AddExistingImageAsync(p.Id, imageUrl);
-                    }
+                    var imageUrl = (await imagesRepository.TryGetImagesByProductIdAsync(p.Id))
+                        .First()
+                        .Url;
+                    productRepository.AddExistingImageAsync(p.Id, imageUrl);
                 }
-                products = dbProducts.ToProductViewModels();
-                if (products is null)
-                    return View(new List<ProductViewModel>());
-                await redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
             }
+            products = dbProducts.ToProductViewModels();
+            if (products is null)
+                return View(new List<ProductViewModel>());
             var foundedProducts = products
                 .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower))
                 .ToList();

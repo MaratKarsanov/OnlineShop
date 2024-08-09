@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using OnlineShopWebApp;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.ApiClients;
-using OnlineShopWebApp.Redis;
 using StackExchange.Redis;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,8 +37,6 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     return ConnectionMultiplexer.Connect(redisConfiguration);
 });
 
-builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
-
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services
@@ -62,7 +58,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient("ReviewApi", httpClient =>
 {
-    httpClient.BaseAddress = new Uri("http://reviews_api:80/");
+    httpClient.BaseAddress = new Uri("http://a28874-d039.v.d-f.pw:80/");
 });
 
 builder.Services.AddTransient<IReviewsApiClient, ReviewsApiClient>();

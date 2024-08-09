@@ -19,14 +19,12 @@ namespace OnlineShopWebApp.XUnitTests
         private Mock<IComparisonRepository> mockComparisonRepository;
         private Mock<IImagesRepository> mockImagesRepository;
         private Mock<IMapper> mockMapper;
-        private Mock<IRedisCacheService> mockRedisCacheService;
         private HomeController homeController;
 
         public HomeControllerTests()
         {
             mockProductsRepository = new Mock<IProductRepository>();
             mockMapper = new Mock<IMapper>();
-            mockRedisCacheService = new Mock<IRedisCacheService>();
             mockFavouritesRepository = new Mock<IFavouritesRepository>();
             mockComparisonRepository = new Mock<IComparisonRepository>();
             mockImagesRepository = new Mock<IImagesRepository>();
@@ -35,7 +33,6 @@ namespace OnlineShopWebApp.XUnitTests
                 mockFavouritesRepository.Object,
                 mockComparisonRepository.Object,
                 mockMapper.Object,
-                mockRedisCacheService.Object,
                 mockImagesRepository.Object
             );
             var context = new DefaultHttpContext();
@@ -168,9 +165,6 @@ namespace OnlineShopWebApp.XUnitTests
                     Product = new Product(),
                     Url = "/images/DefaultImg.jpg" 
                 } });
-            mockRedisCacheService
-                .Setup(r => r.TryGetAsync(It.IsAny<string>()))
-                .ReturnsAsync(string.Empty);
             mockProductsRepository
                 .Setup(r => r.GetAllAsync())
                 .ReturnsAsync(products);
