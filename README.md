@@ -53,6 +53,7 @@ cd OnlineShop</code>
 
 <code>dotnet run</code>
 </ol>
+
 ## Использованные технологии
 <ul>
   <li>ASP.NET Core MVC</li>
