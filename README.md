@@ -40,7 +40,8 @@ Unit-тесты для покрытия контроллеров, использ
 <li>Клонируйте репозиторий:</li>
 
 <code>git clone https://github.com/MaratKarsanov/OnlineShop.git
-cd online_shop</code>
+cd OnlineShop</code>
+
 <li>Настройте строки подключения в файлах конфигурации для PostgreSQL и Redis.</li>
 
 <li>Примените миграции базы данных:</li>
