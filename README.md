@@ -68,5 +68,5 @@ cd OnlineShop</code>
 ## Контрибьютинг
 Если вы хотите внести свой вклад в проект, пожалуйста, создайте форк репозитория, создайте новую ветку, внесите свои изменения и отправьте pull request.
 
-Автор
-Marat Karsanov
+## Автор
+<a href="https://github.com/MaratKarsanov">Marat Karsanov</a>
