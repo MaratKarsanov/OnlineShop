@@ -35,20 +35,21 @@ Unit-тесты для покрытия контроллеров, использ
 <a href="https://www.postgresql.org/download/">PostgreSQL</a>
 <a href="https://redis.io/downloads/">Redis</a>
 
-<h3>Шаги установки</h3>h3>
-1. Клонируйте репозиторий:
+<h3>Шаги установки</h3>
+<ol>
+<li>Клонируйте репозиторий:</li>
 
 <code>git clone https://github.com/MaratKarsanov/OnlineShop.git
 cd online_shop</code>
-2. Настройте строки подключения в файлах конфигурации для PostgreSQL и Redis.
+<li>Настройте строки подключения в файлах конфигурации для PostgreSQL и Redis.</li>
 
-3. Примените миграции базы данных:
+<li>Примените миграции базы данных:</li>
 
 <code>dotnet ef database update</code>
-Запустите приложение:
+<li>Запустите приложение:</li>
 
 <code>dotnet run</code>
-
+</ol>
 ## Использованные технологии
 <ul>
   <li>ASP.NET Core MVC</li>
