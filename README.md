@@ -31,9 +31,11 @@ Unit-тесты для покрытия контроллеров, использ
 
 ## Установка и запуск
 <h3>Предварительные требования</h3>
-<a href="https://dotnet.microsoft.com/ru-ru/download">.NET Core SDK</a>
-<a href="https://www.postgresql.org/download/">PostgreSQL</a>
-<a href="https://redis.io/downloads/">Redis</a>
+<ul>
+  <li><a href="https://dotnet.microsoft.com/ru-ru/download">.NET Core SDK</a></li>
+  <li><a href="https://www.postgresql.org/download/">PostgreSQL</a></li>
+  <li><a href="https://redis.io/downloads/">Redis</a></li>
+</ul>
 
 <h3>Шаги установки</h3>
 <ol>
