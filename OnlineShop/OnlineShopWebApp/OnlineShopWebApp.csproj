@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Automapper" Version="13.0.1" />
+    <PackageReference Include="jQuery" Version="3.7.1" />
+    <PackageReference Include="KendoUICore" Version="2025.2.520" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

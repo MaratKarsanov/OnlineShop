@@ -8,14 +8,15 @@ namespace OnlineShopWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private UserManager<User> userManager;
-        private SignInManager<User> signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public AccountController(UserManager<User> userManager, 
+        public AccountController( 
+            UserManager<User> userManager, 
             SignInManager<User> signInManager)
         {
-            this.signInManager = signInManager;
-            this.userManager = userManager;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -23,6 +24,7 @@ namespace OnlineShopWebApp.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
             return View(new AutorizationData() { ReturnUrl = returnUrl ?? "/Home" });
@@ -33,14 +35,19 @@ namespace OnlineShopWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(autorizationData.UserName,
+                var result = await _signInManager.PasswordSignInAsync(
+                    autorizationData.UserName,
                     autorizationData.Password,
                     autorizationData.LockoutEnabled,
                     false);
                 if (result.Succeeded)
+                {
                     return Redirect(autorizationData.ReturnUrl ?? "/Home");
+                }
                 else
+                {
                     ModelState.AddModelError("", "Неправильный логин или пароль");
+                }
             }
             return View(autorizationData);
         }
@@ -61,11 +68,11 @@ namespace OnlineShopWebApp.Controllers
                     UserName = registrationData.UserName, 
                     PhoneNumber = registrationData.PhoneNumber 
                 };
-                var result = await userManager.CreateAsync(user, registrationData.Password);
+                var result = await _userManager.CreateAsync(user, registrationData.Password);
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, false);
-                    await userManager.AddToRoleAsync(user, Constants.UserRoleName);
+                    await _signInManager.SignInAsync(user, false);
+                    await _userManager.AddToRoleAsync(user, Constants.UserRoleName);
                     return Redirect(registrationData.ReturnUrl ?? "/Home");
                 }
                 else
@@ -79,7 +86,7 @@ namespace OnlineShopWebApp.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
     }
