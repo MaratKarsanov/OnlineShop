@@ -1,34 +1,34 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
-using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
-using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Redis;
+using Serilog;
 using System.Text.Json;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private IProductRepository productRepository;
-        private IFavouritesRepository favouritesRepository;
-        private IComparisonRepository comparisonRepository;
-        private IMapper mapper;
-        private readonly IRedisCacheService redisCacheService;
+        private readonly IProductRepository _productRepository;
+        private readonly IFavouritesRepository _favouritesRepository;
+        private readonly IComparisonRepository _comparisonRepository;
+        private readonly IMapper _mapper;
+        private readonly IRedisCacheService _redisCacheService;
 
-        public HomeController(IProductRepository productRepository,
+        public HomeController(
+            IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
             IRedisCacheService redisCacheService)
         {
-            this.productRepository = productRepository;
-            this.favouritesRepository = favouritesRepository;
-            this.comparisonRepository = comparisonRepository;
-            this.mapper = mapper;
-            this.redisCacheService = redisCacheService;
+            _productRepository = productRepository;
+            _favouritesRepository = favouritesRepository;
+            _comparisonRepository = comparisonRepository;
+            _mapper = mapper;
+            _redisCacheService = redisCacheService;
         }
 
         public async Task<IActionResult> Index(string searchString = "", int pageNumber = 1)
@@ -39,18 +39,18 @@ namespace OnlineShopWebApp.Controllers
                 var userName = User.Identity.Name;
                 var searchStringLower = searchString.ToLower();
                 var products = new List<ProductViewModel>();
-                var cachedProducts = await redisCacheService.TryGetAsync(Constants.ProductsRedisKey);
+                var cachedProducts = await _redisCacheService.TryGetAsync(Constants.ProductsRedisKey);
                 if (!string.IsNullOrEmpty(cachedProducts))
                 {
                     products = JsonSerializer.Deserialize<List<ProductViewModel>>(cachedProducts);
                 }
                 else
                 {
-                    products = mapper.Map<List<ProductViewModel>>(await productRepository.GetAllAsync());
+                    products = _mapper.Map<List<ProductViewModel>>(await _productRepository.GetAllAsync());
                     //products = (await productRepository.GetAllAsync()).ToProductViewModels();
                     if (products is null)
                         return View(new List<ProductViewModel>());
-                    await redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
+                    await _redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
                 }
                 var foundedProducts = products
                     .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower))
@@ -64,16 +64,16 @@ namespace OnlineShopWebApp.Controllers
                 ViewBag.pageNumber = pageNumber;
                 if (userName is not null && userName != string.Empty)
                 {
-                    var favourites = await favouritesRepository.TryGetByUserNameAsync(userName);
+                    var favourites = await _favouritesRepository.TryGetByUserNameAsync(userName);
                     if (favourites is null)
-                        favourites = await favouritesRepository.AddFavouritesAsync(userName);
-                    var comparison = await comparisonRepository.TryGetByUserIdAsync(userName);
+                        favourites = await _favouritesRepository.AddFavouritesAsync(userName);
+                    var comparison = await _comparisonRepository.TryGetByUserIdAsync(userName);
                     if (comparison is null)
-                        comparison = await comparisonRepository.AddComparisonAsync(userName);
+                        comparison = await _comparisonRepository.AddComparisonAsync(userName);
                     //var favouriteProducts = favourites.Items.ToProductViewModels();
                     //var comparisonProducts = comparison.Items.ToProductViewModels();
-                    var favouriteProducts = mapper.Map<List<ProductViewModel>>(favourites.Items);
-                    var comparisonProducts = mapper.Map<List<ProductViewModel>>(comparison.Items);
+                    var favouriteProducts = _mapper.Map<List<ProductViewModel>>(favourites.Items);
+                    var comparisonProducts = _mapper.Map<List<ProductViewModel>>(comparison.Items);
                     foreach (var p in showingProducts)
                     {
                         p.IsInFavourites = favouriteProducts.Contains(p);
@@ -82,9 +82,9 @@ namespace OnlineShopWebApp.Controllers
                 }
                 return View(showingProducts);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                
+                Log.Error(e.Message, e);
                 return View("Error");
             }
         }

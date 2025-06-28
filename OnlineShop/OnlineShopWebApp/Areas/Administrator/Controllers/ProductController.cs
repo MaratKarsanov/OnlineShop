@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.ApiClients;
+using OnlineShopWebApp.ApiModels;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
@@ -17,11 +18,11 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Authorize(Roles = Constants.AdministratorRoleName)]
     public class ProductController : Controller
     {
-        private IProductRepository productRepository;
-        private IMapper mapper;
-        private ImagesProvider imagesProvider;
-        private IRedisCacheService redisCacheService;
-        private IReviewsApiClient reviewsApiClient;
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
+        private readonly ImagesProvider _imagesProvider;
+        private readonly IRedisCacheService _redisCacheService;
+        private readonly IReviewsApiClient _reviewsApiClient;
 
         public ProductController(IProductRepository productRepository,
             IMapper mapper,
@@ -29,24 +30,34 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
             IRedisCacheService redisCacheService,
             IReviewsApiClient reviewsApiClient)
         {
-            this.productRepository = productRepository;
-            this.mapper = mapper;
-            this.imagesProvider = imagesProvider;
-            this.redisCacheService = redisCacheService;
-            this.reviewsApiClient = reviewsApiClient;
+            _productRepository = productRepository;
+            _mapper = mapper;
+            _imagesProvider = imagesProvider;
+            _redisCacheService = redisCacheService;
+            _reviewsApiClient = reviewsApiClient;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View((await productRepository.GetAllAsync()).ToProductViewModels());
+            return View((await _productRepository.GetAllAsync()).ToProductViewModels());
         }
 
+        [HttpPost]
         public async Task<IActionResult> Remove(Guid productId)
         {
-            await productRepository.RemoveAsync(productId);
-            await RemoveCacheAsync();
-            await UpdateCacheAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _productRepository.RemoveAsync(productId);
+                await RemoveCacheAsync();
+                await UpdateCacheAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpGet]
@@ -58,71 +69,104 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddProductViewModel productViewModel)
         {
-            if (!ModelState.IsValid)
-                return View();
-            var imagesPaths = imagesProvider
-                .SaveFiles(productViewModel.UploadedFiles, ImageFolders.Products);
-            await productRepository.AddAsync(productViewModel.ToProduct(imagesPaths));
-            await RemoveCacheAsync();
-            await UpdateCacheAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                if (!ModelState.IsValid)
+                    return View();
+                var imagesPaths = _imagesProvider
+                    .SaveFiles(productViewModel.UploadedFiles, ImageFolders.Products);
+                await _productRepository.AddAsync(productViewModel.ToProduct(imagesPaths));
+                await RemoveCacheAsync();
+                await UpdateCacheAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid productId)
         {
-            var product = await productRepository.TryGetByIdAsync(productId);
-            return View(product.ToEditProductViewModel());
+            try
+            {
+                var product = await _productRepository.TryGetByIdAsync(productId);
+                return View(product.ToEditProductViewModel());
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditProductViewModel productViewModel)
         {
-            if (!ModelState.IsValid)
-                return View();
-            if (productViewModel.UploadedFiles is not null 
-                && productViewModel.UploadedFiles.Length > 0)
+            try
             {
-                var addedImagesPaths = imagesProvider
-                    .SaveFiles(productViewModel.UploadedFiles, ImageFolders.Products);
-                productViewModel.ImagesPaths = addedImagesPaths;
+                if (!ModelState.IsValid)
+                    return View();
+                if (productViewModel.UploadedFiles is not null
+                    && productViewModel.UploadedFiles.Length > 0)
+                {
+                    var addedImagesPaths = _imagesProvider
+                        .SaveFiles(productViewModel.UploadedFiles, ImageFolders.Products);
+                    productViewModel.ImagesPaths = addedImagesPaths;
+                }
+                else
+                {
+                    productViewModel.ImagesPaths = new List<string>();
+                }
+                await _productRepository.EditProductAsync(productViewModel.ToProduct());
+                await RemoveCacheAsync();
+                await UpdateCacheAsync();
+                return RedirectToAction(nameof(Index));
             }
-            else
+            catch (Exception e)
             {
-                productViewModel.ImagesPaths = new List<string>();
+                Log.Error(e.Message, e);
+                return View("Error");
             }
-            await productRepository.EditProductAsync(productViewModel.ToProduct());
-            await RemoveCacheAsync();
-            await UpdateCacheAsync();
-            return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         public async Task<IActionResult> DeleteImage(Guid productId, string imageUrl)
         {
-            await productRepository.RemoveImageAsync(productId, imageUrl);
-            var imageFileName = imageUrl.Split('/').Last();
-            imagesProvider.DeleteFile(imageFileName, ImageFolders.Products);
-            await RemoveCacheAsync();
-            await UpdateCacheAsync();
-            return RedirectToAction(nameof(Edit), new { productId });
+            try
+            {
+                await _productRepository.RemoveImageAsync(productId, imageUrl);
+                var imageFileName = imageUrl.Split('/').Last();
+                _imagesProvider.DeleteFile(imageFileName, ImageFolders.Products);
+                await RemoveCacheAsync();
+                await UpdateCacheAsync();
+                return RedirectToAction(nameof(Edit), new { productId });
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         private async Task UpdateCacheAsync()
         {
             try
             {
-                var products = await productRepository.GetAllAsync();
+                var products = await _productRepository.GetAllAsync();
                 var productViewModels = new List<ProductViewModel>();
 
                 foreach (var product in products)
                 {
-                    var reviews = await reviewsApiClient.GetByProductIdAsync(product.Id);
+                    var reviews = await _reviewsApiClient.TryGetByProductIdAsync(product.Id);
                     var productViewModel = product.ToProductViewModel();
-                    productViewModel.Reviews = reviews;
+                    productViewModel.Reviews = reviews ?? new List<ReviewApiModel>();
                     productViewModels.Add(productViewModel);
                 }
                 var productsJson = JsonSerializer.Serialize(productViewModels);
-                await redisCacheService.SetAsync(Constants.ProductsRedisKey, productsJson);
+                await _redisCacheService.SetAsync(Constants.ProductsRedisKey, productsJson);
             }
             catch (Exception ex)
             {
@@ -134,7 +178,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             try
             {
-                await redisCacheService.RemoveAsync(Constants.ProductsRedisKey);
+                await _redisCacheService.RemoveAsync(Constants.ProductsRedisKey);
             }
             catch (Exception ex)
             {

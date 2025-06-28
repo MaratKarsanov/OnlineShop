@@ -10,9 +10,9 @@
     </a>
     return;
 }
-<a class="nav-link text-dark"
-   asp-area=""
-   asp-controller="Account"
-   asp-action="Logout">
-    Logout
-</a>
+<form id="logoutForm" asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+    <button class="nav-link text-dark"
+       type = "submit">
+        Logout
+    </button>
+</form>

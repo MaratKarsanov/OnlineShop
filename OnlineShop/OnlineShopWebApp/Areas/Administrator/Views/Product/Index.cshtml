@@ -34,9 +34,6 @@
                             </a>
                         </td>
                         <td>
-                            @* <a asp-action="Remove" asp-area="Administrator" asp-controller="Product" asp-route-productId="@product.Id">
-                                Удалить
-                            </a> *@
                             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#product_@product.Id">Удалить</button>
                         </td>
                     </tr>
@@ -61,9 +58,17 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <a class="btn btn-primary" type="button" asp-area="Administrator" asp-controller="Product" asp-action="Remove" asp-route-productId="@product.Id">
-                        Удалить
-                    </a>
+                    <form id="deleteProductForm"
+                          asp-area="Administrator"
+                          asp-controller="Product"
+                          asp-action="Remove"
+                          asp-route-productId="@product.Id"
+                          method="post"
+                          style="display:inline;">
+                        <button class="btn btn-primary" type="submit">
+                            Удалить
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

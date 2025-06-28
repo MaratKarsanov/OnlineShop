@@ -8,81 +8,104 @@ using OnlineShopWebApp.ApiClients;
 using OnlineShopWebApp.ApiModels;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
+using Serilog;
 
 namespace OnlineShopWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private IProductRepository productRepository;
-        private IFavouritesRepository favouritesRepository;
-        private IComparisonRepository comparisonRepository;
-        private IMapper mapper;
-        private IReviewsApiClient reviewsApiClient;
-        private UserManager<User> userManager;
+        private readonly IProductRepository _productRepository;
+        private readonly IFavouritesRepository _favouritesRepository;
+        private readonly IComparisonRepository _comparisonRepository;
+        private readonly IMapper _mapper;
+        private readonly IReviewsApiClient _reviewsApiClient;
+        private readonly UserManager<User> _userManager;
 
-        public ProductController(IProductRepository productRepository,
+        public ProductController(
+            IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
             IReviewsApiClient reviewsApiClient,
             UserManager<User> userManager)
         {
-            this.productRepository = productRepository;
-            this.favouritesRepository = favouritesRepository;
-            this.comparisonRepository = comparisonRepository;
-            this.mapper = mapper;
-            this.reviewsApiClient = reviewsApiClient;
-            this.userManager = userManager;
+            _productRepository = productRepository;
+            _favouritesRepository = favouritesRepository;
+            _comparisonRepository = comparisonRepository;
+            _mapper = mapper;
+            _reviewsApiClient = reviewsApiClient;
+            _userManager = userManager;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index(Guid id)
         {
-            var product = await productRepository.TryGetByIdAsync(id);
-            //var showingProduct = product.ToProductViewModel();
-            var showingProduct = mapper.Map<ProductViewModel>(product);
-            var userName = User.Identity.Name;
-            if (userName is not null && userName != string.Empty)
+            try
             {
-                var favourites = await favouritesRepository.TryGetByUserNameAsync(userName);
-                if (favourites is null)
-                    favourites = await favouritesRepository.AddFavouritesAsync(userName);
-                var comparison = await comparisonRepository.TryGetByUserIdAsync(userName);
-                if (comparison is null)
-                    comparison = await comparisonRepository.AddComparisonAsync(userName);
-                //var favouriteProducts = favourites.Items.ToProductViewModels();
-                var favouriteProducts = mapper.Map<List<ProductViewModel>>(favourites.Items);
-                //var comparisonProducts = comparison.Items.ToProductViewModels();
-                var comparisonProducts = mapper.Map<List<ProductViewModel>>(comparison.Items);
-                showingProduct.IsInFavourites = favouriteProducts.Contains(showingProduct);
-                showingProduct.IsInComparison = comparisonProducts.Contains(showingProduct);
+                var product = await _productRepository.TryGetByIdAsync(id);
+                //var showingProduct = product.ToProductViewModel();
+                var showingProduct = _mapper.Map<ProductViewModel>(product);
+                var userName = User.Identity.Name;
+                if (userName is not null && userName != string.Empty)
+                {
+                    var favourites = await _favouritesRepository.TryGetByUserNameAsync(userName);
+                    if (favourites is null)
+                    {
+                        favourites = await _favouritesRepository.AddFavouritesAsync(userName);
+                    }
+                    var comparison = await _comparisonRepository.TryGetByUserIdAsync(userName);
+                    if (comparison is null)
+                    {
+                        comparison = await _comparisonRepository.AddComparisonAsync(userName);
+                    }
+                    //var favouriteProducts = favourites.Items.ToProductViewModels();
+                    var favouriteProducts = _mapper.Map<List<ProductViewModel>>(favourites.Items);
+                    //var comparisonProducts = comparison.Items.ToProductViewModels();
+                    var comparisonProducts = _mapper.Map<List<ProductViewModel>>(comparison.Items);
+                    showingProduct.IsInFavourites = favouriteProducts.Contains(showingProduct);
+                    showingProduct.IsInComparison = comparisonProducts.Contains(showingProduct);
+                }
+                var reviews = await _reviewsApiClient.TryGetByProductIdAsync(id);
+                showingProduct.Reviews = reviews ?? new List<ReviewApiModel>();
+                return View(showingProduct);
             }
-            var reviews = await reviewsApiClient.GetByProductIdAsync(id);
-            showingProduct.Reviews = reviews;
-            return View(showingProduct);
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddReview(AddReviewApiModel addReview)
         {
-            var currentUser = await userManager.GetUserAsync(User);
-            if (currentUser == null)
-                return Unauthorized();
-            if (!Guid.TryParse(currentUser.Id, out Guid userId))
-            {
-                ModelState.AddModelError("", "Произошла ошибка при идентификации пользователя.");
-                return RedirectToAction("Index", new { id = addReview.ProductId });
-            }
-            addReview.UserId = userId;
             try
             {
-                await reviewsApiClient.AddAsync(addReview);
-                return RedirectToAction("Index", new { id = addReview.ProductId });
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser == null)
+                    return Unauthorized();
+                if (!Guid.TryParse(currentUser.Id, out Guid userId))
+                {
+                    ModelState.AddModelError("", "Произошла ошибка при идентификации пользователя.");
+                    return RedirectToAction("Index", new { id = addReview.ProductId });
+                }
+                addReview.UserId = userId;
+                try
+                {
+                    await _reviewsApiClient.AddAsync(addReview);
+                    return RedirectToAction("Index", new { id = addReview.ProductId });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Произошла ошибка при добавлении отзыва: " + ex.Message);
+                    return RedirectToAction("Index", new { id = addReview.ProductId });
+                }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                ModelState.AddModelError("", "Произошла ошибка при добавлении отзыва: " + ex.Message);
-                return RedirectToAction("Index", new { id = addReview.ProductId });
+                Log.Error(e.Message, e);
+                return View("Error");
             }
         }
 
@@ -92,7 +115,7 @@ namespace OnlineShopWebApp.Controllers
         {
             try
             {
-                await reviewsApiClient.DeleteAsync(reviewId);
+                await _reviewsApiClient.DeleteAsync(reviewId);
                 return RedirectToAction("Index", new { id = productId });
             }
             catch (Exception ex)

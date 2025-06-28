@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
 using OnlineShopWebApp.Areas.Administrator.Models;
+using Serilog;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
@@ -11,27 +12,37 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Authorize(Roles = Constants.AdministratorRoleName)]
     public class RoleController : Controller
     {
-        private RoleManager<IdentityRole> roleManager;
-        private IMapper mapper;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IMapper _mapper;
 
         public RoleController(RoleManager<IdentityRole> roleManager,
             IMapper mapper)
         {
-            this.roleManager = roleManager;
-            this.mapper = mapper;
+            _roleManager = roleManager;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(mapper.Map<List<RoleViewModel>>(roleManager.Roles));
+            return View(_mapper.Map<List<RoleViewModel>>(_roleManager.Roles));
         }
 
         public async Task<IActionResult> Remove(string roleName)
         {
-            var role = await roleManager.FindByNameAsync(roleName);
-            if (role is not null)
-                await roleManager.DeleteAsync(role);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var role = await _roleManager.FindByNameAsync(roleName);
+                if (role is not null)
+                {
+                    await _roleManager.DeleteAsync(role);
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpGet]
@@ -43,15 +54,27 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(RoleViewModel newRole)
         {
-            var result = await roleManager.CreateAsync(new IdentityRole() { Name = newRole.Name});
-            if (result.Succeeded)
-                return RedirectToAction(nameof(Index));
-            else
+            try
             {
-                foreach (var error in result.Errors)
-                    ModelState.AddModelError(string.Empty, error.Description);
+                var result = await _roleManager.CreateAsync(new IdentityRole() { Name = newRole.Name });
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+                return View(newRole);
             }
-            return View(newRole);
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
     }
 }

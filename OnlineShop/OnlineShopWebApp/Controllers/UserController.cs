@@ -14,16 +14,17 @@ namespace OnlineShopWebApp.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private UserManager<User> userManager;
-        private ICartRepository cartRepository;
-        private IComparisonRepository comparisonRepository;
-        private IFavouritesRepository favouritesRepository;
-        private IProductRepository productRepository;
-        private IOrderRepository orderRepository;
-        private IMapper mapper;
-        private ImagesProvider imagesProvider;
+        private readonly UserManager<User> _userManager;
+        private readonly ICartRepository _cartRepository;
+        private readonly IComparisonRepository _comparisonRepository;
+        private readonly IFavouritesRepository _favouritesRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
+        private readonly ImagesProvider _imagesProvider;
 
-        public UserController(UserManager<User> userManager,
+        public UserController(
+            UserManager<User> userManager,
             ICartRepository cartRepository,
             IComparisonRepository comparisonRepository,
             IFavouritesRepository favouritesRepository,
@@ -32,54 +33,83 @@ namespace OnlineShopWebApp.Controllers
             ImagesProvider imagesProvider,
             IOrderRepository orderRepository)
         {
-            this.userManager = userManager;
-            this.comparisonRepository = comparisonRepository;
-            this.cartRepository = cartRepository;
-            this.favouritesRepository = favouritesRepository;
-            this.productRepository = productRepository;
-            this.mapper = mapper;
-            this.imagesProvider = imagesProvider;
-            this.orderRepository = orderRepository;
+            _userManager = userManager;
+            _comparisonRepository = comparisonRepository;
+            _cartRepository = cartRepository;
+            _favouritesRepository = favouritesRepository;
+            _productRepository = productRepository;
+            _mapper = mapper;
+            _imagesProvider = imagesProvider;
+            _orderRepository = orderRepository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userName = User.Identity.Name;
-            var user = userManager.FindByNameAsync(userName).Result;
-            var userOrders = (await orderRepository.GetAllAsync()).Where(o => o.UserName == userName).ToList();
-            ViewBag.Orders = userOrders;
-            return View(user.ToUserViewModel());
+            try
+            {
+                var userName = User.Identity.Name;
+                var user = _userManager.FindByNameAsync(userName).Result;
+                var userOrders = (await _orderRepository.GetAllAsync())
+                    .Where(o => o.UserName == userName)
+                    .ToList();
+                ViewBag.Orders = userOrders;
+                return View(user.ToUserViewModel());
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> EditData()
         {
-            var name = User.Identity.Name;
-            var user = await userManager.FindByNameAsync(name);
-            var userData = new EditUserDataViewModel()
+            try
             {
-                UserName = user.UserName,
-                PhoneNumber = user.PhoneNumber
-            };
-            return View(userData);
+                var name = User.Identity.Name;
+                var user = await _userManager.FindByNameAsync(name);
+                var userData = new EditUserDataViewModel()
+                {
+                    UserName = user.UserName,
+                    PhoneNumber = user.PhoneNumber
+                };
+                return View(userData);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> EditData(EditUserDataViewModel newUserData)
         {
-            if (!ModelState.IsValid)
-                return View(newUserData);
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
-            user.PhoneNumber = newUserData.PhoneNumber;
-            user.UserName = newUserData.UserName;
-            if (newUserData.UploadedFile is not null
-                && newUserData.UploadedFile.Length > 0)
+            try
             {
-                user.ProfileImagePath = imagesProvider
-                    .SaveFile(newUserData.UploadedFile, ImageFolders.Profiles);
+                if (!ModelState.IsValid)
+                {
+                    return View(newUserData);
+                }
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                user.PhoneNumber = newUserData.PhoneNumber;
+                user.UserName = newUserData.UserName;
+                if (newUserData.UploadedFile is not null
+                    && newUserData.UploadedFile.Length > 0)
+                {
+                    user.ProfileImagePath = _imagesProvider
+                        .SaveFile(newUserData.UploadedFile, ImageFolders.Profiles);
+                }
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(Index));
             }
-            await userManager.UpdateAsync(user);
-            return RedirectToAction(nameof(Index));
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpGet]
@@ -91,32 +121,60 @@ namespace OnlineShopWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangeUserPasswordViewModel password)
         {
-            if (!ModelState.IsValid)
-                return RedirectToAction(nameof(ChangePassword));
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
-            var newHashPassword = userManager.PasswordHasher.HashPassword(user, password.NewPassword);
-            user.PasswordHash = newHashPassword;
-            await userManager.UpdateAsync(user);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return RedirectToAction(nameof(ChangePassword));
+                }
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var newHashPassword = _userManager.PasswordHasher.HashPassword(user, password.NewPassword);
+                user.PasswordHash = newHashPassword;
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
+        [HttpPost]
         public async Task<IActionResult> DeleteProfileImage()
         {
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
-            user.ProfileImagePath = "/images/Profiles/defaultAvatar.jpg";
-            await userManager.UpdateAsync(user);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                user.ProfileImagePath = "/images/Profiles/defaultAvatar.jpg";
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Delete()
         {
-            var name = User.Identity.Name;
-            var user = await userManager.FindByNameAsync(name);
-            await userManager.DeleteAsync(user);
-            await cartRepository.RemoveAsync(name);
-            await favouritesRepository.RemoveFavouritesAsync(name);
-            await comparisonRepository.RemoveComparisonAsync(name);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var name = User.Identity.Name;
+                var user = await _userManager.FindByNameAsync(name);
+                await _userManager.DeleteAsync(user);
+                await _cartRepository.RemoveAsync(name);
+                await _favouritesRepository.RemoveFavouritesAsync(name);
+                await _comparisonRepository.RemoveComparisonAsync(name);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
     }
 }

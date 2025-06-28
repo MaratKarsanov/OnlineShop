@@ -5,6 +5,7 @@ using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
+using Serilog;
 
 namespace OnlineShopWebApp.Areas.Administrator.Controllers
 {
@@ -12,36 +13,54 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
     [Authorize(Roles = Constants.AdministratorRoleName)]
     public class OrderController : Controller
     {
-        private ICartRepository cartRepository;
-        private IOrderRepository orderRepository;
-        private IMapper mapper;
+        private readonly ICartRepository _cartRepository;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IMapper _mapper;
 
-        public OrderController(ICartRepository cartRepository,
+        public OrderController(
+            ICartRepository cartRepository,
             IOrderRepository orderRepository,
             IMapper mapper)
         {
-            this.cartRepository = cartRepository;
-            this.mapper = mapper;
-            this.orderRepository = orderRepository;
+            _cartRepository = cartRepository;
+            _mapper = mapper;
+            _orderRepository = orderRepository;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(mapper.Map<List<OrderViewModel>>(await orderRepository.GetAllAsync()));
+            return View(_mapper.Map<List<OrderViewModel>>(await _orderRepository.GetAllAsync()));
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid orderId)
         {
-            var order = await orderRepository.TryGetOrderByIdAsync(orderId);
-            return View(mapper.Map<OrderViewModel>(order));
+            try
+            {
+                var order = await _orderRepository.TryGetOrderByIdAsync(orderId);
+                return View(_mapper.Map<OrderViewModel>(order));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(Guid orderId, OrderStatus status)
         {
-            await orderRepository.UpdateStatusAsync(status, orderId);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _orderRepository.UpdateStatusAsync(status, orderId);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message, e);
+                return View("Error");
+            }
         }
     }
 }
