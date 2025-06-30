@@ -7,7 +7,8 @@
     <div class="row">
         <div class="col-md-6">
             <form class="d-flex" asp-area="" asp-action="Index" asp-controller="Home" method="get">
-                <input name="searchString"
+                <input id="autocompleteSearch"
+                       name="searchString"
                        class="form-control me-1 mb-3"
                        type="search"
                        placeholder="Поиск продуктов"
@@ -97,3 +98,28 @@
 </div>
 
 <partial name="_Pager" model="ViewBag.Pager" />
+
+<script>
+        $("#autocompleteSearch").kendoAutoComplete({
+        placeholder: "Введите название продукта...",
+        minLength: 2,
+        dataTextField: "name", 
+        filter: "startswith",
+        noDataTemplate: "Продукты с таким названием не найдены",
+        dataSource: {
+            transport: {
+                read: {
+                    url: "/getproducts",
+                    type: "GET",
+                    data: function () {
+                        return {
+                            fragment: $("#autocompleteSearch").data("kendoAutoComplete").value()
+                        };
+                    }
+                },
+                serverFiltering: true
+            }
+        },
+        template: "<span>#= name #</span>"
+    });
+</script>

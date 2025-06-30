@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Db;
+using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
 using OnlineShopWebApp.Redis;
@@ -31,6 +32,7 @@ namespace OnlineShopWebApp.Controllers
             _redisCacheService = redisCacheService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index(string searchString = "", int pageNumber = 1)
         {
             try
@@ -49,7 +51,9 @@ namespace OnlineShopWebApp.Controllers
                     products = _mapper.Map<List<ProductViewModel>>(await _productRepository.GetAllAsync());
                     //products = (await productRepository.GetAllAsync()).ToProductViewModels();
                     if (products is null)
+                    {
                         return View(new List<ProductViewModel>());
+                    }
                     await _redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
                 }
                 var foundedProducts = products
@@ -87,6 +91,23 @@ namespace OnlineShopWebApp.Controllers
                 Log.Error(e.Message, e);
                 return View("Error");
             }
+        }
+
+        [HttpGet]
+        [Route("/getproducts")]
+        public async Task<IActionResult> GetProducts(string fragment)
+        {
+            if (string.IsNullOrEmpty(fragment))
+            {
+                return new EmptyResult();
+            }
+            var products = await _productRepository.GetAllAsync();
+            fragment = fragment.ToLower();
+            var result = new ObjectResult(products
+                .Where(p => p.Name.ToLower().Contains(fragment) || p.Description.ToLower().Contains(fragment))
+                .Select(p => new { p.Name })
+                .ToList());
+            return result;
         }
     }
 }
