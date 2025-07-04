@@ -100,12 +100,13 @@
 <partial name="_Pager" model="ViewBag.Pager" />
 
 <script>
-        $("#autocompleteSearch").kendoAutoComplete({
+    $("#autocompleteSearch").kendoAutoComplete({
         placeholder: "Введите название продукта...",
         minLength: 2,
-        dataTextField: "name", 
+        dataTextField: "name",
         filter: "startswith",
         noDataTemplate: "Продукты с таким названием не найдены",
+        clearButton: false,
         dataSource: {
             transport: {
                 read: {
