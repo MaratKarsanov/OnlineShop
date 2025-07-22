@@ -48,10 +48,7 @@ namespace OnlineShopWebApp.Controllers
                     {
                         return Redirect(autorizationData.ReturnUrl ?? "/Home");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Неправильный логин или пароль");
-                    }
+                    ModelState.AddModelError("", "Неправильный логин или пароль");
                 }
                 return View(autorizationData);
             }

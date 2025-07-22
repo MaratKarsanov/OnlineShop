@@ -17,15 +17,6 @@
                 <button class="btn btn-dark" type="submit">Поиск</button>
             </form>
         </div>
-        <div class="col-md-6">
-            <a class="text-dark mb-3"
-               asp-area=""
-               asp-controller="Home"
-               asp-action="Index"
-               asp-route-searchString="">
-                Вернуться к полному списку
-            </a>
-        </div>
     </div>
 </div>
 
@@ -65,24 +56,28 @@
                 }
                 @if (!product.IsInFavourites)
                 {
-                    <a class="btn btn-dark myCardButton"
+                    <a class="myCardButton"
                        asp-controller="Favourites"
                        asp-action="Add"
                        asp-route-productId="@product.Id"
                        asp-route-pageNumber="@ViewBag.pageNumber"
                        role="button">
-                        Добавить в избранное
+                        <svg xmlns="http://www.w3.org/2000/svg" width="80px" height="80px" viewBox="0 0 24 24" fill="none">
+                            <path d="M4.45067 13.9082L11.4033 20.4395C11.6428 20.6644 11.7625 20.7769 11.9037 20.8046C11.9673 20.8171 12.0327 20.8171 12.0963 20.8046C12.2375 20.7769 12.3572 20.6644 12.5967 20.4395L19.5493 13.9082C21.5055 12.0706 21.743 9.0466 20.0978 6.92607L19.7885 6.52734C17.8203 3.99058 13.8696 4.41601 12.4867 7.31365C12.2913 7.72296 11.7087 7.72296 11.5133 7.31365C10.1304 4.41601 6.17972 3.99058 4.21154 6.52735L3.90219 6.92607C2.25695 9.0466 2.4945 12.0706 4.45067 13.9082Z" stroke="#222222" />
+                        </svg>
                     </a>
                 }
                 else
                 {
-                    <a class="btn btn-danger myCardButton"
+                    <a class="myCardButton"
                        asp-controller="Favourites"
                        asp-action="Remove"
                        asp-route-productId="@product.Id"
                        asp-route-pageNumber="@ViewBag.pageNumber"
                        role="button">
-                        Удалить из избранного
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="80px" height="80px" viewBox="0 0 32 32" enable-background="new 0 0 32 32" version="1.1" fill="none">
+                            <path d="M29.5,4.5C27.8,2.3,25.3,1,22.7,1c-2.6,0-5.1,1.3-6.7,3.5C14.4,2.3,11.9,1,9.3,1C6.7,1,4.2,2.3,2.5,4.5   c-1.9,2.6-2,6.4-0.3,9.3c0,0,0,0.1,0.1,0.1l12.9,16.6c0.2,0.3,0.5,0.4,0.8,0.4s0.6-0.1,0.8-0.4L29.7,14c0,0,0-0.1,0.1-0.1   C31.5,11,31.4,7.1,29.5,4.5z" fill="#E92662" />
+                        </svg>
                     </a>
                 }
                 <a class="btn btn-dark myCardButton"
@@ -101,7 +96,7 @@
 
 <script>
     $("#autocompleteSearch").kendoAutoComplete({
-        placeholder: "Введите название продукта...",
+        placeholder: "Поиск по сайту",
         minLength: 2,
         dataTextField: "name",
         filter: "startswith",
