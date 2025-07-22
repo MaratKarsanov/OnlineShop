@@ -1,6 +1,6 @@
-﻿namespace OnlineShopWebApp.Redis
+﻿namespace OnlineShopWebApp.Services.Cache
 {
-    public interface IRedisCacheService
+    public interface ICacheService
     {
         Task SetAsync(string key, string value);
         Task<string> TryGetAsync(string key);

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using OnlineShopWebApp;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.ApiClients;
-using OnlineShopWebApp.Redis;
 using StackExchange.Redis;
+using OnlineShopWebApp.Services.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +27,27 @@ redisConfiguration.ConnectTimeout = 10000;
 redisConfiguration.SyncTimeout = 10000;
 redisConfiguration.ReconnectRetryPolicy = new LinearRetry(10000);
 
+var isRedisAvailable = false;
+
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    return ConnectionMultiplexer.Connect(redisConfiguration);
+    var multiplexer = ConnectionMultiplexer.Connect(redisConfiguration);
+
+    isRedisAvailable = multiplexer.IsConnected;
+
+    return multiplexer;
 });
 
-builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
+if (isRedisAvailable)
+{
+    builder.Services.AddSingleton<ICacheService, RedisCacheService>();
+}
+else
+{
+    builder.Services.AddMemoryCache();
+    builder.Services.AddSingleton<ICacheService, MemoryCacheService>();
+}
+
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

@@ -1,9 +1,9 @@
 ﻿using Serilog;
 using StackExchange.Redis;
 
-namespace OnlineShopWebApp.Redis
+namespace OnlineShopWebApp.Services.Cache
 {
-    public class RedisCacheService : IRedisCacheService
+    public class RedisCacheService : ICacheService
     {
         private readonly IConnectionMultiplexer redis;
         private readonly SemaphoreSlim mutex = new SemaphoreSlim(1, 1);

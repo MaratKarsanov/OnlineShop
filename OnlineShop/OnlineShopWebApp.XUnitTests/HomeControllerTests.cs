@@ -7,7 +7,7 @@ using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Controllers;
 using OnlineShopWebApp.Models;
-using OnlineShopWebApp.Redis;
+using OnlineShopWebApp.Services.Cache;
 using System.Security.Claims;
 
 namespace OnlineShopWebApp.XUnitTests
@@ -18,14 +18,14 @@ namespace OnlineShopWebApp.XUnitTests
         private Mock<IFavouritesRepository> mockFavouritesRepository;
         private Mock<IComparisonRepository> mockComparisonRepository;
         private Mock<IMapper> mockMapper;
-        private Mock<IRedisCacheService> mockRedisCacheService;
+        private Mock<ICacheService> mockCacheService;
         private HomeController homeController;
 
         public HomeControllerTests()
         {
             mockProductsRepository = new Mock<IProductRepository>();
             mockMapper = new Mock<IMapper>();
-            mockRedisCacheService = new Mock<IRedisCacheService>();
+            mockCacheService = new Mock<ICacheService>();
             mockFavouritesRepository = new Mock<IFavouritesRepository>();
             mockComparisonRepository = new Mock<IComparisonRepository>();
             homeController = new HomeController(
@@ -33,7 +33,7 @@ namespace OnlineShopWebApp.XUnitTests
                 mockFavouritesRepository.Object,
                 mockComparisonRepository.Object,
                 mockMapper.Object,
-                mockRedisCacheService.Object
+                mockCacheService.Object
             );
             var context = new DefaultHttpContext();
             context.User = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Name, "testuser@example.com")]));
@@ -153,7 +153,7 @@ namespace OnlineShopWebApp.XUnitTests
 
         private void MoqSetup(List<Product> products)
         {
-            mockRedisCacheService
+            mockCacheService
                 .Setup(r => r.TryGetAsync(It.IsAny<string>()))
                 .ReturnsAsync(string.Empty);
             mockProductsRepository

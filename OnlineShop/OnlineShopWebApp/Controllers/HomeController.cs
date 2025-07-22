@@ -4,7 +4,7 @@ using OnlineShop.Db;
 using OnlineShop.Db.Models;
 using OnlineShop.Db.Repositories.Interfaces;
 using OnlineShopWebApp.Models;
-using OnlineShopWebApp.Redis;
+using OnlineShopWebApp.Services.Cache;
 using Serilog;
 using System.Text.Json;
 
@@ -16,20 +16,20 @@ namespace OnlineShopWebApp.Controllers
         private readonly IFavouritesRepository _favouritesRepository;
         private readonly IComparisonRepository _comparisonRepository;
         private readonly IMapper _mapper;
-        private readonly IRedisCacheService _redisCacheService;
+        private readonly ICacheService _cacheService;
 
         public HomeController(
             IProductRepository productRepository,
             IFavouritesRepository favouritesRepository,
             IComparisonRepository comparisonRepository,
             IMapper mapper,
-            IRedisCacheService redisCacheService)
+            ICacheService cacheService)
         {
             _productRepository = productRepository;
             _favouritesRepository = favouritesRepository;
             _comparisonRepository = comparisonRepository;
             _mapper = mapper;
-            _redisCacheService = redisCacheService;
+            _cacheService = cacheService;
         }
 
         [HttpGet]
@@ -41,7 +41,7 @@ namespace OnlineShopWebApp.Controllers
                 var userName = User.Identity.Name;
                 var searchStringLower = searchString.ToLower();
                 var products = new List<ProductViewModel>();
-                var cachedProducts = await _redisCacheService.TryGetAsync(Constants.ProductsRedisKey);
+                var cachedProducts = await _cacheService.TryGetAsync(Constants.ProductsRedisKey);
                 if (!string.IsNullOrEmpty(cachedProducts))
                 {
                     products = JsonSerializer.Deserialize<List<ProductViewModel>>(cachedProducts);
@@ -54,7 +54,7 @@ namespace OnlineShopWebApp.Controllers
                     {
                         return View(new List<ProductViewModel>());
                     }
-                    await _redisCacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
+                    await _cacheService.SetAsync(Constants.ProductsRedisKey, JsonSerializer.Serialize(products));
                 }
                 var foundedProducts = products
                     .Where(p => p.Name.ToLower().Contains(searchStringLower) || p.Description.ToLower().Contains(searchStringLower))

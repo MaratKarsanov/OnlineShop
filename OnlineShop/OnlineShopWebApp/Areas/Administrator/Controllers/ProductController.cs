@@ -8,7 +8,7 @@ using OnlineShopWebApp.ApiModels;
 using OnlineShopWebApp.Areas.Administrator.Models;
 using OnlineShopWebApp.Helpers;
 using OnlineShopWebApp.Models;
-using OnlineShopWebApp.Redis;
+using OnlineShopWebApp.Services.Cache;
 using Serilog;
 using System.Text.Json;
 
@@ -21,19 +21,19 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
         private readonly ImagesProvider _imagesProvider;
-        private readonly IRedisCacheService _redisCacheService;
+        private readonly ICacheService _cacheService;
         private readonly IReviewsApiClient _reviewsApiClient;
 
         public ProductController(IProductRepository productRepository,
             IMapper mapper,
             ImagesProvider imagesProvider,
-            IRedisCacheService redisCacheService,
+            ICacheService cacheService,
             IReviewsApiClient reviewsApiClient)
         {
             _productRepository = productRepository;
             _mapper = mapper;
             _imagesProvider = imagesProvider;
-            _redisCacheService = redisCacheService;
+            _cacheService = cacheService;
             _reviewsApiClient = reviewsApiClient;
         }
 
@@ -166,7 +166,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
                     productViewModels.Add(productViewModel);
                 }
                 var productsJson = JsonSerializer.Serialize(productViewModels);
-                await _redisCacheService.SetAsync(Constants.ProductsRedisKey, productsJson);
+                await _cacheService.SetAsync(Constants.ProductsRedisKey, productsJson);
             }
             catch (Exception ex)
             {
@@ -178,7 +178,7 @@ namespace OnlineShopWebApp.Areas.Administrator.Controllers
         {
             try
             {
-                await _redisCacheService.RemoveAsync(Constants.ProductsRedisKey);
+                await _cacheService.RemoveAsync(Constants.ProductsRedisKey);
             }
             catch (Exception ex)
             {
