@@ -45,6 +45,10 @@ namespace OnlineShopWebApp.Services.Cache
             try
             {
                 _memoryCache.TryGetValue(key, out var value);
+                if (value is null)
+                {
+                    return Task.FromResult("");
+                }
                 return Task.FromResult(value.ToString());
             }
             catch (Exception ex)
